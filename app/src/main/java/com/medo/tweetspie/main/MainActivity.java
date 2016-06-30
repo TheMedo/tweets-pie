@@ -1,4 +1,4 @@
-package com.medo.tweetspie.ui.main;
+package com.medo.tweetspie.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,10 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.consts.Constants;
+import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
-import com.medo.tweetspie.ui.onboarding.OnboardingActivity;
 
 import butterknife.ButterKnife;
 

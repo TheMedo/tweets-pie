@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.medo.tweetspie.io.rest.TwitterInteractor;
+import com.medo.tweetspie.rest.TwitterInteractor;
 import com.medo.tweetspie.system.PreferencesInteractor;
 
 import timber.log.Timber;

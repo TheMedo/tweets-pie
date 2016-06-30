@@ -1,4 +1,4 @@
-package com.medo.tweetspie.ui.main;
+package com.medo.tweetspie.main;
 
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.medo.tweetspie.system.StringProvider;

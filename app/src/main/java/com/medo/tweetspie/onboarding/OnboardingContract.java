@@ -1,4 +1,4 @@
-package com.medo.tweetspie.ui.onboarding;
+package com.medo.tweetspie.onboarding;
 
 public interface OnboardingContract {
 

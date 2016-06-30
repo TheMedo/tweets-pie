@@ -18,7 +18,7 @@
             android:value="66fba544d440464b418707e3ca3af95e535e051f"
             />
 
-        <activity android:name=".ui.main.MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.onboarding.OnboardingActivity"/>
+        <activity android:name=".onboarding.OnboardingActivity"/>
 
         <service android:name=".service.TimelineService"/>
 

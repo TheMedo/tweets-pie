@@ -1,4 +1,4 @@
-package com.medo.tweetspie.io.rest;
+package com.medo.tweetspie.rest;
 
 
 import android.support.annotation.IntRange;

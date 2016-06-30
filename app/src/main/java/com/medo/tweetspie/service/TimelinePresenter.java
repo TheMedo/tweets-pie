@@ -3,9 +3,9 @@ package com.medo.tweetspie.service;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
-import com.medo.tweetspie.io.rest.LoginCallback;
-import com.medo.tweetspie.io.rest.TweetsCallback;
-import com.medo.tweetspie.io.rest.TwitterTransaction;
+import com.medo.tweetspie.rest.LoginCallback;
+import com.medo.tweetspie.rest.TweetsCallback;
+import com.medo.tweetspie.rest.TwitterTransaction;
 import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.List;

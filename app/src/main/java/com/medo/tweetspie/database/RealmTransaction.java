@@ -1,4 +1,4 @@
-package com.medo.tweetspie.io.database;
+package com.medo.tweetspie.database;
 
 
 public interface RealmTransaction {
