@@ -1,20 +1,26 @@
 package com.medo.tweetspie.rest;
 
 
+import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.medo.tweetspie.consts.Constants;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.AppSession;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.GuestCallback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.tweetui.TimelineResult;
+import com.twitter.sdk.android.tweetui.TweetUi;
 import com.twitter.sdk.android.tweetui.UserTimeline;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class TwitterInteractor implements TwitterTransaction {
@@ -22,6 +28,11 @@ public class TwitterInteractor implements TwitterTransaction {
   private static final int TIMELINE_MAX_QUERIES = 3;
 
   private final UserTimeline timeline;
+
+  public TwitterInteractor() {
+
+    this.timeline = null;
+  }
 
   public TwitterInteractor(PreferencesProvider preferences) {
 
@@ -31,6 +42,13 @@ public class TwitterInteractor implements TwitterTransaction {
             .maxItemsPerRequest(200)
             .screenName(preferences.get(PreferencesProvider.USERNAME))
             .build();
+  }
+
+  @Override
+  public void init(@NonNull Context context) {
+    // init twitter
+    TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
+    Fabric.with(context, new TwitterCore(authConfig), new TweetUi());
   }
 
   @Override
@@ -68,6 +86,10 @@ public class TwitterInteractor implements TwitterTransaction {
                            @Nullable Long beforeId,
                            @NonNull final TweetsCallback callback) {
 
+    if (timeline == null) {
+      callback.onError(new Exception("Timeline is null"));
+      return;
+    }
     timeline.previous(beforeId, new GuestCallback<>(new Callback<TimelineResult<Tweet>>() {
 
       @Override

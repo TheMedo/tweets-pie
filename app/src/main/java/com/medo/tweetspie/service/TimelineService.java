@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.rest.TwitterInteractor;
 import com.medo.tweetspie.system.PreferencesInteractor;
 
@@ -32,7 +33,8 @@ public class TimelineService extends Service implements TimelineContract.Service
 
     TimelineContract.Actions presenter = new TimelinePresenter(
             this,
-            new TwitterInteractor(new PreferencesInteractor(this)));
+            new TwitterInteractor(new PreferencesInteractor(this)),
+            new RealmInteractor());
     presenter.onServiceStarted();
 
     return super.onStartCommand(intent, flags, startId);

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.consts.Constants;
+import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements MainContract.View {
 
   private MainContract.Actions presenter;
+  private RealmInteractor realmInteractor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             this,
             new PreferencesInteractor(this),
             new StringInteractor(this));
+    realmInteractor = new RealmInteractor();
+
     presenter.onInitialize();
+    realmInteractor.open();
+  }
+
+  @Override
+  protected void onDestroy() {
+
+    super.onDestroy();
+    realmInteractor.close();
   }
 
   @Override

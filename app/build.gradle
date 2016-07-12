@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'android-apt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
@@ -24,14 +25,15 @@ def supportLibraryVersion = "24.0.0"
 
 dependencies {
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
-    compile "com.android.support.constraint:constraint-layout:1.0.0-alpha3"
+    compile "com.android.support.constraint:constraint-layout:1.0.0-alpha4"
     compile 'com.jakewharton.timber:timber:4.1.2'
-    compile "com.jakewharton:butterknife:8.1.0"
-    apt 'com.jakewharton:butterknife-compiler:8.1.0'
-    compile('com.twitter.sdk.android:twitter-core:1.6.8@aar') {
+    compile "com.jakewharton:butterknife:8.2.0"
+    apt 'com.jakewharton:butterknife-compiler:8.2.0'
+    compile('com.twitter.sdk.android:twitter-core:1.7.0@aar') {
         transitive = true;
     }
-    compile('com.twitter.sdk.android:tweet-ui:1.10.3@aar') {
+    compile('com.twitter.sdk.android:tweet-ui:1.11.1@aar') {
         transitive = true;
     }
+
 }

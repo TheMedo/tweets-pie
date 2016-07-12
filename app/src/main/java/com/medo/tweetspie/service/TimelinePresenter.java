@@ -3,6 +3,7 @@ package com.medo.tweetspie.service;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
+import com.medo.tweetspie.database.RealmTransaction;
 import com.medo.tweetspie.rest.LoginCallback;
 import com.medo.tweetspie.rest.TweetsCallback;
 import com.medo.tweetspie.rest.TwitterTransaction;
@@ -17,12 +18,16 @@ public class TimelinePresenter implements TimelineContract.Actions {
 
 
   private final TimelineContract.Service service;
-  private final TwitterTransaction interactor;
+  private final TwitterTransaction twitterInteractor;
+  private final RealmTransaction realmInteractor;
 
-  public TimelinePresenter(TimelineContract.Service service, TwitterTransaction interactor) {
+  public TimelinePresenter(TimelineContract.Service service,
+                           TwitterTransaction twitterInteractor,
+                           RealmTransaction realmInteractor) {
 
     this.service = service;
-    this.interactor = interactor;
+    this.twitterInteractor = twitterInteractor;
+    this.realmInteractor = realmInteractor;
   }
 
   @MainThread
@@ -32,9 +37,9 @@ public class TimelinePresenter implements TimelineContract.Actions {
     // notify service start
     service.notifyStart();
     // check for active session
-    if (!interactor.hasActiveSession()) {
+    if (!twitterInteractor.hasActiveSession()) {
       // make a guest login
-      interactor.loginGuest(new LoginCallback() {
+      twitterInteractor.loginGuest(new LoginCallback() {
 
         @Override
         public void onSuccess() {
@@ -58,12 +63,13 @@ public class TimelinePresenter implements TimelineContract.Actions {
   @MainThread
   private void getTimeline() {
 
-    interactor.getTimeline(new TweetsCallback() {
+    twitterInteractor.getTimeline(new TweetsCallback() {
 
       @Override
       public void onTweetsAvailable(@NonNull List<Tweet> tweets) {
-
-        persistTimelineTweets(rateTimelineTweets(tweets));
+        // persist the obtained tweets
+        Timber.d("Obtained %d tweets", tweets.size());
+        realmInteractor.persistTweets(tweets);
       }
 
       @Override
@@ -78,18 +84,5 @@ public class TimelinePresenter implements TimelineContract.Actions {
         service.exitWithError(e);
       }
     });
-  }
-
-  @NonNull
-  @MainThread
-  private List<Tweet> rateTimelineTweets(@NonNull List<Tweet> timelineTweets) {
-    // TODO rate the tweets
-    return timelineTweets;
-  }
-
-  @MainThread
-  private void persistTimelineTweets(@NonNull List<Tweet> timelineTweets) {
-    // TODO persist the tweets
-    Timber.d("Tweets persisted: %s", timelineTweets.size());
   }
 }
