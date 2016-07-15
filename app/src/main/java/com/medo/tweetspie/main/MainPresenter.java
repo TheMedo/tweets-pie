@@ -10,7 +10,9 @@ public class MainPresenter implements MainContract.Actions {
   private final PreferencesProvider preferences;
   private final StringProvider strings;
 
-  public MainPresenter(MainContract.View view, PreferencesProvider preferencesProvider, StringProvider stringProvider) {
+  public MainPresenter(MainContract.View view,
+                       PreferencesProvider preferencesProvider,
+                       StringProvider stringProvider) {
 
     this.view = view;
     this.preferences = preferencesProvider;
@@ -26,6 +28,7 @@ public class MainPresenter implements MainContract.Actions {
     else {
       view.loadData();
       view.initUi();
+      // TODO maybe show data
     }
   }
 
@@ -40,5 +43,18 @@ public class MainPresenter implements MainContract.Actions {
   public void onOnboardingFailure() {
 
     view.exit();
+  }
+
+  @Override
+  public void onDataLoaded(boolean success) {
+
+    if (success) {
+      // TODO get the data for shoiwng
+      view.showData();
+    }
+    else {
+      // TODO show error
+      view.showError();
+    }
   }
 }

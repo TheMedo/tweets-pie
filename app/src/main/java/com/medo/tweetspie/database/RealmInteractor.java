@@ -31,7 +31,7 @@ public class RealmInteractor implements RealmTransaction {
   }
 
   @Override
-  public void open() {
+  public void onInitialize() {
     // get the default realm instance
     if (realm == null) {
       realm = Realm.getDefaultInstance();
@@ -39,7 +39,7 @@ public class RealmInteractor implements RealmTransaction {
   }
 
   @Override
-  public void close() {
+  public void onDestroy() {
     // close the default realm instance
     if (realm != null) {
       realm.close();
@@ -51,7 +51,7 @@ public class RealmInteractor implements RealmTransaction {
   public void persistTweets(@NonNull List<Tweet> tweets) {
     // obtain the default instance if needed
     if (realm == null) {
-      open();
+      onInitialize();
     }
     // convert all tweets to realm objects
     List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());

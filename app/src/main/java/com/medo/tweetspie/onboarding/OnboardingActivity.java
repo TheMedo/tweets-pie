@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class OnboardingActivity extends AppCompatActivity implements OnboardingContract.View {
+public class OnboardingActivity extends BaseActivity implements OnboardingContract.View {
 
   @BindView(R.id.editUsername)
   EditText editUsername;

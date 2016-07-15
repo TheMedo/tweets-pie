@@ -7,6 +7,8 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.medo.tweetspie.bus.BusProvider;
+import com.medo.tweetspie.bus.events.TimelineServiceEvent;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.rest.TwitterInteractor;
 import com.medo.tweetspie.system.PreferencesInteractor;
@@ -42,22 +44,23 @@ public class TimelineService extends Service implements TimelineContract.Service
 
   @Override
   public void notifyStart() {
-    // TODO send broadcast for service start
+    // TODO notify the start of this service
+    Timber.v("Timeline Service Started");
   }
 
   @Override
   public void exitWithSuccess() {
-
+    // notify the end of this service with success
     Timber.v("Timeline Service Success");
-    // TODO send broadcast for service end
+    BusProvider.getInstance().post(new TimelineServiceEvent(true));
     stopSelf();
   }
 
   @Override
   public void exitWithError(@NonNull Exception e) {
-
+    // notify the end of this service with error
     Timber.e(e, "Timeline Service Error");
-    // TODO send broadcast for service end
+    BusProvider.getInstance().post(new TimelineServiceEvent(false));
     stopSelf();
   }
 }

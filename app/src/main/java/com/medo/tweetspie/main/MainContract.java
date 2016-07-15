@@ -11,6 +11,10 @@ public interface MainContract {
 
     void loadData();
 
+    void showData();
+
+    void showError();
+
     void exit();
   }
 
@@ -22,5 +26,7 @@ public interface MainContract {
     void onOnboardingSuccess();
 
     void onOnboardingFailure();
+
+    void onDataLoaded(boolean success);
   }
 }

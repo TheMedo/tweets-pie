@@ -13,9 +13,9 @@ public interface RealmTransaction {
 
   void init(@NonNull Context context);
 
-  void open();
+  void onInitialize();
 
-  void close();
+  void onDestroy();
 
   void persistTweets(@NonNull List<Tweet> tweets);
 }

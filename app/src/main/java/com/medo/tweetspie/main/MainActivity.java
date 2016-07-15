@@ -2,20 +2,22 @@ package com.medo.tweetspie.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
+import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
+import com.medo.tweetspie.bus.events.TimelineServiceEvent;
 import com.medo.tweetspie.consts.Constants;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
+import com.squareup.otto.Subscribe;
 
 import butterknife.ButterKnife;
 
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends BaseActivity implements MainContract.View {
 
   private MainContract.Actions presenter;
   private RealmInteractor realmInteractor;
@@ -32,14 +34,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     realmInteractor = new RealmInteractor();
 
     presenter.onInitialize();
-    realmInteractor.open();
+    realmInteractor.onInitialize();
   }
 
   @Override
   protected void onDestroy() {
 
     super.onDestroy();
-    realmInteractor.close();
+    realmInteractor.onDestroy();
   }
 
   @Override
@@ -76,8 +78,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
   }
 
   @Override
+  public void showData() {
+
+    // TODO show data
+  }
+
+  @Override
+  public void showError() {
+
+    // TODO show error
+  }
+
+  @Override
   public void exit() {
 
     finish();
+  }
+
+  @Subscribe
+  public void onTimelineServiceResult(TimelineServiceEvent event) {
+
+    presenter.onDataLoaded(event.isSuccess());
   }
 }
