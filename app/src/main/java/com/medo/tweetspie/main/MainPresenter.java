@@ -1,7 +1,11 @@
 package com.medo.tweetspie.main;
 
+import com.medo.tweetspie.database.RealmInteractor;
+import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.medo.tweetspie.system.StringProvider;
+
+import io.realm.OrderedRealmCollection;
 
 
 public class MainPresenter implements MainContract.Actions {
@@ -9,14 +13,17 @@ public class MainPresenter implements MainContract.Actions {
   private final MainContract.View view;
   private final PreferencesProvider preferences;
   private final StringProvider strings;
+  private final RealmInteractor realmInteractor;
 
   public MainPresenter(MainContract.View view,
                        PreferencesProvider preferencesProvider,
-                       StringProvider stringProvider) {
+                       StringProvider stringProvider,
+                       RealmInteractor realmInteractor) {
 
     this.view = view;
     this.preferences = preferencesProvider;
     this.strings = stringProvider;
+    this.realmInteractor = realmInteractor;
   }
 
   @Override
@@ -28,7 +35,11 @@ public class MainPresenter implements MainContract.Actions {
     else {
       view.loadData();
       view.initUi();
-      // TODO maybe show data
+      // show the persisted tweets if any
+      OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
+      if (!tweets.isEmpty()) {
+        view.showData(tweets);
+      }
     }
   }
 
@@ -49,8 +60,8 @@ public class MainPresenter implements MainContract.Actions {
   public void onDataLoaded(boolean success) {
 
     if (success) {
-      // TODO get the data for shoiwng
-      view.showData();
+      OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
+      view.showData(tweets);
     }
     else {
       // TODO show error

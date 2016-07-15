@@ -36,7 +36,7 @@ public class RealmConverter {
     realmTweet.setText(tweet.text);
     realmTweet.setUser(extractUser(tweet.user));
 
-    return new RealmTweet();
+    return realmTweet;
   }
 
   @Nullable

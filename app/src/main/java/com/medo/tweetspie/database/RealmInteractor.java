@@ -11,8 +11,10 @@ import com.twitter.sdk.android.core.models.Tweet;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.OrderedRealmCollection;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.Sort;
 import timber.log.Timber;
 
 
@@ -64,5 +66,14 @@ public class RealmInteractor implements RealmTransaction {
     realm.commitTransaction();
 
     Timber.d("Persisted %d tweets", realmTweets.size());
+  }
+
+  @NonNull
+  public OrderedRealmCollection<RealmTweet> getTweets() {
+    // obtain the default instance if needed
+    if (realm == null) {
+      onInitialize();
+    }
+    return realm.where(RealmTweet.class).findAllSorted("score", Sort.DESCENDING);
   }
 }

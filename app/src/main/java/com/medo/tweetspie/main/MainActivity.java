@@ -2,22 +2,33 @@ package com.medo.tweetspie.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.bus.events.TimelineServiceEvent;
 import com.medo.tweetspie.consts.Constants;
 import com.medo.tweetspie.database.RealmInteractor;
+import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.main.adapter.AdapterContract;
+import com.medo.tweetspie.main.adapter.TweetsAdapter;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
+import com.medo.tweetspie.utils.DividerItemDecoration;
 import com.squareup.otto.Subscribe;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
 
 
-public class MainActivity extends BaseActivity implements MainContract.View {
+public class MainActivity extends BaseActivity implements MainContract.View, AdapterContract.View {
+
+  @BindView(R.id.recycler_tweets)
+  RecyclerView recyclerTweets;
 
   private MainContract.Actions presenter;
   private RealmInteractor realmInteractor;
@@ -30,7 +41,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     presenter = new MainPresenter(
             this,
             new PreferencesInteractor(this),
-            new StringInteractor(this));
+            new StringInteractor(this),
+            new RealmInteractor());
     realmInteractor = new RealmInteractor();
 
     presenter.onInitialize();
@@ -78,9 +90,19 @@ public class MainActivity extends BaseActivity implements MainContract.View {
   }
 
   @Override
-  public void showData() {
+  public void showData(OrderedRealmCollection<RealmTweet> tweets) {
 
-    // TODO show data
+    if (recyclerTweets.getAdapter() != null) {
+      // don't update the date if the adapter has already been set
+      // realm will auto update any database changes
+      return;
+    }
+    // setup the recycler view and set the adapter
+    TweetsAdapter tweetsAdapter = new TweetsAdapter(this, tweets, this);
+    recyclerTweets.setLayoutManager(new LinearLayoutManager(this));
+    recyclerTweets.setAdapter(tweetsAdapter);
+    recyclerTweets.setHasFixedSize(true);
+    recyclerTweets.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
   }
 
   @Override
@@ -93,6 +115,21 @@ public class MainActivity extends BaseActivity implements MainContract.View {
   public void exit() {
 
     finish();
+  }
+
+  @Override
+  public void openTweet() {
+
+  }
+
+  @Override
+  public void openUser() {
+
+  }
+
+  @Override
+  public void openMedia() {
+
   }
 
   @Subscribe
