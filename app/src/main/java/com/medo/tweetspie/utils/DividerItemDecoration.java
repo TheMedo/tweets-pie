@@ -17,7 +17,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
   private static final int[] ATTRS = new int[] {
           android.R.attr.listDivider
   };
-  private Drawable mDivider;
+  private final Drawable mDivider;
 
   private int mOrientation;
 
@@ -38,8 +38,9 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
   }
 
   @Override
-  public void onDraw(Canvas c, RecyclerView parent) {
+  public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
 
+    super.onDraw(c, parent, state);
     if (mOrientation == VERTICAL_LIST) {
       drawVertical(c, parent);
     }

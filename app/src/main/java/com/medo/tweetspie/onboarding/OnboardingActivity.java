@@ -4,27 +4,26 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.Editable;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
-import com.medo.tweetspie.utils.AfterTextChangedWatcher;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class OnboardingActivity extends BaseActivity implements OnboardingContract.View {
 
-  @BindView(R.id.editUsername)
-  EditText editUsername;
-  @BindView(R.id.buttonConfirm)
-  Button buttonConfirm;
+  @BindView(R.id.login_button)
+  TwitterLoginButton loginButton;
 
   private OnboardingContract.Actions presenter;
 
@@ -51,45 +50,41 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
 
   private void initViews() {
 
-    editUsername.addTextChangedListener(new AfterTextChangedWatcher() {
+    loginButton.setCallback(new Callback<TwitterSession>() {
 
       @Override
-      public void afterTextChanged(Editable s) {
+      public void success(Result<TwitterSession> result) {
+        // login success
+        presenter.onLoginSuccess(result.data);
+      }
 
-        presenter.onInputChanged();
+      @Override
+      public void failure(TwitterException exception) {
+        // login failure
+        presenter.onLoginFailure(exception);
       }
     });
-    presenter.onViewInitialized();
   }
 
   @Override
-  public void finishWithSuccess() {
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    // Pass the activity result to the login button.
+    super.onActivityResult(requestCode, resultCode, data);
+    loginButton.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Override
+  public void exitWithSuccess() {
 
     setResult(RESULT_OK);
     finish();
   }
 
   @Override
-  public String getUsername() {
+  public void exitWithError(String errorMessage) {
 
-    return editUsername.getText().toString();
-  }
-
-  @Override
-  public void enableConfirmButton(boolean enabled) {
-
-    buttonConfirm.setEnabled(enabled);
-  }
-
-  @Override
-  public void showError(String message) {
-
-    editUsername.setError(message);
-  }
-
-  @OnClick(R.id.buttonConfirm)
-  public void onClick() {
-
-    presenter.onConfirmButtonClick();
+    Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+    setResult(RESULT_CANCELED);
+    finish();
   }
 }

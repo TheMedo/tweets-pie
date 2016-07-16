@@ -3,7 +3,7 @@ package com.medo.tweetspie.bus.events;
 
 public class TimelineServiceEvent {
 
-  private boolean success;
+  private final boolean success;
 
   public TimelineServiceEvent(boolean success) {
 

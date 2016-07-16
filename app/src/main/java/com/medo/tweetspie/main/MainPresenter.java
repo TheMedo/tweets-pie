@@ -3,7 +3,6 @@ package com.medo.tweetspie.main;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.system.PreferencesProvider;
-import com.medo.tweetspie.system.StringProvider;
 
 import io.realm.OrderedRealmCollection;
 
@@ -12,17 +11,14 @@ public class MainPresenter implements MainContract.Actions {
 
   private final MainContract.View view;
   private final PreferencesProvider preferences;
-  private final StringProvider strings;
   private final RealmInteractor realmInteractor;
 
   public MainPresenter(MainContract.View view,
                        PreferencesProvider preferencesProvider,
-                       StringProvider stringProvider,
                        RealmInteractor realmInteractor) {
 
     this.view = view;
     this.preferences = preferencesProvider;
-    this.strings = stringProvider;
     this.realmInteractor = realmInteractor;
   }
 

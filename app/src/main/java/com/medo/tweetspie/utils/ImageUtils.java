@@ -59,7 +59,7 @@ public class ImageUtils {
 
   private static class CropCircleTransformation implements Transformation<Bitmap> {
 
-    private BitmapPool bitmapPool;
+    private final BitmapPool bitmapPool;
 
     /* package */ CropCircleTransformation(Context context) {
 

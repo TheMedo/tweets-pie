@@ -1,29 +1,22 @@
 package com.medo.tweetspie.onboarding;
 
+import com.twitter.sdk.android.core.TwitterSession;
+
+
 public interface OnboardingContract {
 
   interface View {
 
-    String getUsername();
+    void exitWithSuccess();
 
-    void enableConfirmButton(boolean enabled);
-
-    void showError(String message);
-
-    void finishWithSuccess();
-
+    void exitWithError(String errorMessage);
   }
 
 
   interface Actions {
 
-    void validateInputAndUpdateUi();
+    void onLoginSuccess(TwitterSession twitterSession);
 
-    void onViewInitialized();
-
-    void onInputChanged();
-
-    void onConfirmButtonClick();
-
+    void onLoginFailure(Exception e);
   }
 }

@@ -25,7 +25,7 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAdapter.TweetViewHolder> {
 
-  private AdapterContract.Actions presenter;
+  private final AdapterContract.Actions presenter;
 
   public TweetsAdapter(@NonNull Context context,
                        @Nullable OrderedRealmCollection<RealmTweet> data,

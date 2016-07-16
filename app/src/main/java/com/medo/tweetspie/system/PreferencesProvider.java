@@ -11,8 +11,6 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public interface PreferencesProvider {
 
   String USERNAME = "username";
-  String RETWEETS = "retweets";
-  String REPLIES = "replies";
 
   @Nullable
   String get(@PreferenceKey String key);
@@ -21,11 +19,11 @@ public interface PreferencesProvider {
 
   boolean has(@PreferenceKey String key);
 
+  void remove(@PreferenceKey String key);
+
   @Retention(SOURCE)
   @StringDef({
-          USERNAME,
-          RETWEETS,
-          REPLIES
+          USERNAME
   })
   @interface PreferenceKey {}
 }

@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 public class PreferencesInteractor implements PreferencesProvider {
 
-  private SharedPreferences preferences;
+  private final SharedPreferences preferences;
 
   public PreferencesInteractor(Context context) {
 
@@ -32,5 +32,11 @@ public class PreferencesInteractor implements PreferencesProvider {
   public boolean has(@PreferenceKey String key) {
 
     return preferences.contains(key);
+  }
+
+  @Override
+  public void remove(@PreferenceKey String key) {
+
+    preferences.edit().remove(key).apply();
   }
 }

@@ -34,7 +34,7 @@ public class FormatUtils {
     return DateUtils.getRelativeTimeSpanString(
             date.getTime(),
             System.currentTimeMillis(),
-            TimeUnit.MINUTES.toMillis(1),
+            TimeUnit.SECONDS.toMillis(1),
             DateUtils.FORMAT_ABBREV_RELATIVE).toString();
   }
 }

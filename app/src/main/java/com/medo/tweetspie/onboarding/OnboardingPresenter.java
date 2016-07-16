@@ -1,11 +1,11 @@
 package com.medo.tweetspie.onboarding;
 
-import android.text.TextUtils;
-
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.medo.tweetspie.system.StringProvider;
-import com.medo.tweetspie.utils.UsernameValidator;
+import com.twitter.sdk.android.core.TwitterSession;
+
+import timber.log.Timber;
 
 
 public class OnboardingPresenter implements OnboardingContract.Actions {
@@ -14,7 +14,9 @@ public class OnboardingPresenter implements OnboardingContract.Actions {
   private final PreferencesProvider preferences;
   private final StringProvider strings;
 
-  public OnboardingPresenter(OnboardingContract.View view, PreferencesProvider preferencesProvider, StringProvider stringProvider) {
+  public OnboardingPresenter(OnboardingContract.View view,
+                             PreferencesProvider preferencesProvider,
+                             StringProvider stringProvider) {
 
     this.view = view;
     this.preferences = preferencesProvider;
@@ -22,44 +24,16 @@ public class OnboardingPresenter implements OnboardingContract.Actions {
   }
 
   @Override
-  public void validateInputAndUpdateUi() {
-
-    final String username = view.getUsername();
-    if (TextUtils.isEmpty(username)) {
-      // empty input, clear the error and disable the confirm button
-      view.showError(null);
-      view.enableConfirmButton(false);
-      return;
-    }
-    if (!UsernameValidator.validate(username)) {
-      // invalid input, set the error and disable the confirm button
-      view.enableConfirmButton(false);
-      view.showError(strings.getString(R.string.app_name));
-      return;
-    }
-    // valid input, clear the error and enable the confirm button
-    view.showError(null);
-    view.enableConfirmButton(true);
+  public void onLoginSuccess(TwitterSession twitterSession) {
+    // persist the username and notify success
+    preferences.set(PreferencesProvider.USERNAME, twitterSession.getUserName());
+    view.exitWithSuccess();
   }
 
   @Override
-  public void onViewInitialized() {
-    // refresh ui when the view is initialized
-    validateInputAndUpdateUi();
-  }
-
-  @Override
-  public void onInputChanged() {
-    // refresh ui on each user input
-    validateInputAndUpdateUi();
-  }
-
-  @Override
-  public void onConfirmButtonClick() {
-    // save the username into the shared preferences
-    final String username = view.getUsername();
-    preferences.set(PreferencesProvider.USERNAME, username);
-    // finish the activity with RESULT_OK
-    view.finishWithSuccess();
+  public void onLoginFailure(Exception e) {
+    // log and notify error
+    Timber.e(e, "Cannot login with Twitter");
+    view.exitWithError(strings.getString(R.string.error_login_failure));
   }
 }

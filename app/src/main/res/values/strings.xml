@@ -3,11 +3,9 @@
     <string name="app_name">TweetsPie</string>
 
     <!-- Errors -->
-    <string name="error_invalid_username">Only letters, numbers and underscores are allowed.</string>
+    <string name="error_login_failure">Something went wrong. Please try again later!</string>
 
     <!-- Hints -->
-    <string name="hint_username">Username</string>
 
     <!-- Actions -->
-    <string name="action_confirm">Confirm</string>
 </resources>

@@ -4,7 +4,6 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
 import com.medo.tweetspie.database.RealmTransaction;
-import com.medo.tweetspie.rest.LoginCallback;
 import com.medo.tweetspie.rest.TweetsCallback;
 import com.medo.tweetspie.rest.TwitterTransaction;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -36,25 +35,7 @@ public class TimelinePresenter implements TimelineContract.Actions {
 
     // notify service start
     service.notifyStart();
-    // check for active session
-    if (!twitterInteractor.hasActiveSession()) {
-      // make a guest login
-      twitterInteractor.loginGuest(new LoginCallback() {
-
-        @Override
-        public void onSuccess() {
-
-          getTimeline();
-        }
-
-        @Override
-        public void onError(@NonNull Exception e) {
-
-          service.exitWithError(e);
-        }
-      });
-    }
-    else {
+    if (twitterInteractor.checkSession()) {
       // we have an active session, get the timeline
       getTimeline();
     }

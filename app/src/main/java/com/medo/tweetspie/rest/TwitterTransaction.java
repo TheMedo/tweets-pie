@@ -9,9 +9,7 @@ public interface TwitterTransaction {
 
   void init(@NonNull Context context);
 
-  boolean hasActiveSession();
-
-  void loginGuest(@NonNull LoginCallback callback);
+  boolean checkSession();
 
   void getTimeline(@NonNull TweetsCallback callback);
 }
