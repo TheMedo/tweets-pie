@@ -58,7 +58,14 @@ public class RealmInteractor implements RealmTransaction {
     // convert all tweets to realm objects
     List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
     for (Tweet tweet : tweets) {
-      realmTweets.add(RealmConverter.convert(tweet));
+      if (tweet.retweetedStatus == null) {
+        // convert the normal tweet
+        realmTweets.add(RealmConverter.convert(tweet));
+      }
+      else {
+        // convert the retweet
+        realmTweets.add(RealmConverter.convert(tweet.retweetedStatus));
+      }
     }
     // persist the realm tweets
     realm.beginTransaction();

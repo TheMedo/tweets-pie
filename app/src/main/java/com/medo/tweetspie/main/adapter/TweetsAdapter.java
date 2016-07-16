@@ -83,6 +83,7 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       textDate.setText(FormatUtils.toRelativeDate(tweet.getCreatedAt()));
       textDate.setPaintFlags(textDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
       textText.setText(tweet.getText());
+      FormatUtils.addLinks(textText);
     }
 
     @OnClick(R.id.image_avatar)

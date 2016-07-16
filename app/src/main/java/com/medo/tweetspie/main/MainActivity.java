@@ -16,7 +16,6 @@ import com.medo.tweetspie.main.adapter.TweetsAdapter;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
-import com.medo.tweetspie.system.StringInteractor;
 import com.medo.tweetspie.utils.DividerItemDecoration;
 import com.squareup.otto.Subscribe;
 
@@ -41,7 +40,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     presenter = new MainPresenter(
             this,
             new PreferencesInteractor(this),
-            new StringInteractor(this),
             new RealmInteractor());
     realmInteractor = new RealmInteractor();
 
