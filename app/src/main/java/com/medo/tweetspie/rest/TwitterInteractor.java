@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.consts.Constants;
+import com.medo.tweetspie.database.RealmInteractor;
+import com.medo.tweetspie.rest.api.CustomApiClient;
+import com.medo.tweetspie.rest.model.FriendsIds;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -19,6 +22,7 @@ import com.twitter.sdk.android.tweetui.TweetUi;
 import java.util.List;
 
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 
 public class TwitterInteractor implements TwitterTransaction {
@@ -26,33 +30,58 @@ public class TwitterInteractor implements TwitterTransaction {
   private static final int TIMELINE_MAX_QUERIES = 3;
 
   private final PreferencesProvider preferences;
+  private final RealmInteractor realmInteractor;
+  private CustomApiClient customApiClient;
 
-  public TwitterInteractor(PreferencesProvider preferences) {
+  public TwitterInteractor(PreferencesProvider preferences, RealmInteractor realmInteractor) {
 
     this.preferences = preferences;
+    this.realmInteractor = realmInteractor;
   }
 
-  @Override
-  public void init(@NonNull Context context) {
+  public static void init(@NonNull Context context) {
     // init twitter
     TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
     Fabric.with(context, new TwitterCore(authConfig), new TweetUi());
   }
 
-  @Override
-  public boolean checkSession() {
+  private void checkInstance() {
 
-    final boolean hasActiveSession = TwitterCore.getInstance().getSessionManager().getActiveSession() != null;
-    if (!hasActiveSession) {
-      preferences.remove(PreferencesProvider.USERNAME);
+    if (customApiClient == null) {
+      // instantiate the custom api client if null
+      customApiClient = new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
     }
-    return hasActiveSession;
   }
 
-  @Override
-  public void getTimeline(@NonNull TweetsCallback callback) {
+  private void getFriendsIds(@Nullable Long beforeId) {
 
-    getTimeline(1, null, callback);
+    checkInstance();
+    customApiClient.getFriendsService().friends(
+            null, preferences.get(PreferencesProvider.USERNAME), beforeId, false, 5000L, new Callback<FriendsIds>() {
+
+              @Override
+              public void success(Result<FriendsIds> result) {
+
+                FriendsIds ids = result.data;
+                if (ids == null) {
+                  Timber.e("Cannot get friends ids: Empty response");
+                  return;
+                }
+                // persist the friends ids
+                realmInteractor.persistFriendsIds(ids.getIds());
+                // get the next page of friend ids if any
+                final long beforeId = ids.getPreviousCursor();
+                if (beforeId != 0) {
+                  getFriendsIds(beforeId);
+                }
+              }
+
+              @Override
+              public void failure(TwitterException exception) {
+                // ignore exception
+                Timber.e(exception, "Cannot get friends ids");
+              }
+            });
   }
 
   private void getTimeline(@IntRange(from = 1, to = 3) final int part,
@@ -92,5 +121,26 @@ public class TwitterInteractor implements TwitterTransaction {
                 callback.onError(exception);
               }
             });
+  }
+
+  @Override
+  public boolean checkSession() {
+
+    final boolean hasActiveSession = TwitterCore.getInstance().getSessionManager().getActiveSession() != null;
+    if (!hasActiveSession) {
+      preferences.remove(PreferencesProvider.USERNAME);
+      return false;
+    }
+    if (!realmInteractor.hasFriendsIds()) {
+      // fetch the friends ids if we have none
+      getFriendsIds(-1L);
+    }
+    return true;
+  }
+
+  @Override
+  public void getTimeline(@NonNull TweetsCallback callback) {
+
+    getTimeline(1, null, callback);
   }
 }

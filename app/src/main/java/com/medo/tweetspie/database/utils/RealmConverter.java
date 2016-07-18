@@ -4,6 +4,7 @@ package com.medo.tweetspie.database.utils;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
@@ -16,28 +17,6 @@ import io.realm.RealmList;
 
 
 public class RealmConverter {
-
-  @Nullable
-  public static RealmTweet convert(@NonNull Tweet tweet) {
-
-    RealmTweet realmTweet = new RealmTweet();
-    if (tweet.place != null) {
-      realmTweet.setCountryCode(tweet.place.countryCode);
-    }
-    realmTweet.setCreatedAt(tweet.createdAt);
-    realmTweet.setEntities(extractMediaEntities(tweet.entities));
-    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
-    realmTweet.setFavoriteCount(tweet.favoriteCount);
-    realmTweet.setFavorited(tweet.favorited);
-    realmTweet.setIdStr(tweet.idStr);
-    realmTweet.setRetweetCount(tweet.retweetCount);
-    realmTweet.setRetweeted(tweet.retweeted);
-    realmTweet.setScore(0);
-    realmTweet.setText(tweet.text);
-    realmTweet.setUser(extractUser(tweet.user));
-
-    return realmTweet;
-  }
 
   @Nullable
   private static RealmList<RealmTweetEntity> extractMediaEntities(@Nullable TweetEntities entities) {
@@ -65,6 +44,7 @@ public class RealmConverter {
       return null;
     }
     RealmTweetUser realmTweetUser = new RealmTweetUser();
+    realmTweetUser.setFollowersCount(user.followersCount);
     realmTweetUser.setName(user.name);
     realmTweetUser.setProfileBackgroundColor(user.profileBackgroundColor);
     realmTweetUser.setProfileImageUrl(user.profileImageUrl);
@@ -72,5 +52,35 @@ public class RealmConverter {
     realmTweetUser.setScreenName(user.screenName);
 
     return realmTweetUser;
+  }
+
+  @Nullable
+  public static RealmTweet convertTweet(@NonNull Tweet tweet) {
+
+    RealmTweet realmTweet = new RealmTweet();
+    if (tweet.place != null) {
+      realmTweet.setCountryCode(tweet.place.countryCode);
+    }
+    realmTweet.setCreatedAt(tweet.createdAt);
+    realmTweet.setEntities(extractMediaEntities(tweet.entities));
+    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
+    realmTweet.setFavoriteCount(tweet.favoriteCount);
+    realmTweet.setFavorited(tweet.favorited);
+    realmTweet.setIdStr(tweet.idStr);
+    realmTweet.setRetweetCount(tweet.retweetCount);
+    realmTweet.setRetweeted(tweet.retweeted);
+    realmTweet.setScore(0);
+    realmTweet.setText(tweet.text);
+    realmTweet.setUser(extractUser(tweet.user));
+
+    return realmTweet;
+  }
+
+  @NonNull
+  public static RealmFriendId convertFriendId(@NonNull Long friendId) {
+
+    RealmFriendId realmFriendId = new RealmFriendId();
+    realmFriendId.setId(friendId);
+    return realmFriendId;
   }
 }

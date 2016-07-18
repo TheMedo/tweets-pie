@@ -21,7 +21,7 @@ android {
     }
 }
 
-def supportLibraryVersion = "24.0.0"
+def supportLibraryVersion = "24.1.0"
 
 dependencies {
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"
