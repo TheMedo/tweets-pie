@@ -6,12 +6,45 @@ import io.realm.annotations.PrimaryKey;
 
 public class RealmTweetUser extends RealmObject {
 
+  private long id;
+  private int followersCount;
+  private boolean friend;
+  @PrimaryKey
   private String name;
   private String profileBackgroundColor;
   private String profileImageUrl;
   private boolean protectedUser;
-  @PrimaryKey
   private String screenName;
+
+  public long getId() {
+
+    return id;
+  }
+
+  public void setId(long id) {
+
+    this.id = id;
+  }
+
+  public int getFollowersCount() {
+
+    return followersCount;
+  }
+
+  public void setFollowersCount(int followersCount) {
+
+    this.followersCount = followersCount;
+  }
+
+  public boolean isFriend() {
+
+    return friend;
+  }
+
+  public void setFriend(boolean friend) {
+
+    this.friend = friend;
+  }
 
   public String getName() {
 

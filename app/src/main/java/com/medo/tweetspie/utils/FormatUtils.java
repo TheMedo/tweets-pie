@@ -31,6 +31,23 @@ public class FormatUtils {
   private static final String hashTagScheme = "http://www.twitter.com/hashtag/";
   private static final Pattern urlPattern = Pattern.compile("[a-z]+://[^ \\n]*");
 
+
+  /**
+   * Converts the UTC time string into millis.
+   *
+   * @param utcTime the UTC time in "EEE MMM dd HH:mm:ss z yyyy" format
+   * @return the {@link Date} or null if the string cannot be parsed
+   */
+  public static Date utcToDate(@NonNull String utcTime) {
+
+    try {
+      return sdf.parse(utcTime);
+    }
+    catch (ParseException e) {
+      return null;
+    }
+  }
+
   /**
    * Formats the UTC time string into a relative time span string.
    *
@@ -40,15 +57,12 @@ public class FormatUtils {
   @NonNull
   public static String toRelativeDate(@NonNull String utcTime) {
 
-    Date date;
-    try {
-      date = sdf.parse(utcTime);
-    }
-    catch (ParseException e) {
+    final Date createdAtDate = utcToDate(utcTime);
+    if (createdAtDate == null) {
       return "";
     }
     return DateUtils.getRelativeTimeSpanString(
-            date.getTime(),
+            createdAtDate.getTime(),
             System.currentTimeMillis(),
             TimeUnit.SECONDS.toMillis(1),
             DateUtils.FORMAT_ABBREV_RELATIVE).toString();

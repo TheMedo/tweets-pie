@@ -8,6 +8,7 @@ import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
+import com.medo.tweetspie.utils.ScoreUtils;
 import com.twitter.sdk.android.core.models.MediaEntity;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.TweetEntities;
@@ -17,6 +18,37 @@ import io.realm.RealmList;
 
 
 public class RealmConverter {
+
+  @NonNull
+  public static RealmTweet convertTweet(@NonNull Tweet tweet) {
+
+    RealmTweet realmTweet = new RealmTweet();
+    if (tweet.place != null) {
+      realmTweet.setCountryCode(tweet.place.countryCode);
+    }
+    realmTweet.setCreatedAt(tweet.createdAt);
+    realmTweet.setEntities(extractMediaEntities(tweet.entities));
+    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
+    realmTweet.setFavoriteCount(tweet.favoriteCount);
+    realmTweet.setFavorited(tweet.favorited);
+    realmTweet.setIdStr(tweet.idStr);
+    realmTweet.setRetweetCount(tweet.retweetCount);
+    realmTweet.setRetweeted(tweet.retweeted);
+    realmTweet.setText(tweet.text);
+    realmTweet.setUser(extractUser(tweet.user));
+    // calculate the score
+    final int score = ScoreUtils.rateTweet(realmTweet);
+    realmTweet.setScore(score);
+    return realmTweet;
+  }
+
+  @NonNull
+  public static RealmFriendId convertFriendId(@NonNull Long friendId) {
+
+    RealmFriendId realmFriendId = new RealmFriendId();
+    realmFriendId.setId(friendId);
+    return realmFriendId;
+  }
 
   @Nullable
   private static RealmList<RealmTweetEntity> extractMediaEntities(@Nullable TweetEntities entities) {
@@ -44,6 +76,7 @@ public class RealmConverter {
       return null;
     }
     RealmTweetUser realmTweetUser = new RealmTweetUser();
+    realmTweetUser.setId(user.getId());
     realmTweetUser.setFollowersCount(user.followersCount);
     realmTweetUser.setName(user.name);
     realmTweetUser.setProfileBackgroundColor(user.profileBackgroundColor);
@@ -52,35 +85,5 @@ public class RealmConverter {
     realmTweetUser.setScreenName(user.screenName);
 
     return realmTweetUser;
-  }
-
-  @Nullable
-  public static RealmTweet convertTweet(@NonNull Tweet tweet) {
-
-    RealmTweet realmTweet = new RealmTweet();
-    if (tweet.place != null) {
-      realmTweet.setCountryCode(tweet.place.countryCode);
-    }
-    realmTweet.setCreatedAt(tweet.createdAt);
-    realmTweet.setEntities(extractMediaEntities(tweet.entities));
-    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
-    realmTweet.setFavoriteCount(tweet.favoriteCount);
-    realmTweet.setFavorited(tweet.favorited);
-    realmTweet.setIdStr(tweet.idStr);
-    realmTweet.setRetweetCount(tweet.retweetCount);
-    realmTweet.setRetweeted(tweet.retweeted);
-    realmTweet.setScore(0);
-    realmTweet.setText(tweet.text);
-    realmTweet.setUser(extractUser(tweet.user));
-
-    return realmTweet;
-  }
-
-  @NonNull
-  public static RealmFriendId convertFriendId(@NonNull Long friendId) {
-
-    RealmFriendId realmFriendId = new RealmFriendId();
-    realmFriendId.setId(friendId);
-    return realmFriendId;
   }
 }

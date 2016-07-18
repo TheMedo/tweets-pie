@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.database.model.RealmTweetUser;
 import com.medo.tweetspie.database.utils.RealmConverter;
 import com.twitter.sdk.android.core.models.Tweet;
 
@@ -32,13 +33,6 @@ public class RealmInteractor implements RealmTransaction {
     Realm.setDefaultConfiguration(realmConfiguration);
   }
 
-  private void checkInstance() {
-    // get the default realm instance
-    if (realm == null) {
-      realm = Realm.getDefaultInstance();
-    }
-  }
-
   @Override
   public void onInitialize() {
 
@@ -61,14 +55,22 @@ public class RealmInteractor implements RealmTransaction {
     // convert all tweets to realm objects
     List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
     for (Tweet tweet : tweets) {
+      RealmTweet realmTweet;
       if (tweet.retweetedStatus == null) {
         // convert the normal tweet
-        realmTweets.add(RealmConverter.convertTweet(tweet));
+        realmTweet = RealmConverter.convertTweet(tweet);
       }
       else {
         // convert the retweet
-        realmTweets.add(RealmConverter.convertTweet(tweet.retweetedStatus));
+        realmTweet = RealmConverter.convertTweet(tweet.retweetedStatus);
       }
+      // add meta info
+      final RealmTweetUser realmTweetUser = realmTweet.getUser();
+      if (realmTweetUser != null) {
+        realmTweetUser.setFriend(isFriend(realmTweetUser.getId()));
+      }
+
+      realmTweets.add(realmTweet);
     }
     // persist the realm tweets
     realm.beginTransaction();
@@ -107,5 +109,18 @@ public class RealmInteractor implements RealmTransaction {
 
     checkInstance();
     return realm.where(RealmFriendId.class).findFirst() != null;
+  }
+
+  private void checkInstance() {
+    // get the default realm instance
+    if (realm == null) {
+      realm = Realm.getDefaultInstance();
+    }
+  }
+
+  private boolean isFriend(long id) {
+
+    checkInstance();
+    return realm.where(RealmFriendId.class).equalTo("id", id).findFirst() != null;
   }
 }
