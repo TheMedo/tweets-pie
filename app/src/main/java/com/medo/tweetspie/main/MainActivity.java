@@ -90,13 +90,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @Override
   public void showData(OrderedRealmCollection<RealmTweet> tweets) {
 
-    if (recyclerTweets.getAdapter() != null) {
-      // don't update the date if the adapter has already been set
-      // realm will auto update any database changes
+    TweetsAdapter tweetsAdapter = (TweetsAdapter) recyclerTweets.getAdapter();
+    if (tweetsAdapter != null) {
+      // just update the data if the adapter has already been set
+      tweetsAdapter.updateData(tweets);
       return;
     }
     // setup the recycler view and set the adapter
-    TweetsAdapter tweetsAdapter = new TweetsAdapter(this, tweets, this);
+    tweetsAdapter = new TweetsAdapter(this, tweets, this);
     recyclerTweets.setLayoutManager(new LinearLayoutManager(this));
     recyclerTweets.setAdapter(tweetsAdapter);
     recyclerTweets.setHasFixedSize(true);
