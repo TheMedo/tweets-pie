@@ -11,6 +11,7 @@ import com.medo.tweetspie.database.utils.RealmConverter;
 import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
@@ -42,6 +43,7 @@ public class RealmInteractor implements RealmTransaction {
   @Override
   public void onDestroy() {
     // close the default realm instance
+    removeOldTweets();
     if (realm != null) {
       realm.close();
       realm = null;
@@ -116,6 +118,23 @@ public class RealmInteractor implements RealmTransaction {
     if (realm == null) {
       realm = Realm.getDefaultInstance();
     }
+  }
+
+  /**
+   * Deletes all tweets older than a day from the database
+   */
+  private void removeOldTweets() {
+
+    checkInstance();
+    Calendar yesterday = Calendar.getInstance();
+    yesterday.add(Calendar.DAY_OF_YEAR, -1);
+
+    realm.beginTransaction();
+    realm.where(RealmTweet.class)
+            .lessThan("createdAt", yesterday.getTime())
+            .findAll()
+            .deleteAllFromRealm();
+    realm.commitTransaction();
   }
 
   private boolean isFriend(long id) {
