@@ -2,6 +2,7 @@ package com.medo.tweetspie.utils;
 
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.format.DateUtils;
 import android.text.util.Linkify;
 import android.widget.TextView;
@@ -51,18 +52,17 @@ public class FormatUtils {
   /**
    * Formats the UTC time string into a relative time span string.
    *
-   * @param utcTime the UTC time in "EEE MMM dd HH:mm:ss z yyyy" format
+   * @param date the date to be formatted
    * @return the relative time string or empty if UTC time cannot be parsed
    */
   @NonNull
-  public static String toRelativeDate(@NonNull String utcTime) {
+  public static String toRelativeDate(@Nullable Date date) {
 
-    final Date createdAtDate = utcToDate(utcTime);
-    if (createdAtDate == null) {
+    if (date == null) {
       return "";
     }
     return DateUtils.getRelativeTimeSpanString(
-            createdAtDate.getTime(),
+            date.getTime(),
             System.currentTimeMillis(),
             TimeUnit.SECONDS.toMillis(1),
             DateUtils.FORMAT_ABBREV_RELATIVE).toString();

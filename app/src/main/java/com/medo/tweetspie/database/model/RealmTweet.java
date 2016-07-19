@@ -1,5 +1,7 @@
 package com.medo.tweetspie.database.model;
 
+import java.util.Date;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -8,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class RealmTweet extends RealmObject {
 
   private String countryCode;
-  private String createdAt;
+  private Date createdAt;
   private RealmList<RealmTweetEntity> entities;
   private RealmList<RealmTweetEntity> extendedEntities;
   private int favoriteCount;
@@ -31,12 +33,12 @@ public class RealmTweet extends RealmObject {
     this.countryCode = countryCode;
   }
 
-  public String getCreatedAt() {
+  public Date getCreatedAt() {
 
     return createdAt;
   }
 
-  public void setCreatedAt(String createdAt) {
+  public void setCreatedAt(Date createdAt) {
 
     this.createdAt = createdAt;
   }

@@ -8,6 +8,7 @@ import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
+import com.medo.tweetspie.utils.FormatUtils;
 import com.medo.tweetspie.utils.ScoreUtils;
 import com.twitter.sdk.android.core.models.MediaEntity;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -26,7 +27,7 @@ public class RealmConverter {
     if (tweet.place != null) {
       realmTweet.setCountryCode(tweet.place.countryCode);
     }
-    realmTweet.setCreatedAt(tweet.createdAt);
+    realmTweet.setCreatedAt(FormatUtils.utcToDate(tweet.createdAt));
     realmTweet.setEntities(extractMediaEntities(tweet.entities));
     realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
     realmTweet.setFavoriteCount(tweet.favoriteCount);

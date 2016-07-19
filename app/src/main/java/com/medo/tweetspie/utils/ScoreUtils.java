@@ -65,17 +65,16 @@ public class ScoreUtils {
   /**
    * Returns the time score based on the tweet recency to now
    *
-   * @param createdAt the UTC string creation date
+   * @param createdAt the date the tweet was created at
    * @return the recency score in the range of [0, 10]
    */
-  private static int getRecencyScore(@NonNull String createdAt) {
+  private static int getRecencyScore(@Nullable Date createdAt) {
 
-    final Date createdAtDate = FormatUtils.utcToDate(createdAt);
-    if (createdAtDate == null) {
+    if (createdAt == null) {
       // date cannot be parsed
       return 0;
     }
-    final long createdAtMillis = createdAtDate.getTime();
+    final long createdAtMillis = createdAt.getTime();
     final long currentTimeMillis = System.currentTimeMillis();
     final long diffInMillis = currentTimeMillis - createdAtMillis;
     if (diffInMillis > TimeUnit.DAYS.toMillis(1)) {
@@ -90,15 +89,14 @@ public class ScoreUtils {
    * Returns the time zone score based on proximity to the same time zone.
    * The same time zone gets a score of 10, the +/-12 time zone gets score of 0.
    *
-   * @param createdAt the UTC string creation date
+   * @param createdAt the date the tweet was created at
    * @return the time zone score in the range of [0, 10]
    */
-  private static int getTimeZoneScore(@NonNull String createdAt) {
+  private static int getTimeZoneScore(@NonNull Date createdAt) {
 
-    final Date createdAtDate = FormatUtils.utcToDate(createdAt);
     final Calendar nowCal = Calendar.getInstance();
     final Calendar createdAtCal = Calendar.getInstance();
-    createdAtCal.setTime(createdAtDate);
+    createdAtCal.setTime(createdAt);
 
     final long nowOffset = (nowCal.get(Calendar.ZONE_OFFSET) + nowCal.get(Calendar.DST_OFFSET));
     final long createdAtOffset = (createdAtCal.get(Calendar.ZONE_OFFSET) + createdAtCal.get(Calendar.DST_OFFSET));
