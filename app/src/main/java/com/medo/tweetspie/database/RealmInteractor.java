@@ -3,6 +3,7 @@ package com.medo.tweetspie.database;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
@@ -109,6 +110,36 @@ public class RealmInteractor implements RealmTransaction {
     return realm.where(RealmFriendId.class).findFirst() != null;
   }
 
+  @Override
+  public void toggleRetweet(@NonNull String id) {
+
+    RealmTweet tweet = getRealmTweet(id);
+    if (tweet == null) {
+      return;
+    }
+    final boolean isRetweeted = tweet.isRetweeted();
+    final int retweetCount = tweet.getRetweetCount();
+    realm.beginTransaction();
+    tweet.setRetweeted(!isRetweeted);
+    tweet.setRetweetCount(isRetweeted ? retweetCount - 1 : retweetCount + 1);
+    realm.commitTransaction();
+  }
+
+  @Override
+  public void toggleFavorite(@NonNull String id) {
+
+    RealmTweet tweet = getRealmTweet(id);
+    if (tweet == null) {
+      return;
+    }
+    final boolean isFavorited = tweet.isFavorited();
+    final int favoriteCount = tweet.getFavoriteCount();
+    realm.beginTransaction();
+    tweet.setFavorited(!isFavorited);
+    tweet.setFavoriteCount(isFavorited ? favoriteCount - 1 : favoriteCount + 1);
+    realm.commitTransaction();
+  }
+
   /**
    * Deletes all tweets older than a day from the database
    */
@@ -128,5 +159,11 @@ public class RealmInteractor implements RealmTransaction {
   private boolean isFriend(long id) {
 
     return realm.where(RealmFriendId.class).equalTo("id", id).findFirst() != null;
+  }
+
+  @Nullable
+  private RealmTweet getRealmTweet(@NonNull String idStr) {
+
+    return realm.where(RealmTweet.class).equalTo("idStr", idStr).findFirst();
   }
 }

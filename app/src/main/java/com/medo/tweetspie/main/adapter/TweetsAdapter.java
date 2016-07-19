@@ -6,11 +6,12 @@ import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.database.model.RealmTweet;
@@ -19,7 +20,6 @@ import com.medo.tweetspie.utils.ImageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -63,10 +63,10 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     TextView textDate;
     @BindView(R.id.text_text)
     TextView textText;
-    @BindView(R.id.toggle_retweets)
-    ToggleButton toggleRetweets;
-    @BindView(R.id.toggle_favorites)
-    ToggleButton toggleFavorites;
+    @BindView(R.id.text_retweets)
+    CheckedTextView toggleRetweets;
+    @BindView(R.id.text_favorites)
+    CheckedTextView toggleFavorites;
     @BindView(R.id.text_score)
     TextView textScore;
 
@@ -79,35 +79,32 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     }
 
     void showTweet(RealmTweet tweet) {
-
-      this.tweet = tweet;
       // bind the tweet data to the views
-      if (tweet.getUser() != null) {
-        // set the user data
-        ImageUtils.loadUserAvatar(context, imageAvatar, tweet.getUser());
-        textName.setText(tweet.getUser().getName());
-        textUsername.setText("@");
-        textUsername.append(tweet.getUser().getScreenName());
-      }
+      this.tweet = tweet;
+      // set the user data
+      ImageUtils.loadUserAvatar(context, imageAvatar, tweet.getUser());
+      textName.setText(tweet.getUser().getName());
+      textUsername.setText("@");
+      textUsername.append(tweet.getUser().getScreenName());
 
       // set the date
       textDate.setText(FormatUtils.toRelativeDate(tweet.getCreatedAt()));
       textDate.setPaintFlags(textDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
       // set the text and add links
-      textText.setText(tweet.getText());
+      textText.setText(Html.fromHtml(tweet.getText()));
       FormatUtils.addLinks(textText);
 
       // set the retweets
       toggleRetweets.setChecked(tweet.isRetweeted());
-      toggleRetweets.setText(String.valueOf(tweet.getRetweetCount()));
+      toggleRetweets.setText(FormatUtils.formatNumber(tweet.getRetweetCount()));
 
       // set the favorites
       toggleFavorites.setChecked(tweet.isFavorited());
-      toggleFavorites.setText(String.valueOf(tweet.getFavoriteCount()));
+      toggleFavorites.setText(FormatUtils.formatNumber(tweet.getFavoriteCount()));
 
       // set the score
-      textScore.setText(String.valueOf(tweet.getScore()));
+      textScore.setText(FormatUtils.formatNumber(tweet.getScore()));
     }
 
     @OnClick(R.id.image_avatar)
@@ -118,8 +115,8 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
 
     @OnClick(R.id.text_date)
     void onDateClick() {
-      // TODO add tweet id
-      presenter.onDateClick();
+
+      presenter.onDateClick(tweet.getIdStr(), tweet.getUser().getScreenName());
     }
 
     @OnClick(R.id.text_text)
@@ -128,14 +125,16 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       presenter.onMediaClick();
     }
 
-    @OnCheckedChanged(R.id.toggle_retweets)
-    void onRetweetClicked(boolean checked) {
-      // TODO toggle retweet
+    @OnClick(R.id.text_retweets)
+    void onRetweetClicked() {
+
+      presenter.onRetweetClick(tweet.getIdStr());
     }
 
-    @OnCheckedChanged(R.id.toggle_favorites)
-    void onFavoriteClicked(boolean checked) {
-      // TODO toggle favorite
+    @OnClick(R.id.text_favorites)
+    void onFavoriteClicked() {
+
+      presenter.onFavoriteClick(tweet.getIdStr());
     }
   }
 }

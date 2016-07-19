@@ -1,7 +1,9 @@
 package com.medo.tweetspie.main;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -117,7 +119,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void openTweet() {
+  public void openMedia() {
 
   }
 
@@ -127,8 +129,22 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void openMedia() {
+  public void openTweet(@NonNull String url) {
 
+    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    startActivity(intent);
+  }
+
+  @Override
+  public void toggleRetweet(@NonNull String id) {
+
+    realmInteractor.toggleRetweet(id);
+  }
+
+  @Override
+  public void toggleFavorite(@NonNull String id) {
+
+    realmInteractor.toggleFavorite(id);
   }
 
   @Subscribe

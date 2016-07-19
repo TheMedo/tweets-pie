@@ -19,4 +19,8 @@ public interface RealmTransaction {
   void persistFriendsIds(@NonNull List<Long> friendsIds);
 
   boolean hasFriendsIds();
+
+  void toggleRetweet(@NonNull String id);
+
+  void toggleFavorite(@NonNull String id);
 }

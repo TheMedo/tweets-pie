@@ -64,23 +64,23 @@
         android:textAppearance="@style/TextAppearance.AppCompat"
         tools:text="For some notifications (mentions or retweets), you can choose between receiving notifications Only from people I follow or From anyone."/>
 
-    <ToggleButton
-        android:id="@+id/toggle_retweets"
-        style="@style/CustomToggleButton"
+    <CheckedTextView
+        android:id="@+id/text_retweets"
+        style="@style/CustomCheckedTextView"
         android:layout_below="@+id/text_text"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/image_avatar"
-        android:button="@drawable/selector_retweet"
-        tools:textOff="16"/>
+        android:drawableStart="@drawable/selector_retweet"
+        tools:text="16"/>
 
-    <ToggleButton
-        android:id="@+id/toggle_favorites"
-        style="@style/CustomToggleButton"
+    <CheckedTextView
+        android:id="@+id/text_favorites"
+        style="@style/CustomCheckedTextView"
         android:layout_below="@+id/text_text"
         android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/toggle_retweets"
-        android:button="@drawable/selector_favorite"
-        tools:textOff="20"/>
+        android:layout_toEndOf="@+id/text_retweets"
+        android:drawableStart="@drawable/selector_favorite"
+        tools:text="20"/>
 
     <TextView
         android:id="@+id/text_score"

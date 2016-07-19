@@ -1,5 +1,10 @@
 package com.medo.tweetspie.main.adapter;
 
+import android.support.annotation.NonNull;
+
+import com.medo.tweetspie.utils.FormatUtils;
+
+
 public class AdapterPresenter implements AdapterContract.Actions {
 
   private final AdapterContract.View view;
@@ -10,9 +15,9 @@ public class AdapterPresenter implements AdapterContract.Actions {
   }
 
   @Override
-  public void onDateClick() {
+  public void onDateClick(@NonNull String id, @NonNull String screenName) {
 
-    view.openTweet();
+    view.openTweet(FormatUtils.getTweetUrl(id, screenName));
   }
 
   @Override
@@ -25,5 +30,17 @@ public class AdapterPresenter implements AdapterContract.Actions {
   public void onMediaClick() {
 
     view.openMedia();
+  }
+
+  @Override
+  public void onRetweetClick(@NonNull String id) {
+
+    view.toggleRetweet(id);
+  }
+
+  @Override
+  public void onFavoriteClick(@NonNull String id) {
+
+    view.toggleFavorite(id);
   }
 }
