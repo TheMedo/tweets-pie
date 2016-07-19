@@ -82,7 +82,7 @@ public class ScoreUtils {
       return 0;
     }
     // normalize the recency in range
-    return (int) MathUtils.scaleInRange(diffInMillis, createdAtMillis, currentTimeMillis, 0, 10);
+    return (int) (1.0f - MathUtils.normalize(diffInMillis, 0, TimeUnit.DAYS.toMillis(1))) * 10;
   }
 
   /**
@@ -102,7 +102,7 @@ public class ScoreUtils {
     final long createdAtOffset = (createdAtCal.get(Calendar.ZONE_OFFSET) + createdAtCal.get(Calendar.DST_OFFSET));
     final long diffHours = Math.abs(TimeUnit.MILLISECONDS.toHours(nowOffset - createdAtOffset));
 
-    return (int) MathUtils.scaleInRange(diffHours, 0, 12, 10, 0);
+    return (int) MathUtils.normalize(diffHours, 0, 12) * 10;
   }
 
   /**
@@ -115,7 +115,7 @@ public class ScoreUtils {
    */
   private static int getRetweetScore(int retweetCount, int followersCount) {
 
-    return Math.min(10, retweetCount / followersCount * 2000);
+    return Math.min(10, (int) ((float) retweetCount / followersCount * 2000));
   }
 
   /**
@@ -128,7 +128,7 @@ public class ScoreUtils {
    */
   private static int getFavoriteScore(int favoriteCount, int followersCount) {
 
-    return Math.min(10, favoriteCount / followersCount * 1000);
+    return Math.min(10, (int) ((float) favoriteCount / followersCount * 1000));
   }
 
   /**
