@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.database.model.RealmTweet;
@@ -18,6 +19,7 @@ import com.medo.tweetspie.utils.ImageUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
@@ -61,6 +63,12 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     TextView textDate;
     @BindView(R.id.text_text)
     TextView textText;
+    @BindView(R.id.toggle_retweets)
+    ToggleButton toggleRetweets;
+    @BindView(R.id.toggle_favorites)
+    ToggleButton toggleFavorites;
+    @BindView(R.id.text_score)
+    TextView textScore;
 
     private RealmTweet tweet;
 
@@ -75,33 +83,59 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       this.tweet = tweet;
       // bind the tweet data to the views
       if (tweet.getUser() != null) {
+        // set the user data
         ImageUtils.loadUserAvatar(context, imageAvatar, tweet.getUser());
         textName.setText(tweet.getUser().getName());
         textUsername.setText("@");
         textUsername.append(tweet.getUser().getScreenName());
       }
+
+      // set the date
       textDate.setText(FormatUtils.toRelativeDate(tweet.getCreatedAt()));
       textDate.setPaintFlags(textDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+      // set the text and add links
       textText.setText(tweet.getText());
       FormatUtils.addLinks(textText);
+
+      // set the retweets
+      toggleRetweets.setChecked(tweet.isRetweeted());
+      toggleRetweets.setText(String.valueOf(tweet.getRetweetCount()));
+
+      // set the favorites
+      toggleFavorites.setChecked(tweet.isFavorited());
+      toggleFavorites.setText(String.valueOf(tweet.getFavoriteCount()));
+
+      // set the score
+      textScore.setText(String.valueOf(tweet.getScore()));
     }
 
     @OnClick(R.id.image_avatar)
-    public void onAvatarClick() {
+    void onAvatarClick() {
       // TODO add username
       presenter.onAvatarClick();
     }
 
     @OnClick(R.id.text_date)
-    public void onDateClick() {
+    void onDateClick() {
       // TODO add tweet id
       presenter.onDateClick();
     }
 
     @OnClick(R.id.text_text)
-    public void onMediaClick() {
+    void onMediaClick() {
       // TODO add media url
       presenter.onMediaClick();
+    }
+
+    @OnCheckedChanged(R.id.toggle_retweets)
+    void onRetweetClicked(boolean checked) {
+      // TODO toggle retweet
+    }
+
+    @OnCheckedChanged(R.id.toggle_favorites)
+    void onFavoriteClicked(boolean checked) {
+      // TODO toggle favorite
     }
   }
 }
