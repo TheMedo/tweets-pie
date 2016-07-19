@@ -20,6 +20,7 @@ import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
@@ -27,7 +28,8 @@ import timber.log.Timber;
 
 public class TwitterInteractor implements TwitterTransaction {
 
-  private static final int TIMELINE_MAX_QUERIES = 3;
+  private static final int TIMELINE_MAX_QUERIES = 1;
+  private static final long TIMELINE_REFRESH_INTERVAL = TimeUnit.MINUTES.toMillis(5);
 
   private final PreferencesProvider preferences;
   private final RealmInteractor realmInteractor;
@@ -37,6 +39,7 @@ public class TwitterInteractor implements TwitterTransaction {
 
     this.preferences = preferences;
     this.realmInteractor = realmInteractor;
+    this.customApiClient = new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
   }
 
   public static void init(@NonNull Context context) {
@@ -45,19 +48,10 @@ public class TwitterInteractor implements TwitterTransaction {
     Fabric.with(context, new TwitterCore(authConfig), new TweetUi());
   }
 
-  private void checkInstance() {
-
-    if (customApiClient == null) {
-      // instantiate the custom api client if null
-      customApiClient = new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
-    }
-  }
-
   private void getFriendsIds(@Nullable Long beforeId) {
 
-    checkInstance();
     customApiClient.getFriendsService().friends(
-            null, preferences.get(PreferencesProvider.USERNAME), beforeId, false, 5000L, new Callback<FriendsIds>() {
+            null, preferences.getString(PreferencesProvider.USERNAME), beforeId, false, 5000L, new Callback<FriendsIds>() {
 
               @Override
               public void success(Result<FriendsIds> result) {
@@ -88,6 +82,13 @@ public class TwitterInteractor implements TwitterTransaction {
                            @Nullable Long maxId,
                            @NonNull final TweetsCallback callback) {
 
+    long lastUpdateTimestamp = preferences.getLong(PreferencesProvider.LAST_UPDATE_TIMESTAMP);
+    if (System.currentTimeMillis() - lastUpdateTimestamp < TIMELINE_REFRESH_INTERVAL) {
+      // don't trigger network request all too often
+      callback.onFinish();
+      return;
+    }
+
     TwitterCore.getInstance().getApiClient().getStatusesService().homeTimeline(
             200, null, maxId, false, true, false, false, new Callback<List<Tweet>>() {
 
@@ -111,6 +112,7 @@ public class TwitterInteractor implements TwitterTransaction {
                 else {
                   // complete the service once all tweets from user's timeline
                   // have been processed and persisted
+                  preferences.set(PreferencesProvider.LAST_UPDATE_TIMESTAMP, System.currentTimeMillis());
                   callback.onFinish();
                 }
               }

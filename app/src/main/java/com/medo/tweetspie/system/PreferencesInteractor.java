@@ -17,15 +17,27 @@ public class PreferencesInteractor implements PreferencesProvider {
 
   @Nullable
   @Override
-  public String get(@PreferenceKey String key) {
+  public String getString(@PreferenceKey String key) {
 
     return preferences.getString(key, null);
+  }
+
+  @Override
+  public long getLong(@PreferenceKey String key) {
+
+    return preferences.getLong(key, 0);
   }
 
   @Override
   public void set(@PreferenceKey String key, @Nullable String value) {
 
     preferences.edit().putString(key, value).apply();
+  }
+
+  @Override
+  public void set(@PreferenceKey String key, long value) {
+
+    preferences.edit().putLong(key, value).apply();
   }
 
   @Override

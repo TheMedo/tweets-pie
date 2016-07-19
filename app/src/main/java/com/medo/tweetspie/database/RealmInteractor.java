@@ -25,6 +25,11 @@ public class RealmInteractor implements RealmTransaction {
 
   private Realm realm;
 
+  public RealmInteractor() {
+
+    this.realm = Realm.getDefaultInstance();
+  }
+
   public static void init(@NonNull Context context) {
     // create a default realm configuration that will delete the database if migration is needed
     // this will remove the migration overhead when modifying the database schema
@@ -37,23 +42,18 @@ public class RealmInteractor implements RealmTransaction {
   @Override
   public void onInitialize() {
 
-    checkInstance();
   }
 
   @Override
   public void onDestroy() {
-    // close the default realm instance
+
     removeOldTweets();
-    if (realm != null) {
-      realm.close();
-      realm = null;
-    }
+    realm.close();
+    realm = null;
   }
 
   @Override
   public void persistTweets(@NonNull List<Tweet> tweets) {
-
-    checkInstance();
     // convert all tweets to realm objects
     List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
     for (Tweet tweet : tweets) {
@@ -84,8 +84,6 @@ public class RealmInteractor implements RealmTransaction {
 
   @Override
   public void persistFriendsIds(@NonNull List<Long> friendsIds) {
-
-    checkInstance();
     // convert all tweets to realm objects
     List<RealmFriendId> realmFriendIds = new ArrayList<>(friendsIds.size());
     for (Long id : friendsIds) {
@@ -102,22 +100,13 @@ public class RealmInteractor implements RealmTransaction {
   @NonNull
   public OrderedRealmCollection<RealmTweet> getTweets() {
 
-    checkInstance();
     return realm.where(RealmTweet.class).findAllSorted("score", Sort.DESCENDING);
   }
 
   @Override
   public boolean hasFriendsIds() {
 
-    checkInstance();
     return realm.where(RealmFriendId.class).findFirst() != null;
-  }
-
-  private void checkInstance() {
-    // get the default realm instance
-    if (realm == null) {
-      realm = Realm.getDefaultInstance();
-    }
   }
 
   /**
@@ -125,7 +114,6 @@ public class RealmInteractor implements RealmTransaction {
    */
   private void removeOldTweets() {
 
-    checkInstance();
     Calendar yesterday = Calendar.getInstance();
     yesterday.add(Calendar.DAY_OF_YEAR, -1);
 
@@ -139,7 +127,6 @@ public class RealmInteractor implements RealmTransaction {
 
   private boolean isFriend(long id) {
 
-    checkInstance();
     return realm.where(RealmFriendId.class).equalTo("id", id).findFirst() != null;
   }
 }

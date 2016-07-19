@@ -13,11 +13,16 @@ public interface PreferencesProvider {
   String USERNAME = "username";
   String RETWEETS = "retweets";
   String REPLIES = "replies";
+  String LAST_UPDATE_TIMESTAMP = "lastUpdateTimestamp";
 
   @Nullable
-  String get(@PreferenceKey String key);
+  String getString(@PreferenceKey String key);
+
+  long getLong(@PreferenceKey String key);
 
   void set(@PreferenceKey String key, @Nullable String value);
+
+  void set(@PreferenceKey String key, long value);
 
   boolean has(@PreferenceKey String key);
 
@@ -27,7 +32,8 @@ public interface PreferencesProvider {
   @StringDef({
           USERNAME,
           RETWEETS,
-          REPLIES
+          REPLIES,
+          LAST_UPDATE_TIMESTAMP
   })
   @interface PreferenceKey {}
 }
