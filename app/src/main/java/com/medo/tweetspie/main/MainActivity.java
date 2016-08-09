@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.bus.events.TimelineServiceEvent;
-import com.medo.tweetspie.consts.Constants;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.main.adapter.AdapterContract;
@@ -27,6 +26,8 @@ import io.realm.OrderedRealmCollection;
 
 
 public class MainActivity extends BaseActivity implements MainContract.View, AdapterContract.View {
+
+  private static final int REQUEST_CODE_ONBOARDING = 1620;
 
   @BindView(R.id.recycler_tweets)
   RecyclerView recyclerTweets;
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == Constants.REQUEST_CODE_ONBOARDING) {
+    if (requestCode == REQUEST_CODE_ONBOARDING) {
       if (resultCode == RESULT_OK) {
         presenter.onOnboardingSuccess();
       }
@@ -74,7 +75,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @Override
   public void startOnboarding() {
 
-    startActivityForResult(OnboardingActivity.getIntent(this), Constants.REQUEST_CODE_ONBOARDING);
+    startActivityForResult(OnboardingActivity.getIntent(this), REQUEST_CODE_ONBOARDING);
   }
 
   @Override

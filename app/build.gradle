@@ -5,13 +5,17 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    buildToolsVersion "24.0.1"
     defaultConfig {
         applicationId "com.medo.tweetspie"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+
+        // set the twitter api keys into your global gradle.properties file
+        buildConfigField("String", "TWITTER_KEY", "\"" + TWITTER_KEY + "\"")
+        buildConfigField("String", "TWITTER_SECRET", "\"" + TWITTER_SECRET + "\"")
     }
     buildTypes {
         release {

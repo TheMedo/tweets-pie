@@ -6,7 +6,7 @@ import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.medo.tweetspie.consts.Constants;
+import com.medo.tweetspie.BuildConfig;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.rest.api.CustomApiClient;
 import com.medo.tweetspie.rest.model.FriendsIds;
@@ -44,7 +44,7 @@ public class TwitterInteractor implements TwitterTransaction {
 
   public static void init(@NonNull Context context) {
     // init twitter
-    TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
+    TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
     Fabric.with(context, new TwitterCore(authConfig), new TweetUi());
   }
 
