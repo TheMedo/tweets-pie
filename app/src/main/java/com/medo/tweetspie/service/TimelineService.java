@@ -33,7 +33,8 @@ public class TimelineService extends Service implements TimelineContract.Service
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
 
-    RealmInteractor realmInteractor = new RealmInteractor();
+    RealmInteractor realmInteractor = new RealmInteractor(
+            new PreferencesInteractor(getApplicationContext()));
     TimelineContract.Actions presenter = new TimelinePresenter(
             this,
             new TwitterInteractor(new PreferencesInteractor(this), realmInteractor),

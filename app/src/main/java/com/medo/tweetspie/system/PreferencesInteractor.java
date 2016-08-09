@@ -15,6 +15,14 @@ public class PreferencesInteractor implements PreferencesProvider {
     preferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
   }
 
+  @Override
+  public void initWithDefaultValues() {
+
+    set(RETWEETS, true);
+    set(REPLIES, true);
+    set(MAX_TWEETS, 30);
+  }
+
   @Nullable
   @Override
   public String getString(@PreferenceKey String key) {
@@ -29,6 +37,12 @@ public class PreferencesInteractor implements PreferencesProvider {
   }
 
   @Override
+  public boolean getBoolean(@PreferenceKey String key) {
+
+    return preferences.getBoolean(key, false);
+  }
+
+  @Override
   public void set(@PreferenceKey String key, @Nullable String value) {
 
     preferences.edit().putString(key, value).apply();
@@ -38,6 +52,12 @@ public class PreferencesInteractor implements PreferencesProvider {
   public void set(@PreferenceKey String key, long value) {
 
     preferences.edit().putLong(key, value).apply();
+  }
+
+  @Override
+  public void set(@PreferenceKey String key, boolean value) {
+
+    preferences.edit().putBoolean(key, value).apply();
   }
 
   @Override

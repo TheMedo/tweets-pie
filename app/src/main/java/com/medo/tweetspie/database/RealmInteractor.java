@@ -7,12 +7,13 @@ import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
-import com.medo.tweetspie.database.model.RealmTweetUser;
 import com.medo.tweetspie.database.utils.RealmConverter;
+import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
@@ -24,11 +25,13 @@ import timber.log.Timber;
 
 public class RealmInteractor implements RealmTransaction {
 
+  private final PreferencesProvider preferences;
   private Realm realm;
 
-  public RealmInteractor() {
+  public RealmInteractor(PreferencesProvider preferencesProvider) {
 
     this.realm = Realm.getDefaultInstance();
+    this.preferences = preferencesProvider;
   }
 
   public static void init(@NonNull Context context) {
@@ -48,7 +51,6 @@ public class RealmInteractor implements RealmTransaction {
   @Override
   public void onDestroy() {
 
-    removeOldTweets();
     realm.close();
     realm = null;
   }
@@ -56,31 +58,9 @@ public class RealmInteractor implements RealmTransaction {
   @Override
   public void persistTweets(@NonNull List<Tweet> tweets) {
     // convert all tweets to realm objects
-    List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
-    for (Tweet tweet : tweets) {
-      RealmTweet realmTweet;
-      if (tweet.retweetedStatus == null) {
-        // convert the normal tweet
-        realmTweet = RealmConverter.convertTweet(tweet);
-      }
-      else {
-        // convert the retweet
-        realmTweet = RealmConverter.convertTweet(tweet.retweetedStatus);
-      }
-      // add meta info
-      final RealmTweetUser realmTweetUser = realmTweet.getUser();
-      if (realmTweetUser != null) {
-        realmTweetUser.setFriend(isFriend(realmTweetUser.getId()));
-      }
-
-      realmTweets.add(realmTweet);
-    }
-    // persist the realm tweets
-    realm.beginTransaction();
-    realm.copyToRealmOrUpdate(realmTweets);
-    realm.commitTransaction();
-
-    Timber.d("Persisted %d tweets", realmTweets.size());
+    List<RealmTweet> convertedTweets = convertAndRateTweets(tweets);
+    List<RealmTweet> sortedTweets = sortAndTrimTweets(convertedTweets);
+    deleteOldAndPersistNewTweets(sortedTweets);
   }
 
   @Override
@@ -140,20 +120,50 @@ public class RealmInteractor implements RealmTransaction {
     realm.commitTransaction();
   }
 
-  /**
-   * Deletes all tweets older than a day from the database
-   */
-  private void removeOldTweets() {
+  @NonNull
+  private List<RealmTweet> convertAndRateTweets(@NonNull List<Tweet> tweets) {
+    // convert all tweets to realm objects
+    List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
+    for (Tweet tweet : tweets) {
+      RealmTweet realmTweet;
+      boolean friend = isFriend(tweet.user.getId());
+      if (tweet.retweetedStatus == null) {
+        // convert the normal tweet
+        realmTweet = RealmConverter.convertTweet(tweet, friend);
+      }
+      else {
+        // convert the retweet
+        realmTweet = RealmConverter.convertTweet(tweet.retweetedStatus, friend);
+      }
 
-    Calendar yesterday = Calendar.getInstance();
-    yesterday.add(Calendar.DAY_OF_YEAR, -1);
+      realmTweets.add(realmTweet);
+    }
+    return realmTweets;
+  }
 
+  @NonNull
+  private List<RealmTweet> sortAndTrimTweets(@NonNull List<RealmTweet> tweets) {
+    // sort the list based on the score in descending order
+    Collections.sort(tweets, new Comparator<RealmTweet>() {
+
+      @Override
+      public int compare(RealmTweet leftTweet, RealmTweet rightTweet) {
+
+        return Integer.compare(rightTweet.getScore(), leftTweet.getScore());
+      }
+    });
+    // return a subset of the highest rated tweets
+    return tweets.subList(0, (int) preferences.getLong(PreferencesProvider.MAX_TWEETS));
+  }
+
+  private void deleteOldAndPersistNewTweets(@NonNull List<RealmTweet> tweets) {
+    // persist the realm tweets
     realm.beginTransaction();
-    realm.where(RealmTweet.class)
-            .lessThan("createdAt", yesterday.getTime())
-            .findAll()
-            .deleteAllFromRealm();
+    realm.delete(RealmTweet.class);
+    realm.copyToRealmOrUpdate(tweets);
     realm.commitTransaction();
+
+    Timber.d("Persisted %d tweets", tweets.size());
   }
 
   private boolean isFriend(long id) {

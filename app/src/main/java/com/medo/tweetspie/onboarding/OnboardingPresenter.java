@@ -26,6 +26,7 @@ public class OnboardingPresenter implements OnboardingContract.Actions {
   @Override
   public void onLoginSuccess(TwitterSession twitterSession) {
     // persist the username and notify success
+    preferences.initWithDefaultValues();
     preferences.set(PreferencesProvider.USERNAME, twitterSession.getUserName());
     view.exitWithSuccess();
   }

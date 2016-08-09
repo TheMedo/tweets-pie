@@ -21,7 +21,7 @@ import io.realm.RealmList;
 public class RealmConverter {
 
   @NonNull
-  public static RealmTweet convertTweet(@NonNull Tweet tweet) {
+  public static RealmTweet convertTweet(@NonNull Tweet tweet, boolean friend) {
 
     RealmTweet realmTweet = new RealmTweet();
     if (tweet.place != null) {
@@ -36,7 +36,7 @@ public class RealmConverter {
     realmTweet.setRetweetCount(tweet.retweetCount);
     realmTweet.setRetweeted(tweet.retweeted);
     realmTweet.setText(tweet.text);
-    realmTweet.setUser(extractUser(tweet.user));
+    realmTweet.setUser(extractUser(tweet.user, friend));
     // calculate the score
     final int score = ScoreUtils.rateTweet(realmTweet);
     realmTweet.setScore(score);
@@ -71,7 +71,7 @@ public class RealmConverter {
   }
 
   @Nullable
-  private static RealmTweetUser extractUser(@Nullable User user) {
+  private static RealmTweetUser extractUser(@Nullable User user, boolean friend) {
 
     if (user == null) {
       return null;
@@ -84,6 +84,7 @@ public class RealmConverter {
     realmTweetUser.setProfileImageUrl(user.profileImageUrl);
     realmTweetUser.setProtectedUser(user.protectedUser);
     realmTweetUser.setScreenName(user.screenName);
+    realmTweetUser.setFriend(friend);
 
     return realmTweetUser;
   }

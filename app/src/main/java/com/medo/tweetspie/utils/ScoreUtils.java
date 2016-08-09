@@ -43,7 +43,7 @@ public class ScoreUtils {
     // TODO add hidden before
     // TODO add liked before
     // add to score a random factor
-    score += random.nextInt(10);
+    score += random.nextInt(20);
 
     return score;
   }
@@ -52,21 +52,21 @@ public class ScoreUtils {
    * Returns the time score based on the country
    *
    * @param countryCode the country code where the tweet was created
-   * @return 10 if matches the user country code, 0 otherwise
+   * @return 20 if matches the user country code, 0 otherwise
    */
   private static int getCountryScore(@Nullable String countryCode) {
 
     if (countryCode == null) {
       return 0;
     }
-    return !countryCode.equalsIgnoreCase(Locale.getDefault().getCountry()) ? 0 : 10;
+    return !countryCode.equalsIgnoreCase(Locale.getDefault().getCountry()) ? 0 : 20;
   }
 
   /**
    * Returns the time score based on the tweet recency to now
    *
    * @param createdAt the date the tweet was created at
-   * @return the recency score in the range of [0, 10]
+   * @return the recency score in the range of [-50, 50]
    */
   private static int getRecencyScore(@Nullable Date createdAt) {
 
@@ -77,20 +77,24 @@ public class ScoreUtils {
     final long createdAtMillis = createdAt.getTime();
     final long currentTimeMillis = System.currentTimeMillis();
     final long diffInMillis = currentTimeMillis - createdAtMillis;
+    if (diffInMillis > TimeUnit.DAYS.toMillis(2)) {
+      // tweets older than a two days should not be rated very low
+      return -50;
+    }
     if (diffInMillis > TimeUnit.DAYS.toMillis(1)) {
-      // tweets older than a day should not be rated
-      return 0;
+      // tweets older than a day should not be rated high
+      return -10;
     }
     // normalize the recency in range
-    return (int) (1.0f - MathUtils.normalize(diffInMillis, 0, TimeUnit.DAYS.toMillis(1))) * 10;
+    return (int) (1.0f - MathUtils.normalize(diffInMillis, 0, TimeUnit.DAYS.toMillis(1))) * 50;
   }
 
   /**
    * Returns the time zone score based on proximity to the same time zone.
-   * The same time zone gets a score of 10, the +/-12 time zone gets score of 0.
+   * The same time zone gets a score of 20, the +/-12 time zone gets score of 0.
    *
    * @param createdAt the date the tweet was created at
-   * @return the time zone score in the range of [0, 10]
+   * @return the time zone score in the range of [0, 20]
    */
   private static int getTimeZoneScore(@NonNull Date createdAt) {
 
@@ -102,7 +106,7 @@ public class ScoreUtils {
     final long createdAtOffset = (createdAtCal.get(Calendar.ZONE_OFFSET) + createdAtCal.get(Calendar.DST_OFFSET));
     final long diffHours = Math.abs(TimeUnit.MILLISECONDS.toHours(nowOffset - createdAtOffset));
 
-    return (int) MathUtils.normalize(diffHours, 0, 12) * 10;
+    return (int) MathUtils.normalize(diffHours, 0, 12) * 20;
   }
 
   /**
@@ -152,10 +156,10 @@ public class ScoreUtils {
    * i.e. the user follow the tweet author
    *
    * @param isFriend the friend status
-   * @return 0 if the user is not following the tweet author, 10 otherwise
+   * @return 0 if the user is not following the tweet author, 30 otherwise
    */
   private static int getFriendsScore(boolean isFriend) {
 
-    return !isFriend ? 0 : 10;
+    return !isFriend ? 0 : 30;
   }
 }

@@ -39,11 +39,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
     super.onCreate(savedInstanceState);
 
+    PreferencesInteractor preferences = new PreferencesInteractor(this);
+    realmInteractor = new RealmInteractor(preferences);
     presenter = new MainPresenter(
             this,
-            new PreferencesInteractor(this),
-            new RealmInteractor());
-    realmInteractor = new RealmInteractor();
+            preferences,
+            realmInteractor);
 
     presenter.onInitialize();
     realmInteractor.onInitialize();
