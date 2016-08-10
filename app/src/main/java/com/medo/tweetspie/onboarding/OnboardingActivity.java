@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
-import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
+import com.medo.tweetspie.base.BaseActivity;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
 import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
@@ -25,7 +23,7 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
   @BindView(R.id.login_button)
   TwitterLoginButton loginButton;
 
-  private OnboardingContract.Actions presenter;
+  private OnboardingContract.Presenter presenter;
 
   @NonNull
   public static Intent getIntent(@NonNull Activity parent) {
@@ -40,30 +38,15 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
     setContentView(R.layout.activity_onboarding);
     ButterKnife.bind(this);
 
-    presenter = new OnboardingPresenter(
-            this,
-            new PreferencesInteractor(this),
-            new StringInteractor(this));
-
-    initViews();
+    presenter = new OnboardingPresenter(new PreferencesInteractor(this), new StringInteractor(this));
+    presenter.onAttachView(this);
   }
 
-  private void initViews() {
+  @Override
+  protected void onDestroy() {
 
-    loginButton.setCallback(new Callback<TwitterSession>() {
-
-      @Override
-      public void success(Result<TwitterSession> result) {
-        // login success
-        presenter.onLoginSuccess(result.data);
-      }
-
-      @Override
-      public void failure(TwitterException exception) {
-        // login failure
-        presenter.onLoginFailure(exception);
-      }
-    });
+    super.onDestroy();
+    presenter.onDetachView();
   }
 
   @Override
@@ -71,6 +54,12 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
     // Pass the activity result to the login button.
     super.onActivityResult(requestCode, resultCode, data);
     loginButton.onActivityResult(requestCode, resultCode, data);
+  }
+
+  @Override
+  public void setupTwitterButton(Callback<TwitterSession> callback) {
+
+    loginButton.setCallback(callback);
   }
 
   @Override

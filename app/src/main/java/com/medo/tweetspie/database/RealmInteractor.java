@@ -44,11 +44,6 @@ public class RealmInteractor implements RealmTransaction {
   }
 
   @Override
-  public void onInitialize() {
-
-  }
-
-  @Override
   public void onDestroy() {
 
     realm.close();

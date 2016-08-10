@@ -7,8 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.medo.tweetspie.BaseActivity;
 import com.medo.tweetspie.R;
+import com.medo.tweetspie.base.BaseActivity;
 import com.medo.tweetspie.bus.events.TimelineServiceEvent;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.database.model.RealmTweet;
@@ -32,7 +32,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @BindView(R.id.recycler_tweets)
   RecyclerView recyclerTweets;
 
-  private MainContract.Actions presenter;
+  private MainContract.Presenter presenter;
   private RealmInteractor realmInteractor;
 
   @Override
@@ -42,13 +42,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
     PreferencesInteractor preferences = new PreferencesInteractor(this);
     realmInteractor = new RealmInteractor(preferences);
-    presenter = new MainPresenter(
-            this,
-            preferences,
-            realmInteractor);
-
-    presenter.onInitialize();
-    realmInteractor.onInitialize();
+    presenter = new MainPresenter(preferences, realmInteractor);
+    presenter.onAttachView(this);
   }
 
   @Override
@@ -56,6 +51,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
     super.onDestroy();
     realmInteractor.onDestroy();
+    presenter.onDetachView();
   }
 
   @Override

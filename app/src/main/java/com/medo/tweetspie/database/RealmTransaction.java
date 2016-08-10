@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface RealmTransaction {
 
-  void onInitialize();
-
   void onDestroy();
 
   void persistTweets(@NonNull List<Tweet> tweets);

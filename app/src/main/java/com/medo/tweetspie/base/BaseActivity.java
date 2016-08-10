@@ -1,4 +1,4 @@
-package com.medo.tweetspie;
+package com.medo.tweetspie.base;
 
 
 import android.support.v7.app.AppCompatActivity;

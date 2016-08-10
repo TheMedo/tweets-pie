@@ -1,26 +1,48 @@
 package com.medo.tweetspie.onboarding;
 
 import com.medo.tweetspie.R;
+import com.medo.tweetspie.base.AbsPresenter;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.medo.tweetspie.system.StringProvider;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 
 import timber.log.Timber;
 
 
-public class OnboardingPresenter implements OnboardingContract.Actions {
+public class OnboardingPresenter extends AbsPresenter<OnboardingContract.View>
+        implements OnboardingContract.Presenter {
 
-  private final OnboardingContract.View view;
   private final PreferencesProvider preferences;
   private final StringProvider strings;
 
-  public OnboardingPresenter(OnboardingContract.View view,
-                             PreferencesProvider preferencesProvider,
+  public OnboardingPresenter(PreferencesProvider preferencesProvider,
                              StringProvider stringProvider) {
 
-    this.view = view;
     this.preferences = preferencesProvider;
     this.strings = stringProvider;
+  }
+
+  @Override
+  public void onAttachView(OnboardingContract.View view) {
+
+    super.onAttachView(view);
+    getView().setupTwitterButton(new Callback<TwitterSession>() {
+
+      @Override
+      public void success(Result<TwitterSession> result) {
+
+        onLoginSuccess(result.data);
+      }
+
+      @Override
+      public void failure(TwitterException exception) {
+
+        onLoginFailure(exception);
+      }
+    });
   }
 
   @Override
@@ -28,13 +50,13 @@ public class OnboardingPresenter implements OnboardingContract.Actions {
     // persist the username and notify success
     preferences.initWithDefaultValues();
     preferences.set(PreferencesProvider.USERNAME, twitterSession.getUserName());
-    view.exitWithSuccess();
+    getView().exitWithSuccess();
   }
 
   @Override
   public void onLoginFailure(Exception e) {
     // log and notify error
     Timber.e(e, "Cannot login with Twitter");
-    view.exitWithError(strings.getString(R.string.error_login_failure));
+    getView().exitWithError(strings.getString(R.string.error_login_failure));
   }
 }
