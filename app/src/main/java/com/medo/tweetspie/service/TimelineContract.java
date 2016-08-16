@@ -1,15 +1,15 @@
 package com.medo.tweetspie.service;
 
 
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+
+import com.medo.tweetspie.base.BaseService;
+import com.medo.tweetspie.base.BaseServicePresenter;
 
 
 public interface TimelineContract {
 
-  interface Service {
-
-    void notifyStart();
+  interface Service extends BaseService {
 
     void exitWithSuccess();
 
@@ -17,9 +17,7 @@ public interface TimelineContract {
   }
 
 
-  interface Actions {
+  interface Presenter extends BaseServicePresenter<Service> {
 
-    @MainThread
-    void onServiceStarted();
   }
 }

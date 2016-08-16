@@ -1,7 +1,7 @@
 package com.medo.tweetspie.onboarding;
 
 import com.medo.tweetspie.R;
-import com.medo.tweetspie.base.AbsPresenter;
+import com.medo.tweetspie.base.AbsViewPresenter;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.medo.tweetspie.system.StringProvider;
 import com.twitter.sdk.android.core.Callback;
@@ -12,7 +12,7 @@ import com.twitter.sdk.android.core.TwitterSession;
 import timber.log.Timber;
 
 
-public class OnboardingPresenter extends AbsPresenter<OnboardingContract.View>
+public class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
         implements OnboardingContract.Presenter {
 
   private final PreferencesProvider preferences;
@@ -26,9 +26,9 @@ public class OnboardingPresenter extends AbsPresenter<OnboardingContract.View>
   }
 
   @Override
-  public void onAttachView(OnboardingContract.View view) {
+  public void onAttach(OnboardingContract.View view) {
 
-    super.onAttachView(view);
+    super.onAttach(view);
     getView().setupTwitterButton(new Callback<TwitterSession>() {
 
       @Override

@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     PreferencesInteractor preferences = new PreferencesInteractor(this);
     realmInteractor = new RealmInteractor(preferences);
     presenter = new MainPresenter(preferences, realmInteractor);
-    presenter.onAttachView(this);
+    presenter.onAttach(this);
   }
 
   @Override
@@ -51,7 +51,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
     super.onDestroy();
     realmInteractor.onDestroy();
-    presenter.onDetachView();
+    presenter.onDetach();
   }
 
   @Override

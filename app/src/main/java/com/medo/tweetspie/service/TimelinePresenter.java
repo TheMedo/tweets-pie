@@ -3,6 +3,7 @@ package com.medo.tweetspie.service;
 import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 
+import com.medo.tweetspie.base.AbsServicePresenter;
 import com.medo.tweetspie.database.RealmTransaction;
 import com.medo.tweetspie.rest.TweetsCallback;
 import com.medo.tweetspie.rest.TwitterTransaction;
@@ -13,28 +14,25 @@ import java.util.List;
 import timber.log.Timber;
 
 
-public class TimelinePresenter implements TimelineContract.Actions {
+public class TimelinePresenter extends AbsServicePresenter<TimelineContract.Service>
+        implements TimelineContract.Presenter {
 
 
-  private final TimelineContract.Service service;
   private final TwitterTransaction twitterInteractor;
   private final RealmTransaction realmInteractor;
 
-  public TimelinePresenter(TimelineContract.Service service,
-                           TwitterTransaction twitterInteractor,
+  public TimelinePresenter(TwitterTransaction twitterInteractor,
                            RealmTransaction realmInteractor) {
 
-    this.service = service;
     this.twitterInteractor = twitterInteractor;
     this.realmInteractor = realmInteractor;
   }
 
   @MainThread
   @Override
-  public void onServiceStarted() {
+  public void onStart(TimelineContract.Service service) {
 
-    // notify service start
-    service.notifyStart();
+    super.onStart(service);
     if (twitterInteractor.checkSession()) {
       // we have an active session, get the timeline
       getTimeline();
@@ -56,13 +54,13 @@ public class TimelinePresenter implements TimelineContract.Actions {
       @Override
       public void onFinish() {
 
-        service.exitWithSuccess();
+        getService().exitWithSuccess();
       }
 
       @Override
       public void onError(@NonNull Exception e) {
 
-        service.exitWithError(e);
+        getService().exitWithError(e);
       }
     });
   }

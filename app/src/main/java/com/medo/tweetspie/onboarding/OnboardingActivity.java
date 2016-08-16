@@ -39,14 +39,14 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
     ButterKnife.bind(this);
 
     presenter = new OnboardingPresenter(new PreferencesInteractor(this), new StringInteractor(this));
-    presenter.onAttachView(this);
+    presenter.onAttach(this);
   }
 
   @Override
   protected void onDestroy() {
 
     super.onDestroy();
-    presenter.onDetachView();
+    presenter.onDetach();
   }
 
   @Override

@@ -3,24 +3,24 @@ package com.medo.tweetspie.base;
 import android.support.annotation.Nullable;
 
 
-public abstract class AbsPresenter <T extends BaseView> implements BasePresenter<T> {
+public abstract class AbsViewPresenter <T extends BaseView> implements BaseViewPresenter<T> {
 
   @Nullable
   private T view;
 
   @Override
-  public void onAttachView(T view) {
+  public void onAttach(T view) {
 
     this.view = view;
   }
 
   @Override
-  public void onDetachView() {
+  public void onDetach() {
 
     view = null;
   }
 
-  protected boolean isViewAttached() {
+  protected boolean isAttached() {
 
     return view != null;
   }

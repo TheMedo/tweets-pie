@@ -1,7 +1,7 @@
 package com.medo.tweetspie.onboarding;
 
-import com.medo.tweetspie.base.BasePresenter;
 import com.medo.tweetspie.base.BaseView;
+import com.medo.tweetspie.base.BaseViewPresenter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterSession;
 
@@ -18,7 +18,7 @@ public interface OnboardingContract {
   }
 
 
-  interface Presenter extends BasePresenter<View> {
+  interface Presenter extends BaseViewPresenter<View> {
 
     void onLoginSuccess(TwitterSession twitterSession);
 

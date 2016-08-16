@@ -1,8 +1,8 @@
 package com.medo.tweetspie.main;
 
 
-import com.medo.tweetspie.base.BasePresenter;
 import com.medo.tweetspie.base.BaseView;
+import com.medo.tweetspie.base.BaseViewPresenter;
 import com.medo.tweetspie.database.model.RealmTweet;
 
 import io.realm.OrderedRealmCollection;
@@ -26,7 +26,7 @@ public interface MainContract {
   }
 
 
-  interface Presenter extends BasePresenter<View> {
+  interface Presenter extends BaseViewPresenter<View> {
 
     void onOnboardingSuccess();
 

@@ -1,6 +1,6 @@
 package com.medo.tweetspie.main;
 
-import com.medo.tweetspie.base.AbsPresenter;
+import com.medo.tweetspie.base.AbsViewPresenter;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.system.PreferencesProvider;
@@ -8,7 +8,7 @@ import com.medo.tweetspie.system.PreferencesProvider;
 import io.realm.OrderedRealmCollection;
 
 
-public class MainPresenter extends AbsPresenter<MainContract.View>
+public class MainPresenter extends AbsViewPresenter<MainContract.View>
         implements MainContract.Presenter {
 
   private final PreferencesProvider preferences;
@@ -22,9 +22,9 @@ public class MainPresenter extends AbsPresenter<MainContract.View>
   }
 
   @Override
-  public void onAttachView(MainContract.View view) {
+  public void onAttach(MainContract.View view) {
 
-    super.onAttachView(view);
+    super.onAttach(view);
     if (!preferences.has(PreferencesProvider.USERNAME)) {
       getView().startOnboarding();
     }
@@ -37,12 +37,6 @@ public class MainPresenter extends AbsPresenter<MainContract.View>
         getView().showData(tweets);
       }
     }
-  }
-
-  @Override
-  public void onDetachView() {
-
-    super.onDetachView();
   }
 
   @Override

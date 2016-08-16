@@ -18,6 +18,8 @@ import timber.log.Timber;
 
 public class TimelineService extends Service implements TimelineContract.Service {
 
+  private TimelineContract.Presenter presenter;
+
   public static void start(@NonNull Context context) {
 
     context.startService(new Intent(context, TimelineService.class));
@@ -35,19 +37,19 @@ public class TimelineService extends Service implements TimelineContract.Service
 
     RealmInteractor realmInteractor = new RealmInteractor(
             new PreferencesInteractor(getApplicationContext()));
-    TimelineContract.Actions presenter = new TimelinePresenter(
-            this,
+    presenter = new TimelinePresenter(
             new TwitterInteractor(new PreferencesInteractor(this), realmInteractor),
             realmInteractor);
-    presenter.onServiceStarted();
+    presenter.onStart(this);
 
     return super.onStartCommand(intent, flags, startId);
   }
 
   @Override
-  public void notifyStart() {
-    // TODO notify the start of this service
-    Timber.v("Timeline Service Started");
+  public void onDestroy() {
+
+    super.onDestroy();
+    presenter.onStop();
   }
 
   @Override
