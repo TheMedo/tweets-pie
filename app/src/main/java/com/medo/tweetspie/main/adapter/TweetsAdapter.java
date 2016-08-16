@@ -27,14 +27,14 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAdapter.TweetViewHolder> {
 
-  private final AdapterContract.Actions presenter;
+  private final AdapterContract.Presenter presenter;
 
   public TweetsAdapter(@NonNull Context context,
                        @Nullable OrderedRealmCollection<RealmTweet> data,
-                       @NonNull AdapterContract.View view) {
+                       @NonNull AdapterContract.Presenter presenter) {
 
     super(context, data, true);
-    presenter = new AdapterPresenter(view);
+    this.presenter = presenter;
   }
 
   @Override

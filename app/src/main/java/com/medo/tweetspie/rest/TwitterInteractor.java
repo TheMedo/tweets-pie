@@ -29,7 +29,7 @@ import timber.log.Timber;
 public class TwitterInteractor implements TwitterTransaction {
 
   private static final int TIMELINE_MAX_QUERIES = 1;
-  private static final long TIMELINE_REFRESH_INTERVAL = TimeUnit.MINUTES.toMillis(1);
+  private static final long TIMELINE_REFRESH_INTERVAL = TimeUnit.MINUTES.toMillis(5);
 
   private final PreferencesProvider preferences;
   private final RealmInteractor realmInteractor;

@@ -13,6 +13,7 @@ import com.medo.tweetspie.bus.events.TimelineServiceEvent;
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.main.adapter.AdapterContract;
+import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.main.adapter.TweetsAdapter;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.service.TimelineService;
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   RecyclerView recyclerTweets;
 
   private MainContract.Presenter presenter;
+  private AdapterContract.Presenter adapterPresenter;
   private RealmInteractor realmInteractor;
 
   @Override
@@ -44,6 +46,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     realmInteractor = new RealmInteractor(preferences);
     presenter = new MainPresenter(preferences, realmInteractor);
     presenter.onAttach(this);
+    adapterPresenter = new AdapterPresenter();
+    adapterPresenter.onAttach(this);
   }
 
   @Override
@@ -52,6 +56,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     super.onDestroy();
     realmInteractor.onDestroy();
     presenter.onDetach();
+    adapterPresenter.onDetach();
   }
 
   @Override
@@ -97,7 +102,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
       return;
     }
     // setup the recycler view and set the adapter
-    tweetsAdapter = new TweetsAdapter(this, tweets, this);
+    tweetsAdapter = new TweetsAdapter(this, tweets, adapterPresenter);
     recyclerTweets.setLayoutManager(new LinearLayoutManager(this));
     recyclerTweets.setAdapter(tweetsAdapter);
     recyclerTweets.setHasFixedSize(true);
