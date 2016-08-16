@@ -3,20 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
-
-    <ImageView
-        android:id="@+id/image_avatar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:cropToPadding="true"
-        android:scaleType="centerCrop"
-        tools:src="@color/colorAccent"/>
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/text_name"
@@ -24,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/space_normal"
         android:layout_toEndOf="@+id/image_avatar"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="Screen_Name"/>
@@ -35,6 +23,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="@dimen/space_normal"
         android:layout_toEndOf="@+id/text_name"
         android:layout_toStartOf="@+id/text_date"
         android:ellipsize="end"
@@ -48,6 +37,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingStart="@dimen/space_normal"
+        android:paddingTop="@dimen/space_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         tools:text="2d"/>
 
@@ -71,6 +63,9 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/image_avatar"
         android:drawableStart="@drawable/selector_retweet"
+        android:paddingBottom="@dimen/space_normal"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingStart="@dimen/space_normal"
         tools:text="16"/>
 
     <CheckedTextView
@@ -80,6 +75,9 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/text_retweets"
         android:drawableStart="@drawable/selector_favorite"
+        android:paddingBottom="@dimen/space_normal"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingStart="@dimen/space_normal"
         tools:text="20"/>
 
     <TextView
@@ -88,7 +86,24 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/text_text"
+        android:paddingBottom="@dimen/space_normal"
+        android:paddingEnd="@dimen/space_normal"
+        android:paddingStart="@dimen/space_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         tools:text="132"/>
+
+    <ImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/space_normal"
+        android:layout_marginTop="@dimen/space_normal"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        tools:src="@color/colorAccent"/>
 
 </RelativeLayout>
