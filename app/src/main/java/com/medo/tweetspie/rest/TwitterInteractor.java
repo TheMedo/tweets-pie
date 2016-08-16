@@ -13,6 +13,7 @@ import com.medo.tweetspie.rest.model.FriendsIds;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
@@ -33,12 +34,14 @@ public class TwitterInteractor implements TwitterTransaction {
 
   private final PreferencesProvider preferences;
   private final RealmInteractor realmInteractor;
-  private CustomApiClient customApiClient;
+  private final TwitterApiClient apiClient;
+  private final CustomApiClient customApiClient;
 
   public TwitterInteractor(PreferencesProvider preferences, RealmInteractor realmInteractor) {
 
     this.preferences = preferences;
     this.realmInteractor = realmInteractor;
+    this.apiClient = TwitterCore.getInstance().getApiClient();
     this.customApiClient = new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
   }
 
@@ -89,7 +92,7 @@ public class TwitterInteractor implements TwitterTransaction {
       return;
     }
 
-    TwitterCore.getInstance().getApiClient().getStatusesService().homeTimeline(
+    apiClient.getStatusesService().homeTimeline(
             200, null, maxId, false, true, false, false, new Callback<List<Tweet>>() {
 
               @Override
@@ -144,5 +147,69 @@ public class TwitterInteractor implements TwitterTransaction {
   public void getTimeline(@NonNull TweetsCallback callback) {
 
     getTimeline(1, null, callback);
+  }
+
+  @Override
+  public void retweetStatus(@NonNull String tweetId, boolean retweet, @Nullable final TwitterCallback callback) {
+
+    final Callback<Tweet> tweetCallback = new Callback<Tweet>() {
+
+      @Override
+      public void success(Result<Tweet> result) {
+
+        if (callback != null) {
+          callback.onSuccess();
+        }
+      }
+
+      @Override
+      public void failure(TwitterException exception) {
+
+        if (callback != null) {
+          callback.onError(exception);
+        }
+      }
+    };
+
+    if (retweet) {
+      // retweet the status
+      apiClient.getStatusesService().retweet(Long.valueOf(tweetId), false, tweetCallback);
+    }
+    else {
+      // undo the retweet
+      apiClient.getStatusesService().unretweet(Long.valueOf(tweetId), false, tweetCallback);
+    }
+  }
+
+  @Override
+  public void favoriteStatus(@NonNull String tweetId, boolean favorite, @Nullable final TwitterCallback callback) {
+
+    final Callback<Tweet> tweetCallback = new Callback<Tweet>() {
+
+      @Override
+      public void success(Result<Tweet> result) {
+
+        if (callback != null) {
+          callback.onSuccess();
+        }
+      }
+
+      @Override
+      public void failure(TwitterException exception) {
+
+        if (callback != null) {
+          callback.onError(exception);
+        }
+      }
+    };
+
+    if (favorite) {
+      // favorite the status
+      apiClient.getFavoriteService().create(Long.valueOf(tweetId), false, tweetCallback);
+    }
+    else {
+      // undo the favorite
+      apiClient.getFavoriteService().destroy(Long.valueOf(tweetId), false, tweetCallback);
+    }
   }
 }

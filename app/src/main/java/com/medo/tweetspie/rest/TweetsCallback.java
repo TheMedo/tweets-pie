@@ -8,11 +8,9 @@ import com.twitter.sdk.android.core.models.Tweet;
 import java.util.List;
 
 
-public interface TweetsCallback {
+public interface TweetsCallback extends TwitterCallback {
 
   void onTweetsAvailable(@NonNull List<Tweet> tweets);
 
   void onFinish();
-
-  void onError(@NonNull Exception e);
 }

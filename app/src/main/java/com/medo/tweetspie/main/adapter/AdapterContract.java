@@ -16,10 +16,6 @@ public interface AdapterContract {
     void openUser();
 
     void openMedia();
-
-    void toggleRetweet(@NonNull String id);
-
-    void toggleFavorite(@NonNull String id);
   }
 
 

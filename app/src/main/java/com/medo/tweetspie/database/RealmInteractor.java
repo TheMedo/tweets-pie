@@ -86,11 +86,11 @@ public class RealmInteractor implements RealmTransaction {
   }
 
   @Override
-  public void toggleRetweet(@NonNull String id) {
+  public boolean toggleRetweet(@NonNull String id) {
 
     RealmTweet tweet = getRealmTweet(id);
     if (tweet == null) {
-      return;
+      return false;
     }
     final boolean isRetweeted = tweet.isRetweeted();
     final int retweetCount = tweet.getRetweetCount();
@@ -98,14 +98,16 @@ public class RealmInteractor implements RealmTransaction {
     tweet.setRetweeted(!isRetweeted);
     tweet.setRetweetCount(isRetweeted ? retweetCount - 1 : retweetCount + 1);
     realm.commitTransaction();
+
+    return tweet.isRetweeted();
   }
 
   @Override
-  public void toggleFavorite(@NonNull String id) {
+  public boolean toggleFavorite(@NonNull String id) {
 
     RealmTweet tweet = getRealmTweet(id);
     if (tweet == null) {
-      return;
+      return false;
     }
     final boolean isFavorited = tweet.isFavorited();
     final int favoriteCount = tweet.getFavoriteCount();
@@ -113,6 +115,8 @@ public class RealmInteractor implements RealmTransaction {
     tweet.setFavorited(!isFavorited);
     tweet.setFavoriteCount(isFavorited ? favoriteCount - 1 : favoriteCount + 1);
     realm.commitTransaction();
+
+    return tweet.isFavorited();
   }
 
   @NonNull

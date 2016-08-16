@@ -3,15 +3,22 @@ package com.medo.tweetspie.main.adapter;
 import android.support.annotation.NonNull;
 
 import com.medo.tweetspie.base.AbsViewPresenter;
+import com.medo.tweetspie.database.RealmTransaction;
+import com.medo.tweetspie.rest.TwitterTransaction;
 import com.medo.tweetspie.utils.FormatUtils;
 
 
 public class AdapterPresenter extends AbsViewPresenter<AdapterContract.View>
         implements AdapterContract.Presenter {
 
+  private final TwitterTransaction twitterInteractor;
+  private final RealmTransaction realmInteractor;
 
-  public AdapterPresenter() {
+  public AdapterPresenter(TwitterTransaction twitterInteractor,
+                          RealmTransaction realmInteractor) {
 
+    this.twitterInteractor = twitterInteractor;
+    this.realmInteractor = realmInteractor;
   }
 
   @Override
@@ -35,12 +42,16 @@ public class AdapterPresenter extends AbsViewPresenter<AdapterContract.View>
   @Override
   public void onRetweetClick(@NonNull String id) {
 
-    getView().toggleRetweet(id);
+    boolean retweet = realmInteractor.toggleRetweet(id);
+    // TODO implement callback
+    twitterInteractor.retweetStatus(id, retweet, null);
   }
 
   @Override
   public void onFavoriteClick(@NonNull String id) {
 
-    getView().toggleFavorite(id);
+    boolean favorite = realmInteractor.toggleFavorite(id);
+    // TODO implement callback
+    twitterInteractor.favoriteStatus(id, favorite, null);
   }
 }

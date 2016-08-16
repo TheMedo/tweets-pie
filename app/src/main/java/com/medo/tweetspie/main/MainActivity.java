@@ -16,6 +16,7 @@ import com.medo.tweetspie.main.adapter.AdapterContract;
 import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.main.adapter.TweetsAdapter;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
+import com.medo.tweetspie.rest.TwitterInteractor;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.utils.DividerItemDecoration;
@@ -46,8 +47,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     realmInteractor = new RealmInteractor(preferences);
     presenter = new MainPresenter(preferences, realmInteractor);
     presenter.onAttach(this);
-    adapterPresenter = new AdapterPresenter();
-    adapterPresenter.onAttach(this);
   }
 
   @Override
@@ -56,7 +55,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     super.onDestroy();
     realmInteractor.onDestroy();
     presenter.onDetach();
-    adapterPresenter.onDetach();
+    if (adapterPresenter != null) {
+      adapterPresenter.onDetach();
+    }
   }
 
   @Override
@@ -101,6 +102,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
       tweetsAdapter.updateData(tweets);
       return;
     }
+
+    RealmInteractor realmInteractor = new RealmInteractor(
+            new PreferencesInteractor(getApplicationContext()));
+    adapterPresenter = new AdapterPresenter(
+            new TwitterInteractor(new PreferencesInteractor(this), realmInteractor),
+            realmInteractor);
+    adapterPresenter.onAttach(this);
     // setup the recycler view and set the adapter
     tweetsAdapter = new TweetsAdapter(this, tweets, adapterPresenter);
     recyclerTweets.setLayoutManager(new LinearLayoutManager(this));
@@ -136,18 +144,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     startActivity(intent);
-  }
-
-  @Override
-  public void toggleRetweet(@NonNull String id) {
-
-    realmInteractor.toggleRetweet(id);
-  }
-
-  @Override
-  public void toggleFavorite(@NonNull String id) {
-
-    realmInteractor.toggleFavorite(id);
   }
 
   @Subscribe

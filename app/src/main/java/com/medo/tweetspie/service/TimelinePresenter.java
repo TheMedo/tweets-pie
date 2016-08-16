@@ -58,6 +58,11 @@ public class TimelinePresenter extends AbsServicePresenter<TimelineContract.Serv
       }
 
       @Override
+      public void onSuccess() {
+        // don't handle success, it will loop and call onFinish() when done
+      }
+
+      @Override
       public void onError(@NonNull Exception e) {
 
         getService().exitWithError(e);

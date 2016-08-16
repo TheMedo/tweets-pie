@@ -18,7 +18,7 @@ public interface RealmTransaction {
 
   boolean hasFriendsIds();
 
-  void toggleRetweet(@NonNull String id);
+  boolean toggleRetweet(@NonNull String id);
 
-  void toggleFavorite(@NonNull String id);
+  boolean toggleFavorite(@NonNull String id);
 }
