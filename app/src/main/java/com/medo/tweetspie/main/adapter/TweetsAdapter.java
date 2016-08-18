@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.database.model.RealmTweetUser;
 import com.medo.tweetspie.utils.FormatUtils;
 import com.medo.tweetspie.utils.ImageUtils;
 
@@ -61,6 +62,8 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     TextView textUsername;
     @BindView(R.id.text_date)
     TextView textDate;
+    @BindView(R.id.text_retweeted_by)
+    TextView textRetweetedBy;
     @BindView(R.id.text_text)
     TextView textText;
     @BindView(R.id.text_retweets)
@@ -78,6 +81,7 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       ButterKnife.bind(this, view);
     }
 
+    // TODO adapters need special handling in the EBI architecture
     void showTweet(RealmTweet tweet) {
       // bind the tweet data to the views
       this.tweet = tweet;
@@ -91,8 +95,18 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       textDate.setText(FormatUtils.toRelativeDate(tweet.getCreatedAt()));
       textDate.setPaintFlags(textDate.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-      // set the text and add links
-      textText.setText(Html.fromHtml(tweet.getText()));
+      // set the retweeted by if applicable
+      RealmTweetUser retweetedBy = tweet.getRetweetedBy();
+      if (retweetedBy != null) {
+        textRetweetedBy.setVisibility(View.VISIBLE);
+        textRetweetedBy.setText(String.format("Retweeted by @%s", retweetedBy.getScreenName()));
+      }
+      else {
+        textRetweetedBy.setVisibility(View.GONE);
+      }
+
+      // set the text and add links keeping the new lines
+      textText.setText(Html.fromHtml(tweet.getText().replace("\n", "<br>")));
       FormatUtils.addLinks(textText);
 
       // set the retweets

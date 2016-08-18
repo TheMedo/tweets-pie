@@ -22,6 +22,7 @@ public class RealmTweet extends RealmObject {
   private int score;
   private String text;
   private RealmTweetUser user;
+  private RealmTweetUser retweetedBy;
 
   public String getCountryCode() {
 
@@ -141,5 +142,15 @@ public class RealmTweet extends RealmObject {
   public void setUser(RealmTweetUser user) {
 
     this.user = user;
+  }
+
+  public RealmTweetUser getRetweetedBy() {
+
+    return retweetedBy;
+  }
+
+  public void setRetweetedBy(RealmTweetUser retweetedBy) {
+
+    this.retweetedBy = retweetedBy;
   }
 }

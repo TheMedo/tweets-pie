@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.database.model.RealmTweetUser;
 import com.medo.tweetspie.database.utils.RealmConverter;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.models.Tweet;
@@ -55,6 +56,7 @@ public class RealmInteractor implements RealmTransaction {
     // convert all tweets to realm objects
     List<RealmTweet> convertedTweets = convertAndRateTweets(tweets);
     List<RealmTweet> sortedTweets = sortAndTrimTweets(convertedTweets);
+    updateUserFriends(sortedTweets);
     deleteOldAndPersistNewTweets(sortedTweets);
   }
 
@@ -123,19 +125,20 @@ public class RealmInteractor implements RealmTransaction {
   private List<RealmTweet> convertAndRateTweets(@NonNull List<Tweet> tweets) {
     // convert all tweets to realm objects
     List<RealmTweet> realmTweets = new ArrayList<>(tweets.size());
-    for (Tweet tweet : tweets) {
-      RealmTweet realmTweet;
-      boolean friend = isFriend(tweet.user.getId());
-      if (tweet.retweetedStatus == null) {
-        // convert the normal tweet
-        realmTweet = RealmConverter.convertTweet(tweet, friend);
-      }
-      else {
-        // convert the retweet
-        realmTweet = RealmConverter.convertTweet(tweet.retweetedStatus, friend);
-      }
+    final boolean showRetweets = preferences.getBoolean(PreferencesProvider.RETWEETS);
+    final boolean showReplies = preferences.getBoolean(PreferencesProvider.REPLIES);
 
-      realmTweets.add(realmTweet);
+    for (Tweet tweet : tweets) {
+      if (!showRetweets && tweet.retweetedStatus != null) {
+        // we should not show retweets
+        continue;
+      }
+      if (!showReplies && tweet.inReplyToScreenName != null) {
+        // we should not show replies
+        continue;
+      }
+      // convert and add the tweet
+      realmTweets.add(RealmConverter.convertTweet(tweet));
     }
     return realmTweets;
   }
@@ -153,6 +156,14 @@ public class RealmInteractor implements RealmTransaction {
     });
     // return a subset of the highest rated tweets
     return tweets.subList(0, (int) preferences.getLong(PreferencesProvider.MAX_TWEETS));
+  }
+
+  private void updateUserFriends(@NonNull List<RealmTweet> tweets) {
+    // update the friends flag if the current user and the tweet author are friends
+    for (RealmTweet tweet : tweets) {
+      final RealmTweetUser user = tweet.getUser();
+      user.setFriend(isFriend(user.getId()));
+    }
   }
 
   private void deleteOldAndPersistNewTweets(@NonNull List<RealmTweet> tweets) {
