@@ -11,9 +11,7 @@ public interface AdapterContract {
 
   interface View extends BaseView {
 
-    void openTweet(@NonNull String url);
-
-    void openUser();
+    void openUrl(@NonNull String url);
 
     void openMedia();
   }
@@ -23,7 +21,7 @@ public interface AdapterContract {
 
     void onDateClick(@NonNull String id, @NonNull String screenName);
 
-    void onAvatarClick();
+    void onAvatarClick(@NonNull String screenName);
 
     void onMediaClick();
 

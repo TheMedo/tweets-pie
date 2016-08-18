@@ -116,4 +116,9 @@ public class FormatUtils {
 
     return String.format("http://twitter.com/%s/status/%s", screenName, id);
   }
+
+  public static String getUserUrl(@NonNull String screenName) {
+
+    return String.format("http://twitter.com/%s/", screenName);
+  }
 }

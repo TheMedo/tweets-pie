@@ -24,13 +24,13 @@ public class AdapterPresenter extends AbsViewPresenter<AdapterContract.View>
   @Override
   public void onDateClick(@NonNull String id, @NonNull String screenName) {
 
-    getView().openTweet(FormatUtils.getTweetUrl(id, screenName));
+    getView().openUrl(FormatUtils.getTweetUrl(id, screenName));
   }
 
   @Override
-  public void onAvatarClick() {
+  public void onAvatarClick(@NonNull String screenName) {
 
-    getView().openUser();
+    getView().openUrl(FormatUtils.getUserUrl(screenName));
   }
 
   @Override

@@ -107,10 +107,10 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       textScore.setText(FormatUtils.formatNumber(tweet.getScore()));
     }
 
-    @OnClick(R.id.image_avatar)
+    @OnClick({R.id.image_avatar, R.id.text_username})
     void onAvatarClick() {
-      // TODO add username
-      presenter.onAvatarClick();
+
+      presenter.onAvatarClick(tweet.getUser().getScreenName());
     }
 
     @OnClick(R.id.text_date)

@@ -135,12 +135,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void openUser() {
-
-  }
-
-  @Override
-  public void openTweet(@NonNull String url) {
+  public void openUrl(@NonNull String url) {
 
     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     startActivity(intent);
