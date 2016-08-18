@@ -15,9 +15,12 @@ import android.widget.TextView;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
 import com.medo.tweetspie.utils.FormatUtils;
 import com.medo.tweetspie.utils.ImageUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +69,10 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     TextView textRetweetedBy;
     @BindView(R.id.text_text)
     TextView textText;
+    @BindView(R.id.image_media)
+    ImageView imageMedia;
+    @BindView(R.id.text_media_type)
+    TextView textMediaType;
     @BindView(R.id.text_retweets)
     CheckedTextView toggleRetweets;
     @BindView(R.id.text_favorites)
@@ -108,6 +115,35 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       // set the text and add links keeping the new lines
       textText.setText(Html.fromHtml(tweet.getText().replace("\n", "<br>")));
       FormatUtils.addLinks(textText);
+
+      // set the media
+      imageMedia.setVisibility(View.GONE);
+      textMediaType.setVisibility(View.GONE);
+
+      List<RealmTweetEntity> extendedEntities = tweet.getExtendedEntities();
+      if (extendedEntities != null && !extendedEntities.isEmpty()) {
+        if (extendedEntities.size() == 1) {
+          RealmTweetEntity entity = extendedEntities.get(0);
+          // TODO handle media types
+
+          // load the media image
+          imageMedia.setVisibility(View.VISIBLE);
+          ImageUtils.loadEntityMedia(context, imageMedia, entity);
+
+          // TODO extract to constants
+          if ("animated_gif".equalsIgnoreCase(entity.getType())) {
+            // show the gif type
+            textMediaType.setVisibility(View.VISIBLE);
+            textMediaType.setText("GIF");
+          }
+          else if (extendedEntities.size() > 1) {
+            // show count in case of multiple images
+            textMediaType.setVisibility(View.VISIBLE);
+            textMediaType.setText("+");
+            textMediaType.append(String.valueOf(extendedEntities.size() - 1));
+          }
+        }
+      }
 
       // set the retweets
       toggleRetweets.setChecked(tweet.isRetweeted());

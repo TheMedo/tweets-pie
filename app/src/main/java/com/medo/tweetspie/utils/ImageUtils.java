@@ -5,20 +5,23 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.bumptech.glide.BitmapRequestBuilder;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.Transformation;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.medo.tweetspie.R;
+import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
 
 
@@ -32,29 +35,55 @@ public class ImageUtils {
    * @param target  the ImageView to load the avatar into
    * @param user    the tweet author containing the profile data
    */
-  public static void loadUserAvatar(@NonNull Context context, @NonNull ImageView target, @NonNull RealmTweetUser user) {
+  public static void loadUserAvatar(@NonNull Context context, @NonNull ImageView target,
+                                    @NonNull RealmTweetUser user) {
 
-    int color;
-    try {
-      // try parsing the profile background color
-      color = Color.parseColor(user.getProfileBackgroundColor());
-    }
-    catch (Exception e) {
-      // use the accent color as a fallback
-      color = ContextCompat.getColor(context, R.color.colorAccent);
-    }
-    final ColorDrawable placeholderDrawable = new ColorDrawable(color);
     final String avatarUrl = user.getProfileImageUrl();
+    if (!TextUtils.isEmpty(avatarUrl)) {
+      loadImage(context, target, avatarUrl, new CropCircleTransformation(context));
+    }
+  }
 
-    Glide.with(context)
-            .load(avatarUrl)
+  public static void loadEntityMedia(@NonNull Context context, @NonNull ImageView target,
+                                     @NonNull RealmTweetEntity entity) {
+
+    final String mediaUrl = entity.getMediaUrl();
+    if (!TextUtils.isEmpty(mediaUrl)) {
+      loadImage(context, target, mediaUrl, null);
+    }
+  }
+
+  private static void loadImage(@NonNull Context context, @NonNull ImageView target,
+                                @NonNull String url, @Nullable Transformation transformation) {
+
+    final ColorDrawable placeholderDrawable = getPlaceholderDrawable(context);
+    final ColorDrawable errorDrawable = getErrorDrawable(context);
+
+    BitmapRequestBuilder requestBuilder = Glide.with(context)
+            .load(url)
             .asBitmap()
             .centerCrop()
             .placeholder(placeholderDrawable)
-            .fallback(placeholderDrawable)
-            .error(placeholderDrawable)
-            .transform(new CropCircleTransformation(context))
-            .into(target);
+            .fallback(errorDrawable)
+            .error(errorDrawable);
+
+    if (transformation != null) {
+      requestBuilder.transform(transformation);
+    }
+
+    requestBuilder.into(target);
+  }
+
+  private static ColorDrawable getPlaceholderDrawable(@NonNull Context context) {
+
+    final int placeholderColor = ContextCompat.getColor(context, R.color.colorPlaceholder);
+    return new ColorDrawable(placeholderColor);
+  }
+
+  private static ColorDrawable getErrorDrawable(@NonNull Context context) {
+
+    final int placeholderColor = ContextCompat.getColor(context, R.color.colorError);
+    return new ColorDrawable(placeholderColor);
   }
 
   private static class CropCircleTransformation implements Transformation<Bitmap> {

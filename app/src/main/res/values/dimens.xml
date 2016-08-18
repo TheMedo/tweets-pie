@@ -7,4 +7,6 @@
     <dimen name="space_normal">8dp</dimen>
     <dimen name="space_extra">12dp</dimen>
     <dimen name="space_double">16dp</dimen>
+
+    <dimen name="size_avatar">48dp</dimen>
 </resources>
