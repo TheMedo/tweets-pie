@@ -71,6 +71,8 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
     TextView textText;
     @BindView(R.id.image_media)
     ImageView imageMedia;
+    @BindView(R.id.image_transparency)
+    ImageView imageTransparency;
     @BindView(R.id.text_media_type)
     TextView textMediaType;
     @BindView(R.id.text_retweets)
@@ -117,31 +119,32 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       FormatUtils.addLinks(textText);
 
       // set the media
+      imageTransparency.setVisibility(View.GONE);
       imageMedia.setVisibility(View.GONE);
       textMediaType.setVisibility(View.GONE);
 
       List<RealmTweetEntity> extendedEntities = tweet.getExtendedEntities();
       if (extendedEntities != null && !extendedEntities.isEmpty()) {
-        if (extendedEntities.size() == 1) {
-          RealmTweetEntity entity = extendedEntities.get(0);
-          // TODO handle media types
+        RealmTweetEntity entity = extendedEntities.get(0);
+        // TODO handle media types
 
-          // load the media image
-          imageMedia.setVisibility(View.VISIBLE);
-          ImageUtils.loadEntityMedia(context, imageMedia, entity);
+        // load the media image
+        imageMedia.setVisibility(View.VISIBLE);
+        ImageUtils.loadEntityMedia(context, imageMedia, entity);
 
-          // TODO extract to constants
-          if ("animated_gif".equalsIgnoreCase(entity.getType())) {
-            // show the gif type
-            textMediaType.setVisibility(View.VISIBLE);
-            textMediaType.setText("GIF");
-          }
-          else if (extendedEntities.size() > 1) {
-            // show count in case of multiple images
-            textMediaType.setVisibility(View.VISIBLE);
-            textMediaType.setText("+");
-            textMediaType.append(String.valueOf(extendedEntities.size() - 1));
-          }
+        // TODO extract to constants
+        if ("animated_gif".equalsIgnoreCase(entity.getType())) {
+          // show the gif type
+          imageTransparency.setVisibility(View.VISIBLE);
+          textMediaType.setVisibility(View.VISIBLE);
+          textMediaType.setText("GIF");
+        }
+        else if (extendedEntities.size() > 1) {
+          // show count in case of multiple images
+          imageTransparency.setVisibility(View.VISIBLE);
+          textMediaType.setVisibility(View.VISIBLE);
+          textMediaType.setText("+");
+          textMediaType.append(String.valueOf(extendedEntities.size() - 1));
         }
       }
 
