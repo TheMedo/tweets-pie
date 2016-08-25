@@ -17,6 +17,7 @@ import com.medo.tweetspie.R;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
+import com.medo.tweetspie.utils.Constant;
 import com.medo.tweetspie.utils.FormatUtils;
 import com.medo.tweetspie.utils.ImageUtils;
 
@@ -132,8 +133,7 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
         imageMedia.setVisibility(View.VISIBLE);
         ImageUtils.loadEntityMedia(context, imageMedia, entity);
 
-        // TODO extract to constants
-        if ("animated_gif".equalsIgnoreCase(entity.getType())) {
+        if (Constant.MediaType.ANIMATED_GIF.equalsIgnoreCase(entity.getType())) {
           // show the gif type
           imageTransparency.setVisibility(View.VISIBLE);
           textMediaType.setVisibility(View.VISIBLE);
@@ -172,10 +172,10 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       presenter.onDateClick(tweet.getIdStr(), tweet.getUser().getScreenName());
     }
 
-    @OnClick(R.id.text_text)
+    @OnClick(R.id.image_media)
     void onMediaClick() {
-      // TODO add media url
-      presenter.onMediaClick();
+
+      presenter.onMediaClick(tweet.getIdStr());
     }
 
     @OnClick(R.id.text_retweets)

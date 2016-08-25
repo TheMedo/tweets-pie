@@ -15,6 +15,7 @@ import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.main.adapter.AdapterContract;
 import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.main.adapter.TweetsAdapter;
+import com.medo.tweetspie.main.viewer.ViewerDialog;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.rest.TwitterInteractor;
 import com.medo.tweetspie.service.TimelineService;
@@ -130,8 +131,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void openMedia() {
+  public void openMedia(@NonNull String id) {
 
+    ViewerDialog.newInstance(id).show(getSupportFragmentManager(), null);
   }
 
   @Override

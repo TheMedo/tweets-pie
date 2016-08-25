@@ -81,6 +81,12 @@ public class RealmInteractor implements RealmTransaction {
     return realm.where(RealmTweet.class).findAllSorted("score", Sort.DESCENDING);
   }
 
+  @Nullable
+  public RealmTweet getTweet(@NonNull String id) {
+
+    return realm.where(RealmTweet.class).equalTo("idStr", id).findFirst();
+  }
+
   @Override
   public boolean hasFriendsIds() {
 

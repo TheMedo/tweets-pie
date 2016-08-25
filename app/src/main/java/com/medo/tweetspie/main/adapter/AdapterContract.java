@@ -13,7 +13,7 @@ public interface AdapterContract {
 
     void openUrl(@NonNull String url);
 
-    void openMedia();
+    void openMedia(@NonNull String id);
   }
 
 
@@ -23,7 +23,7 @@ public interface AdapterContract {
 
     void onAvatarClick(@NonNull String screenName);
 
-    void onMediaClick();
+    void onMediaClick(@NonNull String id);
 
     void onRetweetClick(@NonNull String id);
 
