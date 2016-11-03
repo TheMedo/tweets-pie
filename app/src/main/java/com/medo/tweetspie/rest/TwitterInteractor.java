@@ -54,7 +54,8 @@ public class TwitterInteractor implements TwitterTransaction {
   private void getFriendsIds(@Nullable Long beforeId) {
 
     customApiClient.getFriendsService().friends(
-            null, preferences.getString(PreferencesProvider.USERNAME), beforeId, false, 5000L, new Callback<FriendsIds>() {
+            null, preferences.getString(PreferencesProvider.USERNAME), beforeId, false, 5000L)
+            .enqueue(new Callback<FriendsIds>() {
 
               @Override
               public void success(Result<FriendsIds> result) {
@@ -92,8 +93,9 @@ public class TwitterInteractor implements TwitterTransaction {
       return;
     }
 
-    apiClient.getStatusesService().homeTimeline(
-            200, null, maxId, false, true, false, false, new Callback<List<Tweet>>() {
+    apiClient.getStatusesService()
+            .homeTimeline(200, null, maxId, false, true, false, false)
+            .enqueue(new Callback<List<Tweet>>() {
 
               @Override
               public void success(Result<List<Tweet>> result) {
@@ -173,11 +175,11 @@ public class TwitterInteractor implements TwitterTransaction {
 
     if (retweet) {
       // retweet the status
-      apiClient.getStatusesService().retweet(Long.valueOf(tweetId), false, tweetCallback);
+      apiClient.getStatusesService().retweet(Long.valueOf(tweetId), false).enqueue(tweetCallback);
     }
     else {
       // undo the retweet
-      apiClient.getStatusesService().unretweet(Long.valueOf(tweetId), false, tweetCallback);
+      apiClient.getStatusesService().unretweet(Long.valueOf(tweetId), false).enqueue(tweetCallback);
     }
   }
 
@@ -205,11 +207,11 @@ public class TwitterInteractor implements TwitterTransaction {
 
     if (favorite) {
       // favorite the status
-      apiClient.getFavoriteService().create(Long.valueOf(tweetId), false, tweetCallback);
+      apiClient.getFavoriteService().create(Long.valueOf(tweetId), false).enqueue(tweetCallback);
     }
     else {
       // undo the favorite
-      apiClient.getFavoriteService().destroy(Long.valueOf(tweetId), false, tweetCallback);
+      apiClient.getFavoriteService().destroy(Long.valueOf(tweetId), false).enqueue(tweetCallback);
     }
   }
 }

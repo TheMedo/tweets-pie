@@ -38,7 +38,8 @@ public class RealmInteractor implements RealmTransaction {
   public static void init(@NonNull Context context) {
     // create a default realm configuration that will delete the database if migration is needed
     // this will remove the migration overhead when modifying the database schema
-    RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(context)
+    Realm.init(context);
+    RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
             .deleteRealmIfMigrationNeeded()
             .build();
     Realm.setDefaultConfiguration(realmConfiguration);
