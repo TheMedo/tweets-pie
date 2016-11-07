@@ -40,6 +40,13 @@ public class MainPresenter extends AbsViewPresenter<MainContract.View>
   }
 
   @Override
+  public void onDetach() {
+
+    super.onDetach();
+    realmInteractor.onDestroy();
+  }
+
+  @Override
   public void onOnboardingSuccess() {
 
     getView().loadData();

@@ -35,14 +35,13 @@ public class TwitterInteractor implements TwitterTransaction {
   private final PreferencesProvider preferences;
   private final RealmInteractor realmInteractor;
   private final TwitterApiClient apiClient;
-  private final CustomApiClient customApiClient;
 
   public TwitterInteractor(PreferencesProvider preferences, RealmInteractor realmInteractor) {
 
     this.preferences = preferences;
     this.realmInteractor = realmInteractor;
     this.apiClient = TwitterCore.getInstance().getApiClient();
-    this.customApiClient = new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
+
   }
 
   public static void init(@NonNull Context context) {
@@ -52,7 +51,9 @@ public class TwitterInteractor implements TwitterTransaction {
   }
 
   private void getFriendsIds(@Nullable Long beforeId) {
-
+    // create a custom api client and obtain a list of all friends ids
+    final CustomApiClient customApiClient =
+            new CustomApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession());
     customApiClient.getFriendsService().friends(
             null, preferences.getString(PreferencesProvider.USERNAME), beforeId, false, 5000L)
             .enqueue(new Callback<FriendsIds>() {

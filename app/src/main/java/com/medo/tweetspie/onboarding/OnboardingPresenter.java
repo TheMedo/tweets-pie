@@ -2,8 +2,9 @@ package com.medo.tweetspie.onboarding;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.AbsViewPresenter;
+import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.PreferencesProvider;
-import com.medo.tweetspie.system.StringProvider;
+import com.medo.tweetspie.system.StringInteractor;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -15,20 +16,21 @@ import timber.log.Timber;
 public class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
         implements OnboardingContract.Presenter {
 
-  private final PreferencesProvider preferences;
-  private final StringProvider strings;
+  private final PreferencesInteractor preferences;
+  private final StringInteractor strings;
 
-  public OnboardingPresenter(PreferencesProvider preferencesProvider,
-                             StringProvider stringProvider) {
+  public OnboardingPresenter(PreferencesInteractor preferences,
+                             StringInteractor strings) {
 
-    this.preferences = preferencesProvider;
-    this.strings = stringProvider;
+    this.preferences = preferences;
+    this.strings = strings;
   }
 
   @Override
   public void onAttach(OnboardingContract.View view) {
 
     super.onAttach(view);
+    getView().initUi();
     getView().setupTwitterButton(new Callback<TwitterSession>() {
 
       @Override
@@ -50,7 +52,7 @@ public class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.Vie
     // persist the username and notify success
     preferences.initWithDefaultValues();
     preferences.set(PreferencesProvider.USERNAME, twitterSession.getUserName());
-    getView().exitWithSuccess();
+    getView().exit();
   }
 
   @Override

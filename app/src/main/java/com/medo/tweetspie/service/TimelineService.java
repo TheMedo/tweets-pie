@@ -7,18 +7,24 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.medo.tweetspie.MainApp;
 import com.medo.tweetspie.bus.BusProvider;
 import com.medo.tweetspie.bus.events.TimelineServiceEvent;
-import com.medo.tweetspie.database.RealmInteractor;
-import com.medo.tweetspie.rest.TwitterInteractor;
-import com.medo.tweetspie.system.PreferencesInteractor;
+import com.medo.tweetspie.database.RealmModule;
+import com.medo.tweetspie.injection.components.AppComponent;
+import com.medo.tweetspie.injection.components.DaggerUserComponent;
+import com.medo.tweetspie.main.MainModule;
+import com.medo.tweetspie.rest.TwitterModule;
+
+import javax.inject.Inject;
 
 import timber.log.Timber;
 
 
 public class TimelineService extends Service implements TimelineContract.Service {
 
-  private TimelineContract.Presenter presenter;
+  @Inject
+  TimelinePresenter presenter;
 
   public static void start(@NonNull Context context) {
 
@@ -35,14 +41,22 @@ public class TimelineService extends Service implements TimelineContract.Service
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
 
-    RealmInteractor realmInteractor = new RealmInteractor(
-            new PreferencesInteractor(getApplicationContext()));
-    presenter = new TimelinePresenter(
-            new TwitterInteractor(new PreferencesInteractor(this), realmInteractor),
-            realmInteractor);
+    inject(MainApp.getAppComponent());
+
     presenter.onStart(this);
 
     return super.onStartCommand(intent, flags, startId);
+  }
+
+  private void inject(@NonNull AppComponent appComponent) {
+
+    DaggerUserComponent.builder()
+            .appComponent(appComponent)
+            .mainModule(new MainModule())
+            .realmModule(new RealmModule())
+            .twitterModule(new TwitterModule())
+            .build()
+            .inject(this);
   }
 
   @Override

@@ -8,11 +8,13 @@ import android.widget.Toast;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.BaseActivity;
-import com.medo.tweetspie.system.PreferencesInteractor;
-import com.medo.tweetspie.system.StringInteractor;
+import com.medo.tweetspie.injection.components.AppComponent;
+import com.medo.tweetspie.injection.components.DaggerOnboardingComponent;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,7 +25,8 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
   @BindView(R.id.login_button)
   TwitterLoginButton loginButton;
 
-  private OnboardingContract.Presenter presenter;
+  @Inject
+  OnboardingPresenter presenter;
 
   @NonNull
   public static Intent getIntent(@NonNull Activity parent) {
@@ -35,10 +38,6 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
   protected void onCreate(Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_onboarding);
-    ButterKnife.bind(this);
-
-    presenter = new OnboardingPresenter(new PreferencesInteractor(this), new StringInteractor(this));
     presenter.onAttach(this);
   }
 
@@ -57,13 +56,30 @@ public class OnboardingActivity extends BaseActivity implements OnboardingContra
   }
 
   @Override
+  protected void inject(@NonNull AppComponent appComponent) {
+
+    DaggerOnboardingComponent.builder()
+            .appComponent(appComponent)
+            .onboardingModule(new OnboardingModule())
+            .build()
+            .inject(this);
+  }
+
+  @Override
+  public void initUi() {
+
+    setContentView(R.layout.activity_onboarding);
+    ButterKnife.bind(this);
+  }
+
+  @Override
   public void setupTwitterButton(Callback<TwitterSession> callback) {
 
     loginButton.setCallback(callback);
   }
 
   @Override
-  public void exitWithSuccess() {
+  public void exit() {
 
     setResult(RESULT_OK);
     finish();

@@ -63,6 +63,11 @@ public class ViewerDialog extends DialogFragment implements ViewerContract.View 
   }
 
   @Override
+  public void initUi() {
+    // TODO init ui
+  }
+
+  @Override
   public void showImage(@NonNull String url) {
 
     Glide.with(this)

@@ -4,24 +4,28 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.BaseActivity;
 import com.medo.tweetspie.bus.events.TimelineServiceEvent;
-import com.medo.tweetspie.database.RealmInteractor;
+import com.medo.tweetspie.database.RealmModule;
 import com.medo.tweetspie.database.model.RealmTweet;
+import com.medo.tweetspie.injection.components.AppComponent;
+import com.medo.tweetspie.injection.components.DaggerUserComponent;
 import com.medo.tweetspie.main.adapter.AdapterContract;
 import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.main.adapter.TweetsAdapter;
 import com.medo.tweetspie.main.viewer.ViewerDialog;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
-import com.medo.tweetspie.rest.TwitterInteractor;
+import com.medo.tweetspie.rest.TwitterModule;
 import com.medo.tweetspie.service.TimelineService;
-import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.utils.DividerItemDecoration;
 import com.squareup.otto.Subscribe;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,18 +39,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @BindView(R.id.recycler_tweets)
   RecyclerView recyclerTweets;
 
-  private MainContract.Presenter presenter;
-  private AdapterContract.Presenter adapterPresenter;
-  private RealmInteractor realmInteractor;
+  @Inject
+  MainPresenter presenter;
+  @Inject
+  AdapterPresenter adapterPresenter;
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(@Nullable Bundle savedInstanceState) {
 
     super.onCreate(savedInstanceState);
-
-    PreferencesInteractor preferences = new PreferencesInteractor(this);
-    realmInteractor = new RealmInteractor(preferences);
-    presenter = new MainPresenter(preferences, realmInteractor);
     presenter.onAttach(this);
   }
 
@@ -54,11 +55,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   protected void onDestroy() {
 
     super.onDestroy();
-    realmInteractor.onDestroy();
     presenter.onDetach();
-    if (adapterPresenter != null) {
-      adapterPresenter.onDetach();
-    }
+    adapterPresenter.onDetach();
   }
 
   @Override
@@ -79,6 +77,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   public void startOnboarding() {
 
     startActivityForResult(OnboardingActivity.getIntent(this), REQUEST_CODE_ONBOARDING);
+  }
+
+  @Override
+  protected void inject(@NonNull AppComponent appComponent) {
+
+    DaggerUserComponent.builder()
+            .appComponent(appComponent)
+            .mainModule(new MainModule())
+            .realmModule(new RealmModule())
+            .twitterModule(new TwitterModule())
+            .build()
+            .inject(this);
   }
 
   @Override
@@ -104,11 +114,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
       return;
     }
 
-    RealmInteractor realmInteractor = new RealmInteractor(
-            new PreferencesInteractor(getApplicationContext()));
-    adapterPresenter = new AdapterPresenter(
-            new TwitterInteractor(new PreferencesInteractor(this), realmInteractor),
-            realmInteractor);
     adapterPresenter.onAttach(this);
     // setup the recycler view and set the adapter
     tweetsAdapter = new TweetsAdapter(this, tweets, adapterPresenter);

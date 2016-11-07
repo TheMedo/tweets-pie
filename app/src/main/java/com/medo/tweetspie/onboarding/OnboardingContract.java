@@ -12,8 +12,6 @@ public interface OnboardingContract {
 
     void setupTwitterButton(Callback<TwitterSession> callback);
 
-    void exitWithSuccess();
-
     void exitWithError(String errorMessage);
   }
 

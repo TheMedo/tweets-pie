@@ -14,15 +14,11 @@ public interface MainContract {
 
     void startOnboarding();
 
-    void initUi();
-
     void loadData();
 
     void showData(OrderedRealmCollection<RealmTweet> data);
 
     void showError();
-
-    void exit();
   }
 
 
