@@ -5,7 +5,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.medo.tweetspie"
         minSdkVersion 21
@@ -25,7 +25,7 @@ android {
     }
 }
 
-def supportLibraryVersion = "25.0.1"
+def supportLibraryVersion = "25.1.0"
 
 dependencies {
     /* Support */
