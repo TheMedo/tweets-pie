@@ -10,6 +10,10 @@ import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.utils.Constant;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.realm.RealmList;
 
 
@@ -56,17 +60,33 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
       return;
     }
 
+    // init the ui
+    getView().initUi();
+
     // show me media contained in this tweet
-    final RealmTweetEntity entity = entities.get(0);
-    //noinspection ResourceType
-    switch (entity.getType()) {
-      case Constant.MediaType.ANIMATED_GIF:
-        getView().showGif(entity.getMediaUrl());
-        break;
-      case Constant.MediaType.PHOTO:
-        getView().showImage(entity.getMediaUrl());
-        break;
+    if (entities.size() == 1) {
+      // we have a single entry, show the content based on the type
+      final RealmTweetEntity entity = entities.get(0);
+      //noinspection ResourceType
+      switch (entity.getType()) {
+        case Constant.MediaType.ANIMATED_GIF:
+          getView().showGif(entity.getMediaUrl());
+          break;
+        case Constant.MediaType.PHOTO:
+          getView().showImages(Arrays.asList(entity.getMediaUrl()));
+          break;
+        case Constant.MediaType.VIDEO:
+          getView().showVideo(entity.getMediaUrl());
+          break;
+      }
     }
-    // TODO handle video
+    else {
+      // we have multiple entries (only images), show all of them
+      final List<String> urls = new ArrayList<>(entities.size());
+      for (RealmTweetEntity entity : entities) {
+        urls.add(entity.getMediaUrl());
+      }
+      getView().showImages(urls);
+    }
   }
 }

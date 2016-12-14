@@ -14,6 +14,9 @@ import com.twitter.sdk.android.core.models.MediaEntity;
 import com.twitter.sdk.android.core.models.Tweet;
 import com.twitter.sdk.android.core.models.TweetEntities;
 import com.twitter.sdk.android.core.models.User;
+import com.twitter.sdk.android.core.models.VideoInfo;
+
+import java.util.List;
 
 import io.realm.RealmList;
 
@@ -73,7 +76,7 @@ public class RealmConverter {
     for (MediaEntity mediaEntity : entities.media) {
       // convert all media entities to realm entities
       RealmTweetEntity realmTweetEntity = new RealmTweetEntity();
-      realmTweetEntity.setMediaUrl(mediaEntity.mediaUrl);
+      realmTweetEntity.setMediaUrl(extractMediaUrl(mediaEntity));
       realmTweetEntity.setType(mediaEntity.type);
       realmTweetEntities.add(realmTweetEntity);
     }
@@ -97,5 +100,20 @@ public class RealmConverter {
     realmTweetUser.setScreenName(user.screenName);
 
     return realmTweetUser;
+  }
+
+  @Nullable
+  private static String extractMediaUrl(@NonNull MediaEntity entity) {
+
+    final VideoInfo videoInfo = entity.videoInfo;
+    if (videoInfo != null) {
+      // we have a video info that contains at least one variant
+      // obtain the url to the video
+      final List<VideoInfo.Variant> variants = videoInfo.variants;
+      if (variants != null && !variants.isEmpty()) {
+        return variants.get(0).url;
+      }
+    }
+    return entity.mediaUrl;
   }
 }

@@ -36,7 +36,7 @@ public class AdapterPresenter extends AbsViewPresenter<AdapterContract.View>
   @Override
   public void onMediaClick(@NonNull String id) {
 
-    getView().openMedia(id);
+    getView().openTweetMedia(id);
   }
 
   @Override

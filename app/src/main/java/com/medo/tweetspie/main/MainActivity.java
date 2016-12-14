@@ -18,7 +18,7 @@ import com.medo.tweetspie.injection.components.DaggerUserComponent;
 import com.medo.tweetspie.main.adapter.AdapterContract;
 import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.main.adapter.TweetsAdapter;
-import com.medo.tweetspie.main.viewer.ViewerDialog;
+import com.medo.tweetspie.main.viewer.ViewerActivity;
 import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.rest.TwitterModule;
 import com.medo.tweetspie.service.TimelineService;
@@ -136,15 +136,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void openMedia(@NonNull String id) {
+  public void openTweetMedia(@NonNull String tweetId) {
 
-    ViewerDialog.newInstance(id).show(getSupportFragmentManager(), null);
+    final Intent intent = ViewerActivity.getIntent(this, tweetId);
+    startActivity(intent);
   }
 
   @Override
   public void openUrl(@NonNull String url) {
 
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
     startActivity(intent);
   }
 

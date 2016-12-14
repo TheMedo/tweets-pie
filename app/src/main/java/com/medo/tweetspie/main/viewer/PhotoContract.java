@@ -7,22 +7,16 @@ import android.support.annotation.NonNull;
 import com.medo.tweetspie.base.BaseView;
 import com.medo.tweetspie.base.BaseViewPresenter;
 
-import java.util.List;
 
-
-public interface ViewerContract {
+public interface PhotoContract {
 
   interface View extends BaseView {
 
     Bundle getArguments();
 
-    void showImages(@NonNull List<String> urls);
+    void showImage(@NonNull String url);
 
     void showGif(@NonNull String url);
-
-    void showVideo(@NonNull String url);
-
-    void exit();
   }
 
 

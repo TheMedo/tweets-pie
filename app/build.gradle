@@ -60,4 +60,5 @@ dependencies {
     /* Utils */
     compile 'com.jakewharton.timber:timber:4.4.0'
     compile 'io.realm:android-adapters:1.4.0'
+    compile 'me.relex:circleindicator:1.2.2@aar'
 }

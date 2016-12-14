@@ -13,7 +13,7 @@ public interface AdapterContract {
 
     void openUrl(@NonNull String url);
 
-    void openMedia(@NonNull String id);
+    void openTweetMedia(@NonNull String tweetId);
   }
 
 

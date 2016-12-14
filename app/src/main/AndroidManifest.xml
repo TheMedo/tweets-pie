@@ -28,6 +28,10 @@
 
         <activity android:name=".onboarding.OnboardingActivity"/>
 
+        <activity
+            android:name=".main.viewer.ViewerActivity"
+            android:theme="@style/AppThemeDark"/>
+
         <service android:name=".service.TimelineService"/>
 
     </application>

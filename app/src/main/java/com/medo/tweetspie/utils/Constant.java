@@ -24,5 +24,7 @@ public class Constant {
   public @interface Extras {
 
     String ID = "id";
+    String URL = "url";
+    String TYPE = "type";
   }
 }
