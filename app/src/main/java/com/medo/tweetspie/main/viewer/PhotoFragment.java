@@ -119,7 +119,6 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
 
     Glide.with(this)
             .load(url)
-            .asGif()
             .diskCacheStrategy(DiskCacheStrategy.SOURCE)
             .placeholder(R.drawable.ic_gif)
             .into(imageMedia);

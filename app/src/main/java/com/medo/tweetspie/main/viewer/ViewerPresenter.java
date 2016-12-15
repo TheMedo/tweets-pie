@@ -76,7 +76,7 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
           getView().showImages(Arrays.asList(entity.getMediaUrl()));
           break;
         case Constant.MediaType.VIDEO:
-          getView().showVideo(entity.getMediaUrl());
+          getView().showVideo(entity.getVideoUrl());
           break;
       }
     }

@@ -76,7 +76,8 @@ public class RealmConverter {
     for (MediaEntity mediaEntity : entities.media) {
       // convert all media entities to realm entities
       RealmTweetEntity realmTweetEntity = new RealmTweetEntity();
-      realmTweetEntity.setMediaUrl(extractMediaUrl(mediaEntity));
+      realmTweetEntity.setMediaUrl(mediaEntity.mediaUrl);
+      realmTweetEntity.setVideoUrl(extractVideoUrl(mediaEntity));
       realmTweetEntity.setType(mediaEntity.type);
       realmTweetEntities.add(realmTweetEntity);
     }
@@ -103,7 +104,7 @@ public class RealmConverter {
   }
 
   @Nullable
-  private static String extractMediaUrl(@NonNull MediaEntity entity) {
+  private static String extractVideoUrl(@NonNull MediaEntity entity) {
 
     final VideoInfo videoInfo = entity.videoInfo;
     if (videoInfo != null) {
@@ -114,6 +115,6 @@ public class RealmConverter {
         return variants.get(0).url;
       }
     }
-    return entity.mediaUrl;
+    return null;
   }
 }

@@ -9,6 +9,7 @@ public class RealmTweetEntity extends RealmObject {
 
   @PrimaryKey
   private String mediaUrl;
+  private String videoUrl;
   private String type;
 
   public String getMediaUrl() {
@@ -19,6 +20,16 @@ public class RealmTweetEntity extends RealmObject {
   public void setMediaUrl(String mediaUrl) {
 
     this.mediaUrl = mediaUrl;
+  }
+
+  public String getVideoUrl() {
+
+    return videoUrl;
+  }
+
+  public void setVideoUrl(String videoUrl) {
+
+    this.videoUrl = videoUrl;
   }
 
   public String getType() {
