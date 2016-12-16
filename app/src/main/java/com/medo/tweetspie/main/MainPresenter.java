@@ -29,8 +29,8 @@ public class MainPresenter extends AbsViewPresenter<MainContract.View>
       getView().startOnboarding();
     }
     else {
-      getView().loadData();
       getView().initUi();
+      getView().loadData();
       // show the persisted tweets if any
       OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
       if (!tweets.isEmpty()) {
@@ -49,8 +49,8 @@ public class MainPresenter extends AbsViewPresenter<MainContract.View>
   @Override
   public void onOnboardingSuccess() {
 
-    getView().loadData();
     getView().initUi();
+    getView().loadData();
   }
 
   @Override

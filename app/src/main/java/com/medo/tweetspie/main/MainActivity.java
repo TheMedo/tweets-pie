@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.BaseActivity;
@@ -38,6 +40,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
 
   @BindView(R.id.recycler_tweets)
   RecyclerView recyclerTweets;
+  @BindView(R.id.progress)
+  ProgressBar progress;
 
   @Inject
   MainPresenter presenter;
@@ -101,12 +105,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @Override
   public void loadData() {
 
+    // show progress bar and start loading data
+    progress.setVisibility(View.VISIBLE);
     TimelineService.start(this);
   }
 
   @Override
   public void showData(OrderedRealmCollection<RealmTweet> tweets) {
 
+    // hide the progress bar
+    progress.setVisibility(View.GONE);
+
+    // create an adapter for displaying tweets
     TweetsAdapter tweetsAdapter = (TweetsAdapter) recyclerTweets.getAdapter();
     if (tweetsAdapter != null) {
       // just update the data if the adapter has already been set
