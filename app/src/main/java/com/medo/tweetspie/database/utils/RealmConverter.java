@@ -3,11 +3,13 @@ package com.medo.tweetspie.database.utils;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.medo.tweetspie.database.model.RealmFriendId;
 import com.medo.tweetspie.database.model.RealmTweet;
 import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.database.model.RealmTweetUser;
+import com.medo.tweetspie.utils.Constant;
 import com.medo.tweetspie.utils.FormatUtils;
 import com.medo.tweetspie.utils.ScoreUtils;
 import com.twitter.sdk.android.core.models.MediaEntity;
@@ -112,7 +114,12 @@ public class RealmConverter {
       // obtain the url to the video
       final List<VideoInfo.Variant> variants = videoInfo.variants;
       if (variants != null && !variants.isEmpty()) {
-        return variants.get(0).url;
+        for (VideoInfo.Variant variant : variants) {
+          if (TextUtils.equals(Constant.VIDEO_MP4, variant.contentType)) {
+            // we are only interested in the .mp4 video variant
+            return variant.url;
+          }
+        }
       }
     }
     return null;

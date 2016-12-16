@@ -1,7 +1,6 @@
 package com.medo.tweetspie.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +22,7 @@ import com.medo.tweetspie.onboarding.OnboardingActivity;
 import com.medo.tweetspie.rest.TwitterModule;
 import com.medo.tweetspie.service.TimelineService;
 import com.medo.tweetspie.utils.DividerItemDecoration;
+import com.medo.tweetspie.utils.IntentUtils;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -145,8 +145,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   @Override
   public void openUrl(@NonNull String url) {
 
-    final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-    startActivity(intent);
+    IntentUtils.openUrl(this, url);
   }
 
   @Subscribe
