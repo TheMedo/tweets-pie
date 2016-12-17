@@ -100,8 +100,7 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
   @Override
   public void showImages(@NonNull List<String> urls) {
 
-    final PhotoPagerAdapter adapter
-            = new PhotoPagerAdapter(getSupportFragmentManager(), Constant.MediaType.PHOTO, urls);
+    final PhotoPagerAdapter adapter = new PhotoPagerAdapter(getSupportFragmentManager(), urls);
     pager.setAdapter(adapter);
     if (urls.size() > 1) {
       indicator.setViewPager(pager);
@@ -109,15 +108,6 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
     else {
       indicator.setVisibility(View.GONE);
     }
-  }
-
-  @Override
-  public void showGif(@NonNull String url) {
-
-    final PhotoPagerAdapter adapter
-            = new PhotoPagerAdapter(getSupportFragmentManager(), Constant.MediaType.ANIMATED_GIF, url);
-    pager.setAdapter(adapter);
-    indicator.setVisibility(View.GONE);
   }
 
   @Override
@@ -137,6 +127,8 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
         final MediaController controller = new MediaController(ViewerActivity.this);
         videoView.setMediaController(controller);
         controller.setAnchorView(videoView);
+        // loop video once it's done playing
+        mediaPlayer.setLooping(true);
       }
     });
 

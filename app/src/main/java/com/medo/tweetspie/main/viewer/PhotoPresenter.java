@@ -28,15 +28,6 @@ public class PhotoPresenter extends AbsViewPresenter<PhotoContract.View>
       return;
     }
 
-    // get the media type, default to image
-    final String type = args.getString(Constant.Extras.TYPE, "");
-    switch (type) {
-      case Constant.MediaType.ANIMATED_GIF:
-        getView().showGif(url);
-        break;
-      default:
-        getView().showImage(url);
-        break;
-    }
+    getView().showImage(url);
   }
 }

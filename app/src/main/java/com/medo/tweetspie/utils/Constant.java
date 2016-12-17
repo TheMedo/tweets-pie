@@ -27,6 +27,5 @@ public class Constant {
 
     String ID = "id";
     String URL = "url";
-    String TYPE = "type";
   }
 }

@@ -15,8 +15,6 @@ public interface PhotoContract {
     Bundle getArguments();
 
     void showImage(@NonNull String url);
-
-    void showGif(@NonNull String url);
   }
 
 

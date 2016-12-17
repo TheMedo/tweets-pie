@@ -18,8 +18,6 @@ public interface ViewerContract {
 
     void showImages(@NonNull List<String> urls);
 
-    void showGif(@NonNull String url);
-
     void showVideo(@NonNull String url);
 
     void exit();

@@ -10,10 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.BaseFragment;
 import com.medo.tweetspie.injection.components.AppComponent;
 import com.medo.tweetspie.injection.components.DaggerUserComponent;
@@ -30,10 +28,9 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
   PhotoPresenter presenter;
   private ImageView imageMedia;
 
-  public static PhotoFragment newInstance(@NonNull String type, @NonNull String url) {
+  public static PhotoFragment newInstance(@NonNull String url) {
 
     final Bundle args = new Bundle();
-    args.putString(Constant.Extras.TYPE, type);
     args.putString(Constant.Extras.URL, url);
 
     final PhotoFragment fragment = new PhotoFragment();
@@ -111,16 +108,6 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
                 return false;
               }
             })
-            .into(imageMedia);
-  }
-
-  @Override
-  public void showGif(@NonNull String url) {
-
-    Glide.with(this)
-            .load(url)
-            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-            .placeholder(R.drawable.ic_gif)
             .into(imageMedia);
   }
 }

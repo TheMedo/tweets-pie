@@ -69,12 +69,10 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
       final RealmTweetEntity entity = entities.get(0);
       //noinspection ResourceType
       switch (entity.getType()) {
-        case Constant.MediaType.ANIMATED_GIF:
-          getView().showGif(entity.getMediaUrl());
-          break;
         case Constant.MediaType.PHOTO:
           getView().showImages(Arrays.asList(entity.getMediaUrl()));
           break;
+        case Constant.MediaType.ANIMATED_GIF:
         case Constant.MediaType.VIDEO:
           getView().showVideo(entity.getVideoUrl());
           break;
