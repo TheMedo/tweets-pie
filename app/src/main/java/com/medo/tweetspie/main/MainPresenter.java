@@ -34,7 +34,7 @@ public class MainPresenter extends AbsViewPresenter<MainContract.View>
       // show the persisted tweets if any
       OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
       if (!tweets.isEmpty()) {
-        getView().showData(tweets);
+        getView().showData(tweets, true);
       }
     }
   }
@@ -64,7 +64,7 @@ public class MainPresenter extends AbsViewPresenter<MainContract.View>
 
     if (success) {
       OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
-      getView().showData(tweets);
+      getView().showData(tweets, false);
     }
     else {
       // TODO show error

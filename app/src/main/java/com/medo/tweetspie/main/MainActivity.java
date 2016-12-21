@@ -111,10 +111,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
   }
 
   @Override
-  public void showData(OrderedRealmCollection<RealmTweet> tweets) {
+  public void showData(OrderedRealmCollection<RealmTweet> tweets, boolean cached) {
 
-    // hide the progress bar
-    progress.setVisibility(View.GONE);
+    if (!cached) {
+      // hide the progress bar
+      progress.setVisibility(View.GONE);
+    }
 
     // create an adapter for displaying tweets
     TweetsAdapter tweetsAdapter = (TweetsAdapter) recyclerTweets.getAdapter();

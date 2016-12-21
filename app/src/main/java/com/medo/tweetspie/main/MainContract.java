@@ -16,7 +16,7 @@ public interface MainContract {
 
     void loadData();
 
-    void showData(OrderedRealmCollection<RealmTweet> data);
+    void showData(OrderedRealmCollection<RealmTweet> data, boolean cached);
 
     void showError();
   }
