@@ -26,6 +26,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="@dimen/space_normal"
         android:layout_toEndOf="@+id/image_avatar"
+        android:drawableStart="@drawable/ic_lock"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         tools:text="Screen_Name"/>
 

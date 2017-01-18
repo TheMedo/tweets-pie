@@ -96,10 +96,11 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       // bind the tweet data to the views
       this.tweet = tweet;
       // set the user data
-      ImageUtils.loadUserAvatar(context, imageAvatar, tweet.getUser());
-      textName.setText(tweet.getUser().getName());
+      final RealmTweetUser user = tweet.getUser();
+      ImageUtils.loadUserAvatar(context, imageAvatar, user);
+      textName.setText(user.getName());
       textUsername.setText("@");
-      textUsername.append(tweet.getUser().getScreenName());
+      textUsername.append(user.getScreenName());
 
       // set the date
       textDate.setText(FormatUtils.toRelativeDate(tweet.getCreatedAt()));
@@ -154,9 +155,14 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
         }
       }
 
-      // set the retweets
+      // set locked user
+      final boolean locked = user.isLocked();
+      textName.setCompoundDrawablesWithIntrinsicBounds(locked ? R.drawable.ic_lock : 0, 0, 0, 0);
+
+      // set the retweets and disable retweeting if user is locked
       toggleRetweets.setChecked(tweet.isRetweeted());
       toggleRetweets.setText(FormatUtils.formatNumber(tweet.getRetweetCount()));
+      toggleRetweets.setEnabled(!locked);
 
       // set the favorites
       toggleFavorites.setChecked(tweet.isFavorited());

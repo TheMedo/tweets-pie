@@ -15,6 +15,7 @@ public class RealmTweetUser extends RealmObject {
   private String profileImageUrl;
   private boolean protectedUser;
   private String screenName;
+  private boolean locked;
 
   public long getId() {
 
@@ -94,5 +95,15 @@ public class RealmTweetUser extends RealmObject {
   public void setScreenName(String screenName) {
 
     this.screenName = screenName;
+  }
+
+  public boolean isLocked() {
+
+    return locked;
+  }
+
+  public void setLocked(boolean locked) {
+
+    this.locked = locked;
   }
 }

@@ -101,6 +101,7 @@ public class RealmConverter {
     realmTweetUser.setProfileImageUrl(user.profileImageUrl);
     realmTweetUser.setProtectedUser(user.protectedUser);
     realmTweetUser.setScreenName(user.screenName);
+    realmTweetUser.setLocked(user.protectedUser);
 
     return realmTweetUser;
   }
