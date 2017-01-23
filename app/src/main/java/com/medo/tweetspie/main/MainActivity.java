@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ada
     recyclerTweets.setLayoutManager(new LinearLayoutManager(this));
     recyclerTweets.setAdapter(tweetsAdapter);
     recyclerTweets.setHasFixedSize(true);
-    recyclerTweets.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+    recyclerTweets.addItemDecoration(new DividerItemDecoration(this));
   }
 
   @Override

@@ -25,6 +25,7 @@ public abstract class AbsServicePresenter <T extends BaseService> implements Bas
     return service != null;
   }
 
+  @Nullable
   protected T getService() {
 
     return service;

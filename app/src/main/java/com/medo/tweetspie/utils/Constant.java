@@ -10,6 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 public class Constant {
 
   public static final String VIDEO_MP4 = "video/mp4";
+  public static final String GIF = "GIF";
+  public static final String VID = "VID";
 
   @Retention(RetentionPolicy.SOURCE)
   @StringDef({MediaType.PHOTO, MediaType.ANIMATED_GIF, MediaType.VIDEO})

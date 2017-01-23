@@ -138,13 +138,13 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
           // show the gif type
           imageTransparency.setVisibility(View.VISIBLE);
           textMediaType.setVisibility(View.VISIBLE);
-          textMediaType.setText("GIF");
+          textMediaType.setText(Constant.GIF);
         }
         else if (Constant.MediaType.VIDEO.equalsIgnoreCase(entity.getType())) {
           // show the video type
           imageTransparency.setVisibility(View.VISIBLE);
           textMediaType.setVisibility(View.VISIBLE);
-          textMediaType.setText("VID");
+          textMediaType.setText(Constant.VID);
         }
         else if (extendedEntities.size() > 1) {
           // show count in case of multiple images

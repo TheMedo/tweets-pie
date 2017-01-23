@@ -25,6 +25,7 @@ public abstract class AbsViewPresenter <T extends BaseView> implements BaseViewP
     return view != null;
   }
 
+  @Nullable
   protected T getView() {
 
     return view;
