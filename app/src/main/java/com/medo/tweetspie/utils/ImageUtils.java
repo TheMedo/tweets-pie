@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
+import android.view.TextureView;
 import android.widget.ImageView;
 
 import com.bumptech.glide.BitmapRequestBuilder;
@@ -84,6 +85,44 @@ public class ImageUtils {
 
     final int placeholderColor = ContextCompat.getColor(context, R.color.colorError);
     return new ColorDrawable(placeholderColor);
+  }
+
+  /**
+   * Adjusts the aspect ratio of the given texture view, to match
+   * the prepared video aspect ratio to avoid video stretching.
+   *
+   * @param textureView the texture view that needs adjusting
+   * @param videoWidth  the prepared video width
+   * @param videoHeight the prepared video height
+   */
+  public static void adjustAspectRatio(@NonNull TextureView textureView,
+                                       int videoWidth, int videoHeight) {
+
+    final int textureWidth = textureView.getWidth();
+    final int textureHeight = textureView.getHeight();
+    final double aspectRatio = (double) videoHeight / videoWidth;
+
+    final int newWidth;
+    final int newHeight;
+    if (textureHeight > (int) (textureWidth * aspectRatio)) {
+      // limited by narrow width, restrict height
+      newWidth = textureWidth;
+      newHeight = (int) (textureWidth * aspectRatio);
+    }
+    else {
+      // limited by short height, restrict width
+      newWidth = (int) (textureHeight / aspectRatio);
+      newHeight = textureHeight;
+    }
+
+    int xOffset = (textureWidth - newWidth) / 2;
+    int yOffset = (textureHeight - newHeight) / 2;
+
+    final Matrix transformMatrix = new Matrix();
+    textureView.getTransform(transformMatrix);
+    transformMatrix.setScale((float) newWidth / textureWidth, (float) newHeight / textureHeight);
+    transformMatrix.postTranslate(xOffset, yOffset);
+    textureView.setTransform(transformMatrix);
   }
 
   private static class CropCircleTransformation implements Transformation<Bitmap> {

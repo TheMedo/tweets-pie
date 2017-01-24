@@ -2,11 +2,15 @@ package com.medo.tweetspie.main.viewer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.view.Surface;
+import android.view.TextureView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,8 +23,10 @@ import com.medo.tweetspie.injection.components.AppComponent;
 import com.medo.tweetspie.injection.components.DaggerUserComponent;
 import com.medo.tweetspie.main.adapter.PhotoPagerAdapter;
 import com.medo.tweetspie.utils.Constant;
+import com.medo.tweetspie.utils.ImageUtils;
 import com.medo.tweetspie.utils.IntentUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -30,10 +36,13 @@ import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator;
 
 
-public class ViewerActivity extends BaseActivity implements ViewerContract.View {
+public class ViewerActivity extends BaseActivity
+        implements ViewerContract.View, TextureView.SurfaceTextureListener {
 
   @BindView(R.id.video_view)
   VideoView videoView;
+  @BindView(R.id.texture_view)
+  TextureView textureView;
   @BindView(R.id.pager)
   ViewPager pager;
   @BindView(R.id.indicator)
@@ -41,6 +50,8 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
 
   @Inject
   ViewerPresenter presenter;
+  @Inject
+  MediaPlayer mediaPlayer;
 
   @NonNull
   public static Intent getIntent(@NonNull Activity parent, @NonNull String tweetId) {
@@ -83,6 +94,8 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
 
     setContentView(R.layout.activity_viewer);
     ButterKnife.bind(this);
+
+    textureView.setSurfaceTextureListener(this);
   }
 
   @Override
@@ -111,24 +124,47 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
   }
 
   @Override
-  public void showVideo(@NonNull final String url) {
+  public void showGif(@NonNull String url) {
 
+    try {
+      mediaPlayer.setDataSource(url);
+    }
+    catch (IOException e) {
+      // cannot play the video without a valid source
+      return;
+    }
+    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+      @Override
+      public void onPrepared(MediaPlayer mediaPlayer) {
+        // adjust the ratio of the texture view to avoid stretching
+        ImageUtils.adjustAspectRatio(textureView, mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
+        // set the gif as looping and start the playback
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+      }
+    });
+    // prepare the playback
+    mediaPlayer.prepareAsync();
+  }
+
+  @Override
+  public void showVideo(@NonNull final String url) {
+    // toggling the background color is a workaround for preventing
+    // view flicker when the video is initially loaded
+    videoView.setBackgroundColor(Color.BLACK);
     videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
       @Override
       public void onPrepared(MediaPlayer mediaPlayer) {
 
-        if (videoView == null) {
-          // the view has been destroyed
-          return;
-        }
-        // once the video has been prepared create a media controller
-        // for video playback anchored to the bottom of the video
+        videoView.setBackgroundColor(Color.TRANSPARENT);
+        // create a media controller for video playback anchored to the bottom of the video
         final MediaController controller = new MediaController(ViewerActivity.this);
         videoView.setMediaController(controller);
         controller.setAnchorView(videoView);
-        // loop video once it's done playing
-        mediaPlayer.setLooping(true);
+        // start the playback
+        mediaPlayer.start();
       }
     });
 
@@ -136,11 +172,6 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
 
       @Override
       public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-
-        if (videoView == null) {
-          // the view has been destroyed
-          return false;
-        }
         // we cannot open the video (ex. unsupported format)
         // start a view intent in case some other app can handle it
         IntentUtils.openUrl(ViewerActivity.this, url);
@@ -151,6 +182,28 @@ public class ViewerActivity extends BaseActivity implements ViewerContract.View 
 
     // load the video and start playback immediately after
     videoView.setVideoURI(Uri.parse(url));
-    videoView.start();
+  }
+
+  @Override
+  public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
+
+    final Surface surface = new Surface(surfaceTexture);
+    mediaPlayer.setSurface(surface);
+  }
+
+  @Override
+  public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+
+  }
+
+  @Override
+  public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+
+    return true;
+  }
+
+  @Override
+  public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
   }
 }

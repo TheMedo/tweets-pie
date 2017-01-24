@@ -20,6 +20,8 @@ public interface ViewerContract {
 
     void showVideo(@NonNull String url);
 
+    void showGif(@NonNull String url);
+
     void exit();
   }
 

@@ -73,6 +73,8 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
           getView().showImages(Arrays.asList(entity.getMediaUrl()));
           break;
         case Constant.MediaType.ANIMATED_GIF:
+          getView().showGif(entity.getVideoUrl());
+          break;
         case Constant.MediaType.VIDEO:
           getView().showVideo(entity.getVideoUrl());
           break;

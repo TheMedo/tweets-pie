@@ -1,5 +1,7 @@
 package com.medo.tweetspie.main.viewer;
 
+import android.media.MediaPlayer;
+
 import com.medo.tweetspie.database.RealmInteractor;
 import com.medo.tweetspie.injection.scopes.UserScope;
 
@@ -22,5 +24,12 @@ public class ViewerModule {
   PhotoPresenter providePhotoPresenter() {
 
     return new PhotoPresenter();
+  }
+
+  @Provides
+  @UserScope
+  MediaPlayer provideMediaPlayer() {
+
+    return new MediaPlayer();
   }
 }
