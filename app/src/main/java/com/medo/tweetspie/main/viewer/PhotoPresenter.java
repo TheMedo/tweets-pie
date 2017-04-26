@@ -1,33 +1,23 @@
 package com.medo.tweetspie.main.viewer;
 
 
-import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.base.AbsViewPresenter;
-import com.medo.tweetspie.utils.Constant;
 
 
 public class PhotoPresenter extends AbsViewPresenter<PhotoContract.View>
         implements PhotoContract.Presenter {
 
   @Override
-  public void onAttach(PhotoContract.View view) {
-
-    super.onAttach(view);
-
-    // get the arguments and exit if invalid
-    final Bundle args = view.getArguments();
-    if (args == null || args.isEmpty()) {
-      return;
-    }
-
+  public void loadImage(@Nullable String url) {
     // get the tweetId and exit if empty or null
-    final String url = args.getString(Constant.Extras.URL, null);
-    if (TextUtils.isEmpty(url)) {
-      return;
+    if (view != null) {
+      if (url == null) {
+        view.exit();
+        return;
+      }
+      view.showImage(url);
     }
-
-    view.showImage(url);
   }
 }

@@ -55,6 +55,7 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
 
     super.onViewCreated(view, savedInstanceState);
     presenter.onAttach(this);
+    presenter.loadImage(getArguments().getString(Constant.Extras.URL, null));
   }
 
   @Override
