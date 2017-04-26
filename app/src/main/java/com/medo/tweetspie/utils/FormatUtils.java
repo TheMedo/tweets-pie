@@ -12,20 +12,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class FormatUtils {
 
   private static final SimpleDateFormat SDF = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US);
-  private static final Linkify.TransformFilter FILTER = new Linkify.TransformFilter() {
-
-    public final String transformUrl(final Matcher match, String url) {
-
-      return match.group();
-    }
-  };
+  private static final Linkify.TransformFilter FILTER = (match, url) -> match.group();
   private static final Pattern MENTION_PATTERN = Pattern.compile("@([A-Za-z0-9_-]+)");
   private static final String MENTION_SCHEME = "http://www.twitter.com/";
   private static final Pattern HASH_TAG_PATTERN = Pattern.compile("#([A-Za-z0-9_-]+)");

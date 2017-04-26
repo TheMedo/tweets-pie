@@ -128,16 +128,12 @@ public class ViewerActivity extends BaseActivity
       // cannot play the video without a valid source
       return;
     }
-    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-      @Override
-      public void onPrepared(MediaPlayer mediaPlayer) {
-        // adjust the ratio of the texture view to avoid stretching
-        ImageUtils.adjustAspectRatio(textureView, mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
-        // set the gif as looping and start the playback
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-      }
+    mediaPlayer.setOnPreparedListener(mediaPlayer -> {
+      // adjust the ratio of the texture view to avoid stretching
+      ImageUtils.adjustAspectRatio(textureView, mediaPlayer.getVideoWidth(), mediaPlayer.getVideoHeight());
+      // set the gif as looping and start the playback
+      mediaPlayer.setLooping(true);
+      mediaPlayer.start();
     });
     // prepare the playback
     mediaPlayer.prepareAsync();
@@ -148,31 +144,23 @@ public class ViewerActivity extends BaseActivity
     // toggling the background color is a workaround for preventing
     // view flicker when the video is initially loaded
     videoView.setBackgroundColor(Color.BLACK);
-    videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+    videoView.setOnPreparedListener(mediaPlayer -> {
 
-      @Override
-      public void onPrepared(MediaPlayer mediaPlayer) {
-
-        videoView.setBackgroundColor(Color.TRANSPARENT);
-        // create a media controller for video playback anchored to the bottom of the video
-        final MediaController controller = new MediaController(ViewerActivity.this);
-        videoView.setMediaController(controller);
-        controller.setAnchorView(videoView);
-        // start the playback
-        mediaPlayer.start();
-      }
+      videoView.setBackgroundColor(Color.TRANSPARENT);
+      // create a media controller for video playback anchored to the bottom of the video
+      final MediaController controller = new MediaController(ViewerActivity.this);
+      videoView.setMediaController(controller);
+      controller.setAnchorView(videoView);
+      // start the playback
+      mediaPlayer.start();
     });
 
-    videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-
-      @Override
-      public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
-        // we cannot open the video (ex. unsupported format)
-        // start a view intent in case some other app can handle it
-        IntentUtils.openUrl(ViewerActivity.this, url);
-        exit();
-        return false;
-      }
+    videoView.setOnErrorListener((mediaPlayer, what, extra) -> {
+      // we cannot open the video (ex. unsupported format)
+      // start a view intent in case some other app can handle it
+      IntentUtils.openUrl(ViewerActivity.this, url);
+      exit();
+      return false;
     });
 
     // load the video and start playback immediately after

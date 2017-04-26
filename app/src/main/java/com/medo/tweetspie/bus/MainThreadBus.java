@@ -38,14 +38,7 @@ class MainThreadBus extends Bus {
       bus.post(event);
     }
     else {
-      handler.post(new Runnable() {
-
-        @Override
-        public void run() {
-
-          bus.post(event);
-        }
-      });
+      handler.post(() -> bus.post(event));
     }
   }
 }

@@ -14,7 +14,6 @@ import com.twitter.sdk.android.core.models.Tweet;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.realm.OrderedRealmCollection;
@@ -154,14 +153,7 @@ public class RealmInteractor implements RealmTransaction {
   @NonNull
   private List<RealmTweet> sortAndTrimTweets(@NonNull List<RealmTweet> tweets) {
     // sort the list based on the score in descending order
-    Collections.sort(tweets, new Comparator<RealmTweet>() {
-
-      @Override
-      public int compare(RealmTweet leftTweet, RealmTweet rightTweet) {
-
-        return Integer.compare(rightTweet.getScore(), leftTweet.getScore());
-      }
-    });
+    Collections.sort(tweets, (leftTweet, rightTweet) -> Integer.compare(rightTweet.getScore(), leftTweet.getScore()));
     // return a subset of the highest rated tweets
     return tweets.subList(0, (int) preferences.getLong(PreferencesProvider.MAX_TWEETS));
   }

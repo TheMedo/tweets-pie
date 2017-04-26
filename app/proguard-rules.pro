@@ -44,3 +44,7 @@
   public *;
 }
 -keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+# Retrolambda
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
