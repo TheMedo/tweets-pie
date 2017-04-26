@@ -8,7 +8,7 @@ import com.medo.tweetspie.database.model.RealmTweet;
 import io.realm.OrderedRealmCollection;
 
 
-public interface MainContract {
+interface MainContract {
 
   interface View extends BaseView {
 

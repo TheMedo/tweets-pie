@@ -7,12 +7,12 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
 
-public class MainThreadBus extends Bus {
+class MainThreadBus extends Bus {
 
   private static Bus bus;
   private final Handler handler = new Handler(Looper.getMainLooper());
 
-  public MainThreadBus() {
+  MainThreadBus() {
 
     if (bus == null) {
       bus = new Bus(ThreadEnforcer.ANY);

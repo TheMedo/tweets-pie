@@ -280,7 +280,7 @@ public class RealmConverter {
    * @param baseMax the starting range max
    * @return the normalized number in range
    */
-  public float normalize(final long valueIn, final long baseMin, final long baseMax) {
+  private float normalize(final long valueIn, final long baseMin, final long baseMax) {
 
     return (valueIn - baseMin) / (float) (baseMax - baseMin);
   }

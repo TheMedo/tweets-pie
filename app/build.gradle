@@ -23,10 +23,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dexOptions {
-        incremental true
-        javaMaxHeapSize "8g"
-    }
 }
 
 def supportLibraryVersion = "25.3.1"

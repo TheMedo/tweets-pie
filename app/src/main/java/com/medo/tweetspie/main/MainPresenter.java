@@ -8,14 +8,13 @@ import com.medo.tweetspie.system.PreferencesProvider;
 import io.realm.OrderedRealmCollection;
 
 
-public class MainPresenter extends AbsViewPresenter<MainContract.View>
+class MainPresenter extends AbsViewPresenter<MainContract.View>
         implements MainContract.Presenter {
 
   private final PreferencesProvider preferences;
   private final RealmInteractor realmInteractor;
 
-  public MainPresenter(PreferencesProvider preferencesProvider,
-                       RealmInteractor realmInteractor) {
+  MainPresenter(PreferencesProvider preferencesProvider, RealmInteractor realmInteractor) {
 
     this.preferences = preferencesProvider;
     this.realmInteractor = realmInteractor;

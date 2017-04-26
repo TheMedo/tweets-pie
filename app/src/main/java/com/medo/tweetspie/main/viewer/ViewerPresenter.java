@@ -11,7 +11,7 @@ import com.medo.tweetspie.database.model.RealmTweetEntity;
 import com.medo.tweetspie.utils.Constant;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -70,7 +70,7 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
       //noinspection ResourceType
       switch (entity.getType()) {
         case Constant.MediaType.PHOTO:
-          getView().showImages(Arrays.asList(entity.getMediaUrl()));
+          getView().showImages(Collections.singletonList(entity.getMediaUrl()));
           break;
         case Constant.MediaType.ANIMATED_GIF:
           getView().showGif(entity.getVideoUrl());
