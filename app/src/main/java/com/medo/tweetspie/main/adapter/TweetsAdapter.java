@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
@@ -33,18 +34,21 @@ import io.realm.RealmRecyclerViewAdapter;
 public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAdapter.TweetViewHolder> {
 
   private final AdapterContract.Presenter presenter;
+  private final Context context;
 
   public TweetsAdapter(@NonNull Context context,
                        @Nullable OrderedRealmCollection<RealmTweet> data,
                        @NonNull AdapterContract.Presenter presenter) {
 
-    super(context, data, true);
+    super(data, true);
     this.presenter = presenter;
+    this.context = context;
   }
 
   @Override
   public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+    LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     View itemView = inflater.inflate(R.layout.layout_tweet, parent, false);
     return new TweetViewHolder(itemView);
   }
