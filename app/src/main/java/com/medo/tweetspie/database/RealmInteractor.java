@@ -27,12 +27,14 @@ import timber.log.Timber;
 public class RealmInteractor implements RealmTransaction {
 
   private final PreferencesProvider preferences;
-  private Realm realm;
+  private final RealmConverter converter;
+  private final Realm realm;
 
-  public RealmInteractor(PreferencesProvider preferencesProvider) {
+  public RealmInteractor(PreferencesProvider preferencesProvider, RealmConverter converter) {
 
-    this.realm = Realm.getDefaultInstance();
     this.preferences = preferencesProvider;
+    this.converter = converter;
+    this.realm = Realm.getDefaultInstance();
   }
 
   public static void init(@NonNull Context context) {
@@ -49,7 +51,6 @@ public class RealmInteractor implements RealmTransaction {
   public void onDestroy() {
 
     realm.close();
-    realm = null;
   }
 
   @Override
@@ -66,7 +67,7 @@ public class RealmInteractor implements RealmTransaction {
     // convert all tweets to realm objects
     List<RealmFriendId> realmFriendIds = new ArrayList<>(friendsIds.size());
     for (Long id : friendsIds) {
-      realmFriendIds.add(RealmConverter.convertFriendId(id));
+      realmFriendIds.add(converter.convertFriendId(id));
     }
     // persist the realm tweets
     realm.beginTransaction();
@@ -145,7 +146,7 @@ public class RealmInteractor implements RealmTransaction {
         continue;
       }
       // convert and add the tweet
-      realmTweets.add(RealmConverter.convertTweet(tweet));
+      realmTweets.add(converter.convertTweet(tweet));
     }
     return realmTweets;
   }

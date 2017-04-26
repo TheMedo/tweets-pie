@@ -1,6 +1,7 @@
 package com.medo.tweetspie.main;
 
 import com.medo.tweetspie.database.RealmInteractor;
+import com.medo.tweetspie.database.utils.RealmConverter;
 import com.medo.tweetspie.injection.scopes.UserScope;
 import com.medo.tweetspie.main.adapter.AdapterPresenter;
 import com.medo.tweetspie.rest.TwitterInteractor;
@@ -33,5 +34,12 @@ public class MainModule {
   TimelinePresenter provideTimelinePresenter(TwitterInteractor twitterInteractor, RealmInteractor realm) {
 
     return new TimelinePresenter(twitterInteractor, realm);
+  }
+
+  @Provides
+  @UserScope
+  RealmConverter provideRealmConverter() {
+
+    return new RealmConverter();
   }
 }

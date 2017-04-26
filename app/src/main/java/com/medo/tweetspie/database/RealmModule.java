@@ -1,5 +1,6 @@
 package com.medo.tweetspie.database;
 
+import com.medo.tweetspie.database.utils.RealmConverter;
 import com.medo.tweetspie.injection.scopes.UserScope;
 import com.medo.tweetspie.system.PreferencesInteractor;
 
@@ -12,8 +13,8 @@ public class RealmModule {
 
   @Provides
   @UserScope
-  RealmInteractor provideRealm(PreferencesInteractor preferences) {
+  RealmInteractor provideRealm(PreferencesInteractor preferences, RealmConverter converter) {
 
-    return new RealmInteractor(preferences);
+    return new RealmInteractor(preferences, converter);
   }
 }
