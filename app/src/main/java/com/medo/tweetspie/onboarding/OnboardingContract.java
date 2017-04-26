@@ -6,7 +6,7 @@ import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterSession;
 
 
-public interface OnboardingContract {
+interface OnboardingContract {
 
   interface View extends BaseView {
 

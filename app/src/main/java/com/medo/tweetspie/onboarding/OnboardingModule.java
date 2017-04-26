@@ -1,6 +1,5 @@
 package com.medo.tweetspie.onboarding;
 
-import com.medo.tweetspie.injection.scopes.OnboardingScope;
 import com.medo.tweetspie.system.PreferencesInteractor;
 import com.medo.tweetspie.system.StringInteractor;
 
@@ -9,7 +8,7 @@ import dagger.Provides;
 
 
 @Module
-public class OnboardingModule {
+class OnboardingModule {
 
   @Provides
   @OnboardingScope

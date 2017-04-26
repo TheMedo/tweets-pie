@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.medo.tweetspie.R;
 import com.medo.tweetspie.base.BaseActivity;
 import com.medo.tweetspie.injection.components.AppComponent;
-import com.medo.tweetspie.injection.components.DaggerOnboardingComponent;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;

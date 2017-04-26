@@ -13,14 +13,14 @@ import com.twitter.sdk.android.core.TwitterSession;
 import timber.log.Timber;
 
 
-public class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
+class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
         implements OnboardingContract.Presenter {
 
   private final PreferencesInteractor preferences;
   private final StringInteractor strings;
 
-  public OnboardingPresenter(PreferencesInteractor preferences,
-                             StringInteractor strings) {
+  OnboardingPresenter(PreferencesInteractor preferences,
+                      StringInteractor strings) {
 
     this.preferences = preferences;
     this.strings = strings;
