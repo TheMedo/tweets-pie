@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 public abstract class AbsViewPresenter <T extends BaseView> implements BaseViewPresenter<T> {
 
   @Nullable
-  private T view;
+  protected T view;
 
   @Override
   public void onAttach(T view) {
@@ -18,16 +18,5 @@ public abstract class AbsViewPresenter <T extends BaseView> implements BaseViewP
   public void onDetach() {
 
     view = null;
-  }
-
-  protected boolean isAttached() {
-
-    return view != null;
-  }
-
-  @Nullable
-  protected T getView() {
-
-    return view;
   }
 }

@@ -30,8 +30,8 @@ class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
   public void onAttach(OnboardingContract.View view) {
 
     super.onAttach(view);
-    getView().initUi();
-    getView().setupTwitterButton(new Callback<TwitterSession>() {
+    view.initUi();
+    view.setupTwitterButton(new Callback<TwitterSession>() {
 
       @Override
       public void success(Result<TwitterSession> result) {
@@ -52,13 +52,17 @@ class OnboardingPresenter extends AbsViewPresenter<OnboardingContract.View>
     // persist the username and notify success
     preferences.initWithDefaultValues();
     preferences.set(PreferencesProvider.USERNAME, twitterSession.getUserName());
-    getView().exit();
+    if (view != null) {
+      view.exit();
+    }
   }
 
   @Override
   public void onLoginFailure(Exception e) {
     // log and notify error
     Timber.e(e, "Cannot login with Twitter");
-    getView().exitWithError(strings.getString(R.string.error_login_failure));
+    if (view != null) {
+      view.exitWithError(strings.getString(R.string.error_login_failure));
+    }
   }
 }

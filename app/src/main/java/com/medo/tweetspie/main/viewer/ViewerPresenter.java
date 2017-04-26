@@ -33,35 +33,35 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
     super.onAttach(view);
 
     // get the arguments and exit if invalid
-    final Bundle args = getView().getArguments();
+    final Bundle args = view.getArguments();
     if (args == null || args.isEmpty()) {
-      getView().exit();
+      view.exit();
       return;
     }
 
     // get the tweetId and exit if empty or null
     final String id = args.getString(Constant.Extras.ID, null);
     if (TextUtils.isEmpty(id)) {
-      getView().exit();
+      view.exit();
       return;
     }
 
     // get the tweetId and exit if null
     final RealmTweet tweet = realmInteractor.getTweet(id);
     if (tweet == null) {
-      getView().exit();
+      view.exit();
       return;
     }
 
     // get the tweet media and exist if null
     final RealmList<RealmTweetEntity> entities = tweet.getExtendedEntities();
     if (entities == null || entities.isEmpty()) {
-      getView().exit();
+      view.exit();
       return;
     }
 
     // init the ui
-    getView().initUi();
+    view.initUi();
 
     // show me media contained in this tweet
     if (entities.size() == 1) {
@@ -70,13 +70,13 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
       //noinspection ResourceType
       switch (entity.getType()) {
         case Constant.MediaType.PHOTO:
-          getView().showImages(Collections.singletonList(entity.getMediaUrl()));
+          view.showImages(Collections.singletonList(entity.getMediaUrl()));
           break;
         case Constant.MediaType.ANIMATED_GIF:
-          getView().showGif(entity.getVideoUrl());
+          view.showGif(entity.getVideoUrl());
           break;
         case Constant.MediaType.VIDEO:
-          getView().showVideo(entity.getVideoUrl());
+          view.showVideo(entity.getVideoUrl());
           break;
       }
     }
@@ -86,7 +86,7 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
       for (RealmTweetEntity entity : entities) {
         urls.add(entity.getMediaUrl());
       }
-      getView().showImages(urls);
+      view.showImages(urls);
     }
   }
 }

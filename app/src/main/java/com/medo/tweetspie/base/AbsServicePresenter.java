@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 public abstract class AbsServicePresenter <T extends BaseService> implements BaseServicePresenter<T> {
 
   @Nullable
-  private T service;
+  protected T service;
 
   @Override
   public void onStart(T service) {
@@ -18,16 +18,5 @@ public abstract class AbsServicePresenter <T extends BaseService> implements Bas
   public void onStop() {
 
     service = null;
-  }
-
-  protected boolean isStarted() {
-
-    return service != null;
-  }
-
-  @Nullable
-  protected T getService() {
-
-    return service;
   }
 }

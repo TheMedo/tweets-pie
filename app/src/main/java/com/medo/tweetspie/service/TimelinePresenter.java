@@ -54,7 +54,9 @@ public class TimelinePresenter extends AbsServicePresenter<TimelineContract.Serv
       @Override
       public void onFinish() {
 
-        getService().exitWithSuccess();
+        if (service != null) {
+          service.exitWithSuccess();
+        }
       }
 
       @Override
@@ -65,7 +67,9 @@ public class TimelinePresenter extends AbsServicePresenter<TimelineContract.Serv
       @Override
       public void onError(@NonNull Exception e) {
 
-        getService().exitWithError(e);
+        if (service != null) {
+          service.exitWithError(e);
+        }
       }
     });
   }

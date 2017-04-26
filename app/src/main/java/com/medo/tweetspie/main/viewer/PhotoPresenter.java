@@ -17,7 +17,7 @@ public class PhotoPresenter extends AbsViewPresenter<PhotoContract.View>
     super.onAttach(view);
 
     // get the arguments and exit if invalid
-    final Bundle args = getView().getArguments();
+    final Bundle args = view.getArguments();
     if (args == null || args.isEmpty()) {
       return;
     }
@@ -28,6 +28,6 @@ public class PhotoPresenter extends AbsViewPresenter<PhotoContract.View>
       return;
     }
 
-    getView().showImage(url);
+    view.showImage(url);
   }
 }

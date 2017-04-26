@@ -56,8 +56,11 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
   @Override
   public void onBindViewHolder(TweetViewHolder holder, int position) {
     // show the tweet
-    RealmTweet tweet = getData().get(position);
-    holder.showTweet(tweet);
+    OrderedRealmCollection<RealmTweet> data = getData();
+    if (data != null) {
+      RealmTweet tweet = data.get(position);
+      holder.showTweet(tweet);
+    }
   }
 
   class TweetViewHolder extends RecyclerView.ViewHolder {

@@ -25,15 +25,15 @@ class MainPresenter extends AbsViewPresenter<MainContract.View>
 
     super.onAttach(view);
     if (!preferences.has(PreferencesProvider.USERNAME)) {
-      getView().startOnboarding();
+      view.startOnboarding();
     }
     else {
-      getView().initUi();
-      getView().loadData();
+      view.initUi();
+      view.loadData();
       // show the persisted tweets if any
       OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
       if (!tweets.isEmpty()) {
-        getView().showData(tweets, true);
+        view.showData(tweets, true);
       }
     }
   }
@@ -48,26 +48,32 @@ class MainPresenter extends AbsViewPresenter<MainContract.View>
   @Override
   public void onOnboardingSuccess() {
 
-    getView().initUi();
-    getView().loadData();
+    if (view != null) {
+      view.initUi();
+      view.loadData();
+    }
   }
 
   @Override
   public void onOnboardingFailure() {
 
-    getView().exit();
+    if (view != null) {
+      view.exit();
+    }
   }
 
   @Override
   public void onDataLoaded(boolean success) {
 
-    if (success) {
-      OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
-      getView().showData(tweets, false);
-    }
-    else {
-      // TODO show error
-      getView().showError();
+    if (view != null) {
+      if (success) {
+        OrderedRealmCollection<RealmTweet> tweets = realmInteractor.getTweets();
+        view.showData(tweets, false);
+      }
+      else {
+        // TODO show error
+        view.showError();
+      }
     }
   }
 }
