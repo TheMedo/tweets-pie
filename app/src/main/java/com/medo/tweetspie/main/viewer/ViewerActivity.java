@@ -66,6 +66,7 @@ public class ViewerActivity extends BaseActivity
 
     super.onCreate(savedInstanceState);
     presenter.onAttach(this);
+    presenter.handleMedia(getIntent().getStringExtra(Constant.Extras.ID));
   }
 
   @Override
@@ -102,12 +103,6 @@ public class ViewerActivity extends BaseActivity
   public void exit() {
 
     finish();
-  }
-
-  @Override
-  public Bundle getArguments() {
-
-    return getIntent().getExtras();
   }
 
   @Override

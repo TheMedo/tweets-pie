@@ -1,8 +1,7 @@
 package com.medo.tweetspie.main.viewer;
 
 
-import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.base.AbsViewPresenter;
 import com.medo.tweetspie.database.RealmInteractor;
@@ -28,65 +27,56 @@ public class ViewerPresenter extends AbsViewPresenter<ViewerContract.View>
   }
 
   @Override
-  public void onAttach(ViewerContract.View view) {
+  public void handleMedia(@Nullable String tweetId) {
 
-    super.onAttach(view);
-
-    // get the arguments and exit if invalid
-    final Bundle args = view.getArguments();
-    if (args == null || args.isEmpty()) {
-      view.exit();
-      return;
-    }
-
-    // get the tweetId and exit if empty or null
-    final String id = args.getString(Constant.Extras.ID, null);
-    if (TextUtils.isEmpty(id)) {
-      view.exit();
-      return;
-    }
-
-    // get the tweetId and exit if null
-    final RealmTweet tweet = realmInteractor.getTweet(id);
-    if (tweet == null) {
-      view.exit();
-      return;
-    }
-
-    // get the tweet media and exist if null
-    final RealmList<RealmTweetEntity> entities = tweet.getExtendedEntities();
-    if (entities == null || entities.isEmpty()) {
-      view.exit();
-      return;
-    }
-
-    // init the ui
-    view.initUi();
-
-    // show me media contained in this tweet
-    if (entities.size() == 1) {
-      // we have a single entry, show the content based on the type
-      final RealmTweetEntity entity = entities.get(0);
-      //noinspection ResourceType
-      switch (entity.getType()) {
-        case Constant.MediaType.PHOTO:
-          view.showImages(Collections.singletonList(entity.getMediaUrl()));
-          break;
-        case Constant.MediaType.ANIMATED_GIF:
-          view.showGif(entity.getVideoUrl());
-          break;
-        case Constant.MediaType.VIDEO:
-          view.showVideo(entity.getVideoUrl());
-          break;
+    if (view != null) {
+      if (tweetId == null) {
+        view.exit();
+        return;
       }
-    }
-    else {
-      // we have multiple entries (only images), show all of them
-      final List<String> urls = new ArrayList<>(entities.size());
-      for (RealmTweetEntity entity : entities) {
-        urls.add(entity.getMediaUrl());
+
+      // get the tweetId and exit if null
+      final RealmTweet tweet = realmInteractor.getTweet(tweetId);
+      if (tweet == null) {
+        view.exit();
+        return;
       }
-      view.showImages(urls);
+
+      // get the tweet media and exist if null
+      final RealmList<RealmTweetEntity> entities = tweet.getExtendedEntities();
+      if (entities == null || entities.isEmpty()) {
+        view.exit();
+        return;
+      }
+
+      // init the ui
+      view.initUi();
+
+      // show me media contained in this tweet
+      if (entities.size() == 1) {
+        // we have a single entry, show the content based on the type
+        final RealmTweetEntity entity = entities.get(0);
+        //noinspection ResourceType
+        switch (entity.getType()) {
+          case Constant.MediaType.PHOTO:
+            view.showImages(Collections.singletonList(entity.getMediaUrl()));
+            break;
+          case Constant.MediaType.ANIMATED_GIF:
+            view.showGif(entity.getVideoUrl());
+            break;
+          case Constant.MediaType.VIDEO:
+            view.showVideo(entity.getVideoUrl());
+            break;
+        }
+      }
+      else {
+        // we have multiple entries (only images), show all of them
+        final List<String> urls = new ArrayList<>(entities.size());
+        for (RealmTweetEntity entity : entities) {
+          urls.add(entity.getMediaUrl());
+        }
+        view.showImages(urls);
+      }
     }
   }
 }

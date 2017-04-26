@@ -1,8 +1,8 @@
 package com.medo.tweetspie.main.viewer;
 
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.medo.tweetspie.base.BaseView;
 import com.medo.tweetspie.base.BaseViewPresenter;
@@ -10,11 +10,9 @@ import com.medo.tweetspie.base.BaseViewPresenter;
 import java.util.List;
 
 
-public interface ViewerContract {
+interface ViewerContract {
 
   interface View extends BaseView {
-
-    Bundle getArguments();
 
     void showImages(@NonNull List<String> urls);
 
@@ -28,5 +26,6 @@ public interface ViewerContract {
 
   interface Presenter extends BaseViewPresenter<View> {
 
+    void handleMedia(@Nullable String tweetId);
   }
 }
