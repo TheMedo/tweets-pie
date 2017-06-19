@@ -48,7 +48,7 @@ public class RealmConverter {
     }
     realmTweet.setCreatedAt(FormatUtils.utcToDate(tweet.createdAt));
     realmTweet.setEntities(extractMediaEntities(tweet.entities));
-    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEtities));
+    realmTweet.setExtendedEntities(extractMediaEntities(tweet.extendedEntities));
     realmTweet.setFavoriteCount(tweet.favoriteCount);
     realmTweet.setFavorited(tweet.favorited);
     realmTweet.setIdStr(tweet.idStr);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.medo.tweetspie.BuildConfig;
 import com.medo.tweetspie.database.RealmInteractor;
@@ -12,18 +13,19 @@ import com.medo.tweetspie.rest.api.CustomApiClient;
 import com.medo.tweetspie.rest.model.FriendsIds;
 import com.medo.tweetspie.system.PreferencesProvider;
 import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.tweetui.TweetUi;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 
@@ -46,8 +48,12 @@ public class TwitterInteractor implements TwitterTransaction {
 
   public static void init(@NonNull Context context) {
     // init twitter
-    TwitterAuthConfig authConfig = new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET);
-    Fabric.with(context, new TwitterCore(authConfig), new TweetUi());
+    TwitterConfig config = new TwitterConfig.Builder(context)
+            .logger(new DefaultLogger(Log.DEBUG))
+            .twitterAuthConfig(new TwitterAuthConfig(BuildConfig.TWITTER_KEY, BuildConfig.TWITTER_SECRET))
+            .debug(true)
+            .build();
+    Twitter.initialize(config);
   }
 
   private void getFriendsIds(@Nullable Long beforeId) {
