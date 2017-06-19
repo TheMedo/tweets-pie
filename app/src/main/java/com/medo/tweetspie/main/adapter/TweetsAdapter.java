@@ -119,7 +119,7 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       RealmTweetUser retweetedBy = tweet.getRetweetedBy();
       if (retweetedBy != null) {
         textRetweetedBy.setVisibility(View.VISIBLE);
-        textRetweetedBy.setText(String.format("@%s", retweetedBy.getScreenName()));
+        textRetweetedBy.setText(String.format("Retweeted by @%s", retweetedBy.getScreenName()));
       }
       else {
         textRetweetedBy.setVisibility(View.GONE);
@@ -129,7 +129,7 @@ public class TweetsAdapter extends RealmRecyclerViewAdapter<RealmTweet, TweetsAd
       String inReplyToScreenName = tweet.getInReplyToScreenName();
       if (inReplyToScreenName != null) {
         textReplyingTo.setVisibility(View.VISIBLE);
-        textReplyingTo.setText(String.format("@%s", inReplyToScreenName));
+        textReplyingTo.setText(String.format("Replying to @%s", inReplyToScreenName));
       }
       else {
         textReplyingTo.setVisibility(View.GONE);
