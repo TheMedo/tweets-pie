@@ -57,6 +57,7 @@ public class RealmConverter {
     realmTweet.setText(tweet.text);
     realmTweet.setUser(extractUser(tweet.user));
     realmTweet.setRetweetedBy(extractUser(retweetedBy));
+    realmTweet.setInReplyToScreenName(tweet.inReplyToScreenName);
     // calculate the score
     final int score = rateTweet(realmTweet);
     realmTweet.setScore(score);
