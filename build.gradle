@@ -1,20 +1,19 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    ext.kotlin_version = '1.1.51'
     repositories {
+        google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         // The Fabric Gradle plugin uses an open ended version to react
         // quickly to Android tooling updates
         classpath 'io.fabric.tools:gradle:1.+'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        classpath "io.realm:realm-gradle-plugin:3.3.2"
-        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.60"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -22,10 +21,10 @@ buildscript {
 
 allprojects {
     repositories {
+        google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://jitpack.io" }
-        maven { url "https://maven.google.com" }
     }
 }
 

@@ -4,6 +4,7 @@
 
     <!-- Errors -->
     <string name="error_login_failure">Something went wrong. Please try again later!</string>
+    <string name="error_load_data_failure">Unable to fetch tweets. Please try again later!</string>
 
     <!-- Hints -->
 

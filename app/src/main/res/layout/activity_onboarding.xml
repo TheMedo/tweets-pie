@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
-        android:id="@+id/login_button"
+        android:id="@+id/loginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
