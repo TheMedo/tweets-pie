@@ -9,9 +9,9 @@ import com.medo.tweetspie.system.USERNAME
 class MainPresenter(
         private val preferences: Preferences,
         private val resources: Resources
-) : AbsBasePresenter<MainContract.View>(), MainContract.Presenter {
+) : AbsBasePresenter<MainMvp.View>(), MainMvp.Presenter {
 
-    override fun onAttach(view: MainContract.View) {
+    override fun onAttach(view: MainMvp.View) {
         super.onAttach(view)
         if (!preferences.has(USERNAME)) view.startOnboarding()
         else view.loadData()

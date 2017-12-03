@@ -26,5 +26,7 @@
         </activity>
 
         <activity android:name=".onboarding.OnboardingActivity" />
+
+        <service android:name=".service.MainService" />
     </application>
 </manifest>

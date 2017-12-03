@@ -6,7 +6,7 @@ import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.TwitterSession
 
 
-interface OnboardingContract {
+interface OnboardingMvp {
 
     interface View : BaseView {
 
@@ -14,7 +14,6 @@ interface OnboardingContract {
 
         fun exitWithError(errorMessage: String)
     }
-
 
     interface Presenter : BasePresenter<View> {
 

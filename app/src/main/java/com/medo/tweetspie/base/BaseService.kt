@@ -1,9 +1,9 @@
 package com.medo.tweetspie.base
 
-import android.support.v7.app.AppCompatActivity
+import android.app.IntentService
 import org.koin.android.ext.android.releaseContext
 
-abstract class BaseActivity : AppCompatActivity(), BaseView {
+abstract class BaseService(name: String) : IntentService(name), BaseView {
 
     abstract val contextName: String
     abstract val presenter: BasePresenter<*>

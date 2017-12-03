@@ -5,17 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import com.medo.tweetspie.R
 import com.medo.tweetspie.base.BaseActivity
-import com.medo.tweetspie.di.Context
+import com.medo.tweetspie.di.BindContext
 import com.medo.tweetspie.extensions.toast
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.android.synthetic.main.activity_onboarding.*
 import org.koin.android.ext.android.inject
 
-class OnboardingActivity : BaseActivity(), OnboardingContract.View {
+class OnboardingActivity : BaseActivity(), OnboardingMvp.View {
 
-    override val contextName: String = Context.Onboarding
-    override val presenter by inject<OnboardingContract.Presenter>()
+    override val contextName: String = BindContext.Onboarding
+    override val presenter by inject<OnboardingMvp.Presenter>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

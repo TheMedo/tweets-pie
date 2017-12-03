@@ -9,6 +9,7 @@ const val USERNAME = "username"
 const val RETWEETS = "retweets"
 const val REPLIES = "replies"
 const val LAST_UPDATE_TIMESTAMP = "lastUpdateTimestamp"
+const val LAST_FRIENDS_IDS_TIMESTAMP = "lastFriendsIdsTimestamp"
 const val MAX_TWEETS = "maxTweets"
 
 @Retention(AnnotationRetention.SOURCE)
@@ -34,6 +35,8 @@ interface Preferences {
     fun has(@PreferenceKey key: String): Boolean
 
     fun remove(@PreferenceKey key: String)
+
+    fun clear()
 }
 
 class PreferencesImpl(context: Context) : Preferences {
@@ -61,4 +64,6 @@ class PreferencesImpl(context: Context) : Preferences {
     override fun has(@PreferenceKey key: String) = prefs.contains(key)
 
     override fun remove(@PreferenceKey key: String) = prefs.edit().remove(key).apply()
+
+    override fun clear() = prefs.edit().clear().apply()
 }

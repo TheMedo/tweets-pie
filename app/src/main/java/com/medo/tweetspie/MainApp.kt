@@ -9,7 +9,7 @@ import com.twitter.sdk.android.core.DefaultLogger
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import org.koin.android.ext.android.startAndroidContext
+import org.koin.android.ext.android.startKoin
 
 import timber.log.Timber
 
@@ -19,7 +19,7 @@ class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         // init DI
-        startAndroidContext(this, tweetsPieAppModules())
+        startKoin(this, tweetsPieAppModules())
         // init timber
         Timber.plant(if (BuildConfig.DEBUG) Timber.DebugTree() else CrashReportingTree())
         // init twitter

@@ -5,8 +5,13 @@
     <!-- Errors -->
     <string name="error_login_failure">Something went wrong. Please try again later!</string>
     <string name="error_load_data_failure">Unable to fetch tweets. Please try again later!</string>
+    <string name="error_notification_twitter_title">TweetsPie Error</string>
+    <string name="error_notification_twitter_message">Unable to connect to Twitter. Please login again!</string>
 
     <!-- Hints -->
 
     <!-- Actions -->
+
+    <!-- Utils -->
+    <string name="notification_channel_tweets">Tweets</string>
 </resources>

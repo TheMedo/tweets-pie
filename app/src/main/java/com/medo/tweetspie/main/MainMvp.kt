@@ -5,7 +5,7 @@ import com.medo.tweetspie.base.BasePresenter
 import com.medo.tweetspie.base.BaseView
 
 
-interface MainContract {
+interface MainMvp {
 
     interface View : BaseView {
 
@@ -17,7 +17,6 @@ interface MainContract {
 
         fun showError(message: String)
     }
-
 
     interface Presenter : BasePresenter<View> {
 

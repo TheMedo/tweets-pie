@@ -14,9 +14,9 @@ import timber.log.Timber
 class OnboardingPresenter(
         private val preferences: Preferences,
         private val resources: Resources
-) : AbsBasePresenter<OnboardingContract.View>(), OnboardingContract.Presenter {
+) : AbsBasePresenter<OnboardingMvp.View>(), OnboardingMvp.Presenter {
 
-    override fun onAttach(view: OnboardingContract.View) {
+    override fun onAttach(view: OnboardingMvp.View) {
         super.onAttach(view)
         view.setupTwitterButton(object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
