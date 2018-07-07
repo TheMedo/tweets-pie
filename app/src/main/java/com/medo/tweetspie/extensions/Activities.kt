@@ -1,10 +1,11 @@
 package com.medo.tweetspie.extensions
 
-import android.app.Activity
-import android.content.Intent
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 
-inline fun <reified T : Any> Activity.launchActivity(requestCode: Int = -1, noinline setup: Intent.() -> Unit = {}) {
-    val intent = Intent(this, T::class.java)
-    intent.setup()
-    startActivityForResult(intent, requestCode)
+fun AppCompatActivity.snack(message: String? = null, duration: Int = Snackbar.LENGTH_SHORT) {
+    message ?: return
+    val content = findViewById<View>(android.R.id.content) ?: return
+    Snackbar.make(content, message, duration).show()
 }

@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion "27.0.1"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.1"
     defaultConfig {
         applicationId "com.medo.tweetspie"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -29,32 +28,36 @@ android {
     }
 }
 
-def supportLibraryVersion = "27.0.2"
-def kotlinVersion = '1.2.0'
+def androidXVersion = "1.0.0-beta01"
+def lifecycleVersion = "2.0.0-beta01"
+def kotlinVersion = "1.2.51"
+def coroutinesVersion = "0.23.3"
+def twitterKitVersion = "3.3.0"
+def koinVersion = "0.9.3"
 
 dependencies {
     /* Support */
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
-    implementation "com.android.support:percent:$supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$androidXVersion"
+    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
+    implementation "com.google.android.material:material:$androidXVersion"
+    implementation "androidx.core:core-ktx:$androidXVersion"
+    implementation "androidx.fragment:fragment-ktx:$androidXVersion"
+
+    /* Lifecycle */
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
     /* Kotlin */
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    /* Coroutines */
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
 
     /* Twitter */
-    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
-    implementation("com.twitter.sdk.android:tweet-ui:3.1.1") {
-        exclude module: 'support-v4'
-        exclude module: 'appcompat-v7'
-        exclude module: 'recyclerview-v7'
-    }
+    implementation "com.twitter.sdk.android:twitter-core:$twitterKitVersion"
+    implementation "com.twitter.sdk.android:tweet-ui:$twitterKitVersion"
 
     /* Dependency Injection */
-    implementation("org.koin:koin-android:0.6.1") {
-        exclude module: 'appcompat-v7'
-        exclude module: 'kotlin-stdlib'
-    }
-
-    /* Utils */
-    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation "org.koin:koin-android:$koinVersion"
+    implementation "org.koin:koin-android-architecture:$koinVersion"
 }

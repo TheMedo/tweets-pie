@@ -1,68 +1,27 @@
 package com.medo.tweetspie.di
 
-import com.medo.tweetspie.di.BindContext.Main
-import com.medo.tweetspie.di.BindContext.Onboarding
-import com.medo.tweetspie.di.BindContext.Service
-import com.medo.tweetspie.main.MainMvp
-import com.medo.tweetspie.main.MainPresenter
-import com.medo.tweetspie.onboarding.OnboardingMvp
-import com.medo.tweetspie.onboarding.OnboardingPresenter
-import com.medo.tweetspie.service.ServiceMvp
-import com.medo.tweetspie.service.ServicePresenter
-import com.medo.tweetspie.system.Preferences
-import com.medo.tweetspie.system.PreferencesImpl
+import android.preference.PreferenceManager
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.system.ResourcesImpl
-import com.medo.tweetspie.twitter.FriendsApiClient
-import com.medo.tweetspie.twitter.TwitterClient
-import com.medo.tweetspie.twitter.TwitterClientImpl
-import com.twitter.sdk.android.core.SessionManager
-import com.twitter.sdk.android.core.TwitterApiClient
-import com.twitter.sdk.android.core.TwitterCore
-import com.twitter.sdk.android.core.TwitterSession
-import org.koin.android.module.AndroidModule
+import com.medo.tweetspie.system.UserRepository
+import com.medo.tweetspie.system.UserRepositoryImpl
+import com.medo.tweetspie.ui.main.MainViewModel
+import com.medo.tweetspie.ui.onboarding.OnboardingViewModel
+import org.koin.dsl.module.applicationContext
 
-fun tweetsPieAppModules() = listOf(
-        OnboardingModule(),
-        MainModule(),
-        ServiceModule()
-)
+fun getAppModules() = listOf(mainModule)
 
-class OnboardingModule : AndroidModule() {
-    override fun context() = applicationContext {
-        context(name = Onboarding) {
-            provide { OnboardingPresenter(get(), get()) } bind (OnboardingMvp.Presenter::class)
-        }
-        provide { PreferencesImpl(get()) } bind (Preferences::class)
-        provide { ResourcesImpl(get()) } bind (Resources::class)
-        provide { TwitterClientImpl(getTwitterSession(), getTwitterClient(), getFriendsClient()) } bind (TwitterClient::class)
-    }
-}
+val mainModule = applicationContext {
 
-class MainModule : AndroidModule() {
-    override fun context() = applicationContext {
-        context(name = Main) {
-            provide { MainPresenter(get(), get()) } bind (MainMvp.Presenter::class)
-        }
-    }
-}
+    //    bean { Room.databaseBuilder(androidApplication(), WeatherDatabase::class.java, "weather_db").build() }
+//    bean { get<WeatherDatabase>().weatherDao() }
+//    bean { WeatherRepositoryImpl(get(), get()) as WeatherRepository }
 
-class ServiceModule : AndroidModule() {
-    override fun context() = applicationContext {
-        context(name = Service) {
-            provide { ServicePresenter(get(), get()) } bind (ServiceMvp.Presenter::class)
-        }
-    }
-}
+    bean { ResourcesImpl(get()) as Resources }
+    bean { UserRepositoryImpl(get()) as UserRepository }
 
-fun getTwitterSession(): SessionManager<TwitterSession> = TwitterCore.getInstance().sessionManager
+    bean { PreferenceManager.getDefaultSharedPreferences(get()) }
 
-fun getTwitterClient(): TwitterApiClient = TwitterCore.getInstance().apiClient
-
-fun getFriendsClient(): FriendsApiClient = FriendsApiClient(getTwitterSession().activeSession)
-
-object BindContext {
-    val Onboarding = "Onboarding"
-    val Main = "Main"
-    val Service = "Service"
+    viewModelX { OnboardingViewModel(get()) }
+    viewModelX { MainViewModel(get()) }
 }
