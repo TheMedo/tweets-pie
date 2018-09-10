@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
-    buildToolsVersion "28.0.1"
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "com.medo.tweetspie"
         minSdkVersion 25
@@ -28,10 +28,16 @@ android {
     }
 }
 
-def androidXVersion = "1.0.0-beta01"
-def lifecycleVersion = "2.0.0-beta01"
-def kotlinVersion = "1.2.51"
-def coroutinesVersion = "0.23.3"
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+def androidXVersion = "1.0.0-rc01"
+def lifecycleVersion = "2.0.0-rc01"
+def kotlinVersion = "1.2.61"
+def coroutinesVersion = "0.25.0"
 def twitterKitVersion = "3.3.0"
 def koinVersion = "0.9.3"
 
@@ -52,6 +58,7 @@ dependencies {
 
     /* Coroutines */
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     /* Twitter */
     implementation "com.twitter.sdk.android:twitter-core:$twitterKitVersion"

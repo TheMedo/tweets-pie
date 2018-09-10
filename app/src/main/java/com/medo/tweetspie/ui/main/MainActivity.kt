@@ -2,7 +2,6 @@ package com.medo.tweetspie.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import com.medo.tweetspie.R
@@ -35,7 +34,7 @@ class MainActivity : BaseActivity() {
 
     private fun showTweets() {
         val fragmentManager = supportFragmentManager
-        val fragment = fragmentManager.findFragmentByTag(TAG_TWEETS_FRAGMENT) ?: Fragment()
+        val fragment = fragmentManager.findFragmentByTag(TAG_TWEETS_FRAGMENT) ?: TweetsFragment()
         fragmentManager.transaction {
             replace(android.R.id.content, fragment, TAG_TWEETS_FRAGMENT)
         }

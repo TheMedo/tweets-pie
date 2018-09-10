@@ -1,4 +1,4 @@
-package com.medo.tweetspie.twitter
+package com.medo.tweetspie.data.remote
 
 import com.google.gson.annotations.SerializedName
 import com.twitter.sdk.android.core.TwitterApiClient

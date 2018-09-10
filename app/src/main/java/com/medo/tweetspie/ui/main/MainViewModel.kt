@@ -9,14 +9,4 @@ class MainViewModel(
 ) : BaseViewModel() {
 
     val user: LiveData<String> = userRepository.getUser()
-
-//    init {
-//        permission.postValue(permissionManager.hasLocationPermission())
-//    }
-//
-//    fun fetchWeather() {
-//        locationManager.getLocation()?.addOnSuccessListener {
-//            weatherRepository.fetch(it.latitude, it.longitude)
-//        }
-//    }
 }
