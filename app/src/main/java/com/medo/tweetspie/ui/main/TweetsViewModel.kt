@@ -1,17 +1,20 @@
 package com.medo.tweetspie.ui.main
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.medo.tweetspie.base.BaseViewModel
+import com.medo.tweetspie.data.local.model.Pie
 import com.medo.tweetspie.data.repository.TweetsRepository
-import com.twitter.sdk.android.core.models.Tweet
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 
 class TweetsViewModel(
-        private val repository: TweetsRepository
+    repository: TweetsRepository
 ) : BaseViewModel() {
 
-    val tweets: LiveData<List<Tweet>> = repository.getTweets()
+    init {
+        repository.fetch()
+    }
 
-    fun fetch() = launch(UI) { repository.fetch() }
+    val pies: LiveData<List<Pie>> = repository.getPies()
+    val loading: LiveData<Boolean> = repository.getLoading()
+    val refresh: MutableLiveData<Boolean> = MutableLiveData()
 }

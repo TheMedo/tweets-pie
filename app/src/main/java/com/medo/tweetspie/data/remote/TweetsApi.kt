@@ -2,20 +2,20 @@ package com.medo.tweetspie.data.remote
 
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.services.StatusesService
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.withContext
 
 interface TweetsApi {
 
-    suspend fun getTimeline(): List<Tweet>
+    fun getTimeline(): List<Tweet>
+
+    fun getFriends(handle: String): List<String>
 }
 
 class TweetsApiImpl(
-        private val statuses: StatusesService,
-        private val friends: FriendsService
+    private val statuses: StatusesService,
+    private val friends: FriendsService
 ) : TweetsApi {
 
-    override suspend fun getTimeline(): List<Tweet> {
+    override fun getTimeline(): List<Tweet> {
         var maxId: Long? = null
         val result = mutableListOf<Tweet>()
 
@@ -30,11 +30,36 @@ class TweetsApiImpl(
         return result
     }
 
-    private suspend fun getTimeline(maxId: Long?) = withContext(CommonPool) {
-        try {
-            statuses.homeTimeline(200, null, maxId, false, true, false, false).execute()
-        } catch (e: Exception) {
-            null
+    override fun getFriends(handle: String): List<String> {
+        var cursor: Long? = null
+        val result = mutableListOf<String>()
+
+        while (true) {
+            val part = getFriends(handle, cursor) ?: break
+            result.addAll(part.ids)
+            cursor = part.nextCursor ?: break
         }
-    }?.body() ?: emptyList()
+
+        return result
+    }
+
+    private fun getTimeline(maxId: Long?) = try {
+        statuses.homeTimeline(
+            200,
+            null,
+            maxId,
+            false,
+            true,
+            false,
+            false
+        ).execute()?.body() ?: emptyList()
+    } catch (e: Exception) {
+        emptyList<Tweet>()
+    }
+
+    private fun getFriends(handle: String, cursor: Long?) = try {
+        friends.friends(screenName = handle, cursor = cursor).execute()?.body()
+    } catch (e: Exception) {
+        null
+    }
 }

@@ -26,6 +26,10 @@ abstract class BaseFragment : Fragment() {
         viewModel?.failure?.removeObserver(failureObserver)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater.inflate(getLayoutId(), container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? =
+        inflater.inflate(getLayoutId(), container, false)
 }

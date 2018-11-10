@@ -16,15 +16,16 @@ class FriendsApiClient(session: TwitterSession) : TwitterApiClient(session) {
 interface FriendsService {
 
     @GET("/1.1/friends/ids.json")
-    fun friends(@Query("user_id") id: Long?,
-                @Query("screen_name") screenName: String,
-                @Query("cursor") cursor: Long?,
-                @Query("stringify_ids") stringifyIds: Boolean?,
-                @Query("count") count: Long?): Call<FriendsIds>
+    fun friends(
+        @Query("screen_name") screenName: String,
+        @Query("cursor") cursor: Long?,
+        @Query("stringify_ids") stringifyIds: Boolean = true,
+        @Query("count") count: Long = 2000L
+    ): Call<FriendsIds>
 }
 
 data class FriendsIds(
-        @SerializedName("previous_cursor") val previousCursor: Long,
-        @SerializedName("ids") val ids: List<Long>,
-        @SerializedName("next_cursor") val nextCursor: Long
+    @SerializedName("previous_cursor") val previousCursor: Long?,
+    @SerializedName("ids") val ids: List<String>,
+    @SerializedName("next_cursor") val nextCursor: Long?
 )

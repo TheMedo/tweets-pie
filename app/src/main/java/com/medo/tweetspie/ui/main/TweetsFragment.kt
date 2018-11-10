@@ -6,13 +6,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.medo.tweetspie.R
 import com.medo.tweetspie.base.BaseFragment
-import com.medo.tweetspie.di.viewModel
-import com.twitter.sdk.android.core.models.Tweet
+import com.medo.tweetspie.data.local.model.Pie
+import com.medo.tweetspie.extensions.show
 import kotlinx.android.synthetic.main.fragment_tweets.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TweetsFragment : BaseFragment() {
 
     override val viewModel by viewModel<TweetsViewModel>()
+
+    private val adapter = PieAdapter()
 
     override fun getLayoutId() = R.layout.fragment_tweets
 
@@ -20,13 +23,29 @@ class TweetsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recycler.layoutManager = LinearLayoutManager(context)
-//        recycler.adapter =
+        recycler.adapter = adapter
 
-        viewModel.tweets.observe(this, Observer<List<Tweet>>(this::showTweets))
-        viewModel.fetch()
+        fab.setOnClickListener { viewModel.refresh.postValue(false) }
+
+        viewModel.pies.observe(this, Observer<List<Pie>>(this::showPies))
+        viewModel.loading.observe(this, Observer<Boolean>(this::showLoading))
+        viewModel.refresh.observe(this, Observer<Boolean>(this::showRefresh))
     }
 
-    private fun showTweets(tweets: List<Tweet>) {
-        println("HERE + ${tweets.size}")
+    private fun showPies(pies: List<Pie>) {
+        val hasData = adapter.itemCount > 0
+        viewModel.refresh.postValue(hasData)
+
+        adapter.setData(pies.map(Pie::text))
+        if (!hasData) adapter.notifyDataSetChanged()
+    }
+
+    private fun showLoading(show: Boolean) {
+        progress.show(visible = show)
+    }
+
+    private fun showRefresh(show: Boolean) {
+        if (show) fab.show() else fab.hide()
+        if (!show) adapter.notifyDataSetChanged()
     }
 }

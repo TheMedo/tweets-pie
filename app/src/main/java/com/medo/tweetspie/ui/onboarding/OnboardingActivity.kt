@@ -5,13 +5,13 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.medo.tweetspie.R
 import com.medo.tweetspie.base.BaseActivity
-import com.medo.tweetspie.di.viewModel
 import com.medo.tweetspie.ui.main.MainActivity
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.android.synthetic.main.activity_onboarding.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class OnboardingActivity : BaseActivity() {
 
@@ -23,10 +23,7 @@ class OnboardingActivity : BaseActivity() {
 
         loginButton.callback = object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>?) {
-                when (result) {
-                    null -> viewModel.failure.postValue("Cannot login")
-                    else -> viewModel.saveUser(result.data)
-                }
+                viewModel.saveUser(result?.data)
             }
 
             override fun failure(exception: TwitterException?) {

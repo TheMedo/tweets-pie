@@ -9,7 +9,7 @@ interface Resources {
 }
 
 class ResourcesImpl(
-        private val context: Context
+    private val context: Context
 ) : Resources {
 
     override fun getString(@StringRes id: Int): String = context.getString(id)

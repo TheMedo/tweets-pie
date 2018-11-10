@@ -6,9 +6,9 @@ import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
 import com.medo.tweetspie.R
 import com.medo.tweetspie.base.BaseActivity
-import com.medo.tweetspie.di.viewModel
 import com.medo.tweetspie.ui.onboarding.OnboardingActivity
 import com.medo.tweetspie.utils.TAG_TWEETS_FRAGMENT
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainActivity : BaseActivity() {

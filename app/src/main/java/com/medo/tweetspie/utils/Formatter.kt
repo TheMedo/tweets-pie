@@ -1,4 +1,4 @@
-package com.medo.tweetspie.system
+package com.medo.tweetspie.utils
 
 import android.content.Context
 import android.text.format.DateUtils
@@ -6,7 +6,8 @@ import android.text.util.Linkify
 import android.widget.TextView
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -71,10 +72,11 @@ class FormatterImpl(val context: Context) : Formatter {
     override fun toRelativeDate(date: Date?): String = when (date) {
         null -> ""
         else -> DateUtils.getRelativeTimeSpanString(
-                date.time,
-                System.currentTimeMillis(),
-                TimeUnit.SECONDS.toMillis(1),
-                DateUtils.FORMAT_ABBREV_RELATIVE).toString()
+            date.time,
+            System.currentTimeMillis(),
+            TimeUnit.SECONDS.toMillis(1),
+            DateUtils.FORMAT_ABBREV_RELATIVE
+        ).toString()
     }
 
     override fun addLinks(target: TextView) {
@@ -104,7 +106,8 @@ class FormatterImpl(val context: Context) : Formatter {
         return String(value, 0, valueLength)
     }
 
-    override fun getTweetUrl(id: String, screenName: String) = String.format(urlFormat, screenName, id)
+    override fun getTweetUrl(id: String, screenName: String) =
+        String.format(urlFormat, screenName, id)
 
     override fun getUserUrl(screenName: String) = String.format(userFormat, screenName)
 }
