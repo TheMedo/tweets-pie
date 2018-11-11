@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/space_8">
+    android:paddingStart="@dimen/space_16"
+    android:paddingTop="@dimen/space_8"
+    android:paddingEnd="@dimen/space_16"
+    android:paddingBottom="@dimen/space_4">
+
+    <ImageView
+        android:id="@+id/image_avatar"
+        android:layout_width="@dimen/size_avatar"
+        android:layout_height="@dimen/size_avatar"
+        android:contentDescription="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_8"
+        android:lines="1"
+        android:maxLength="20"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/image_verified"
+        app:layout_constraintStart_toEndOf="@id/image_avatar"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Darko Arsovski" />
+
+    <TextView
+        android:id="@+id/text_handle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_4"
+        android:layout_marginEnd="@dimen/space_4"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toStartOf="@id/text_timestamp"
+        app:layout_constraintStart_toEndOf="@id/image_protected"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="dArsovec" />
+
+    <TextView
+        android:id="@+id/text_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="12m ago" />
+
+    <ImageView
+        android:id="@+id/image_verified"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginStart="@dimen/space_2"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_verified"
+        app:layout_constraintBottom_toBottomOf="@id/text_timestamp"
+        app:layout_constraintStart_toEndOf="@id/text_name"
+        app:layout_constraintTop_toTopOf="@id/text_timestamp" />
+
+    <ImageView
+        android:id="@+id/image_protected"
+        android:layout_width="@dimen/size_icon"
+        android:layout_height="@dimen/size_icon"
+        android:layout_marginEnd="@dimen/space_4"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_lock"
+        app:layout_constraintBottom_toBottomOf="@id/text_timestamp"
+        app:layout_constraintStart_toEndOf="@id/image_verified"
+        app:layout_constraintTop_toTopOf="@id/text_timestamp" />
+
+    <TextView
+        android:id="@+id/text_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_8"
+        android:lines="1"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/image_avatar"
+        app:layout_constraintTop_toBottomOf="@id/text_name"
+        tools:text="In reply to Ivy3lue" />
 
     <TextView
         android:id="@+id/text_tweet"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_info"
+        tools:text="Macedonian Ecological Society (mes.org.mk) released a video of a 6-months old lynx made with camera trap on Stogovo Mountain in #Macedonia. The clip shows the cub eating deer meat served by his mom." />
+
+    <CheckBox
+        android:id="@+id/button_retweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Macedonian Ecological Society (mes.org.mk) released a video of a 6-months old lynx made with camera trap on Stogovo Mountain in #Macedonia. The clip shows the cub eating deer meat served by his mom." />
+        android:layout_marginEnd="@dimen/space_8"
+        android:button="@drawable/selector_retweet"
+        android:padding="@dimen/space_8"
+        android:textColor="?android:textColorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_favorite"
+        app:layout_constraintTop_toBottomOf="@id/text_tweet"
+        tools:text="928" />
+
+    <CheckBox
+        android:id="@+id/button_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/space_16"
+        android:layout_marginEnd="@dimen/space_8"
+        android:button="@drawable/selector_favorite"
+        android:padding="@dimen/space_8"
+        android:textColor="?android:textColorTertiary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/text_score"
+        app:layout_constraintTop_toBottomOf="@id/text_tweet"
+        tools:text="1.4K" />
+
+    <TextView
+        android:id="@+id/text_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_pie"
+        android:drawablePadding="@dimen/space_8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_tweet"
+        tools:text="36" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

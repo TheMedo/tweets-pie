@@ -34,7 +34,7 @@ class MainActivity : BaseActivity() {
 
     private fun showTweets() {
         val fragmentManager = supportFragmentManager
-        val fragment = fragmentManager.findFragmentByTag(TAG_TWEETS_FRAGMENT) ?: TweetsFragment()
+        val fragment = fragmentManager.findFragmentByTag(TAG_TWEETS_FRAGMENT) ?: PiesFragment()
         fragmentManager.transaction {
             replace(android.R.id.content, fragment, TAG_TWEETS_FRAGMENT)
         }

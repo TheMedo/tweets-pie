@@ -1,7 +1,7 @@
 package com.medo.tweetspie.utils
 
 // tags
-const val TAG_TWEETS_FRAGMENT = "TweetsFragment"
+const val TAG_TWEETS_FRAGMENT = "PiesFragment"
 
 // intervals
 const val FRIENDS_IDS_TIMEOUT = 24 * 60 * 1000

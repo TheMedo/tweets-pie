@@ -6,6 +6,8 @@ import com.medo.tweetspie.data.local.PieDatabase
 import com.medo.tweetspie.data.remote.FriendsApiClient
 import com.medo.tweetspie.data.remote.TweetsApi
 import com.medo.tweetspie.data.remote.TweetsApiImpl
+import com.medo.tweetspie.data.repository.TweetsConverter
+import com.medo.tweetspie.data.repository.TweetsConverterImpl
 import com.medo.tweetspie.data.repository.TweetsRepository
 import com.medo.tweetspie.data.repository.TweetsRepositoryImpl
 import com.medo.tweetspie.data.repository.UserRepository
@@ -15,7 +17,7 @@ import com.medo.tweetspie.system.ClockImpl
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.system.ResourcesImpl
 import com.medo.tweetspie.ui.main.MainViewModel
-import com.medo.tweetspie.ui.main.TweetsViewModel
+import com.medo.tweetspie.ui.main.PiesViewModel
 import com.medo.tweetspie.ui.onboarding.OnboardingViewModel
 import com.medo.tweetspie.utils.Formatter
 import com.medo.tweetspie.utils.FormatterImpl
@@ -36,6 +38,7 @@ val mainModule = module {
     single { get<PieDatabase>().pieDao() }
     single { FormatterImpl(get()) as Formatter }
     single { ResourcesImpl(get()) as Resources }
+    single { TweetsConverterImpl(get(), get(), get()) as TweetsConverter }
     single { UserRepositoryImpl(get()) as UserRepository }
     single { TweetsApiImpl(get(), get()) as TweetsApi }
     single {
@@ -59,5 +62,5 @@ val mainModule = module {
 
     viewModel { OnboardingViewModel(get()) }
     viewModel { MainViewModel(get()) }
-    viewModel { TweetsViewModel(get()) }
+    viewModel { PiesViewModel(get(), get(), get()) }
 }

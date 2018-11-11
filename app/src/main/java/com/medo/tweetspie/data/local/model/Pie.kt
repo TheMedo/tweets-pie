@@ -22,7 +22,7 @@ data class Pie(
 
     var inReplyTo: String? = null,
     var retweetedBy: String? = null,
-    var quoted: Boolean = false,
+    var quoted: String? = null,
 
     @Embedded
     var user: PieUser,

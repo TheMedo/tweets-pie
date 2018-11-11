@@ -9,6 +9,13 @@
     <string name="error_notification_twitter_message">Unable to connect to Twitter. Please login again!</string>
 
     <!-- Hints -->
+    <string name="hint_retweet">Retweeted by %s</string>
+    <string name="hint_reply">Replying to %s</string>
+    <string name="hint_quote">Quoted %s</string>
+
+    <!-- Urls -->
+    <string name="url_user" translatable="false">https://twitter.com/%s</string>
+    <string name="url_tweet" translatable="false">https://twitter.com/%s/status/%s</string>
 
     <!-- Actions -->
 
