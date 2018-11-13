@@ -22,4 +22,7 @@ interface PieDao {
 
     @Query("SELECT * FROM friends WHERE friendId = :userId")
     fun getFriend(userId: String): PieFriend?
+
+    @Query("DELETE FROM pies where pieId NOT IN (SELECT pieId from pies ORDER BY createdAt DESC LIMIT 400)")
+    fun deleteOldData()
 }

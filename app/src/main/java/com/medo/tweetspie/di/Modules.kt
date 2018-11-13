@@ -29,6 +29,9 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
+const val DISPATCHER_MAIN = "MAIN"
+const val DISPATCHER_IO = "IO"
+
 fun getAppModules() = listOf(mainModule)
 
 val mainModule = module {
@@ -45,7 +48,7 @@ val mainModule = module {
     single { TweetsApiImpl(get(), get()) as TweetsApi }
     single {
         TweetsRepositoryImpl(
-            get("IO"),
+            get(DISPATCHER_IO),
             get(),
             get(),
             get(),
@@ -55,8 +58,8 @@ val mainModule = module {
     }
     single { ClockImpl() as Clock }
     single { TwitterLinkifyImpl() as TwitterLinkify }
-    single("IO") { Dispatchers.IO }
-    single("MAIN") { Dispatchers.Main }
+    single(DISPATCHER_IO) { Dispatchers.IO }
+    single(DISPATCHER_MAIN) { Dispatchers.Main }
 
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     single { TwitterCore.getInstance().sessionManager.activeSession }
@@ -64,6 +67,6 @@ val mainModule = module {
     single { FriendsApiClient(get()).friendsService }
 
     viewModel { OnboardingViewModel(get()) }
-    viewModel { MainViewModel(get()) }
+    viewModel { MainViewModel(get(), get(), get(DISPATCHER_IO)) }
     viewModel { PiesViewModel(get(), get(), get(), get()) }
 }
