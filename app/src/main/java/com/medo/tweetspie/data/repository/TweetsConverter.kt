@@ -32,7 +32,7 @@ class TweetsConverterImpl(
 
     private fun convertTweet(tweet: Tweet, retweetedBy: String?) = Pie(
         pieId = tweet.idStr,
-        text = tweet.text,
+        text = extractText(tweet),
         createdAt = tweet.createdAt,
         favoriteCount = tweet.favoriteCount,
         favorited = tweet.favorited,
@@ -47,6 +47,14 @@ class TweetsConverterImpl(
         user = convertUser(tweet.user),
         score = calculateScore(tweet)
     )
+
+    private fun extractText(tweet: Tweet): String {
+        var text = tweet.text
+        tweet.extendedEntities.media.forEach {
+            text = text.replace(it.url, "")
+        }
+        return text
+    }
 
     private fun convertUser(user: User) = PieUser(
         userId = user.idStr,

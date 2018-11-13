@@ -37,8 +37,7 @@ class PiesFragment : BaseFragment() {
         viewModel.pies.observe(this, Observer<List<BakedPie>>(this::showPies))
         viewModel.loading.observe(this, Observer<Boolean>(this::showLoading))
         viewModel.refresh.observe(this, Observer<Boolean>(this::showRefresh))
-        viewModel.userAction.observe(this, Observer(this::openUser))
-        viewModel.tweetAction.observe(this, Observer(this::openTweet))
+        viewModel.urlAction.observe(this, Observer(this::openUrl))
     }
 
     private fun showPies(pies: List<BakedPie>) {
@@ -58,11 +57,7 @@ class PiesFragment : BaseFragment() {
         if (!show) adapter.notifyDataSetChanged()
     }
 
-    private fun openUser(userUrl: String) {
-        activity?.openUrl(userUrl)
-    }
-
-    private fun openTweet(tweetUrl: String) {
-        activity?.openUrl(tweetUrl)
+    private fun openUrl(url: String) {
+        activity?.openUrl(url)
     }
 }

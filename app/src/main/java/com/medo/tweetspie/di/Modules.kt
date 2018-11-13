@@ -21,6 +21,8 @@ import com.medo.tweetspie.ui.main.PiesViewModel
 import com.medo.tweetspie.ui.onboarding.OnboardingViewModel
 import com.medo.tweetspie.utils.Formatter
 import com.medo.tweetspie.utils.FormatterImpl
+import com.medo.tweetspie.utils.linkify.TwitterLinkify
+import com.medo.tweetspie.utils.linkify.TwitterLinkifyImpl
 import com.twitter.sdk.android.core.TwitterCore
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
@@ -52,6 +54,7 @@ val mainModule = module {
         ) as TweetsRepository
     }
     single { ClockImpl() as Clock }
+    single { TwitterLinkifyImpl() as TwitterLinkify }
     single("IO") { Dispatchers.IO }
     single("MAIN") { Dispatchers.Main }
 
@@ -62,5 +65,5 @@ val mainModule = module {
 
     viewModel { OnboardingViewModel(get()) }
     viewModel { MainViewModel(get()) }
-    viewModel { PiesViewModel(get(), get(), get()) }
+    viewModel { PiesViewModel(get(), get(), get(), get()) }
 }

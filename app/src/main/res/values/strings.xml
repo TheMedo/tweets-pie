@@ -16,6 +16,7 @@
     <!-- Urls -->
     <string name="url_user" translatable="false">https://twitter.com/%s</string>
     <string name="url_tweet" translatable="false">https://twitter.com/%s/status/%s</string>
+    <string name="url_hashtag" translatable="false">https://twitter.com/hashtag/%s</string>
 
     <!-- Actions -->
 

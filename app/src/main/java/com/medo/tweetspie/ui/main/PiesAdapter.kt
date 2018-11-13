@@ -1,6 +1,8 @@
 package com.medo.tweetspie.ui.main
 
 import android.graphics.Paint
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +22,7 @@ data class BakedPie(
     val userVerified: Boolean,
     val timestamp: String,
     val info: String?,
-    val text: String,
+    val text: Spanned,
     val retweeted: Boolean,
     val retweetCount: String,
     val favorited: Boolean,
@@ -56,6 +58,8 @@ class PieViewHolder(
 ) : RecyclerView.ViewHolder(view) {
 
     init {
+        itemView.text_tweet.movementMethod = LinkMovementMethod.getInstance()
+
         val flags = itemView.text_timestamp.paintFlags
         itemView.text_timestamp.paintFlags = flags or Paint.UNDERLINE_TEXT_FLAG
     }
@@ -81,11 +85,11 @@ class PieViewHolder(
         itemView.button_favorite.text = item.favoriteCount
         itemView.text_score.text = item.score
 
-        val userClickListener: (View) -> Unit = { viewModel.userAction.post(item.userUrl) }
+        val userClickListener: (View) -> Unit = { viewModel.urlAction.post(item.userUrl) }
         itemView.image_avatar.setOnClickListener(userClickListener)
         itemView.text_name.setOnClickListener(userClickListener)
         itemView.text_handle.setOnClickListener(userClickListener)
-        itemView.text_timestamp.setOnClickListener { viewModel.tweetAction.post(item.tweetUrl) }
+        itemView.text_timestamp.setOnClickListener { viewModel.urlAction.post(item.tweetUrl) }
     }
 }
 
