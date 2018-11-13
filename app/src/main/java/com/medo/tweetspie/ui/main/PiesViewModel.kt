@@ -12,16 +12,27 @@ import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.utils.ActionLiveData
 import com.medo.tweetspie.utils.Formatter
 import com.medo.tweetspie.utils.linkify.TwitterLinkify
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class PiesViewModel(
     repository: TweetsRepository,
     private val formatter: Formatter,
     private val resources: Resources,
-    private val linkify: TwitterLinkify
-) : BaseViewModel() {
+    private val linkify: TwitterLinkify,
+    private val ioDispatcher: CoroutineDispatcher
+) : BaseViewModel(), CoroutineScope {
+
+    override val coroutineContext: CoroutineContext
+        get() = job + ioDispatcher
+
+    private val job = Job()
 
     init {
-        repository.fetch()
+        launch { repository.fetch() }
     }
 
     val loading: LiveData<Boolean> = repository.getLoading()
@@ -29,6 +40,11 @@ class PiesViewModel(
     val pies: LiveData<List<BakedPie>> = Transformations.map(repository.getPies()) { bakePies(it) }
 
     val urlAction = ActionLiveData<String>()
+
+    override fun onCleared() {
+        super.onCleared()
+        job.cancel()
+    }
 
     private fun bakePies(pies: List<Pie>) = pies.map {
         BakedPie(

@@ -10,11 +10,6 @@ import com.medo.tweetspie.data.local.model.PieFriend
 import com.medo.tweetspie.data.remote.TweetsApi
 import com.medo.tweetspie.system.Clock
 import com.twitter.sdk.android.core.models.Tweet
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
 
 const val KEY_TWEETS_TIMESTAMP = "keyTweetsTimestamp"
 const val TIMELINE_REFRESH_INTERVAL = 1 * 30 * 1000
@@ -31,18 +26,13 @@ interface TweetsRepository {
 }
 
 class TweetsRepositoryImpl(
-    private val ioDispatcher: CoroutineDispatcher,
     private val prefs: SharedPreferences,
     private val clock: Clock,
     private val converter: TweetsConverter,
     private val tweetsApi: TweetsApi,
     private val pieDao: PieDao
-) : TweetsRepository, CoroutineScope {
+) : TweetsRepository {
 
-    override val coroutineContext: CoroutineContext
-        get() = job + ioDispatcher
-
-    private val job = Job()
     private val data = pieDao.getPies()
     private val loading = MutableLiveData<Boolean>()
 
@@ -51,22 +41,20 @@ class TweetsRepositoryImpl(
     override fun getLoading() = loading
 
     override fun fetch() {
-        launch {
-            loading.postValue(true)
-            val lastFriendsUpdate = prefs.getLong(KEY_FRIENDS_TIMESTAMP, 0)
-            if (clock.getCurrentTime() - lastFriendsUpdate > FRIENDS_REFRESH_INTERVAL) {
-                val handle = prefs.getString(KEY_HANDLE, "") ?: ""
-                val friends = tweetsApi.getFriends(handle)
-                persistFriends(friends)
-            }
-
-            val lastUpdate = prefs.getLong(KEY_TWEETS_TIMESTAMP, 0)
-            if (clock.getCurrentTime() - lastUpdate > TIMELINE_REFRESH_INTERVAL) {
-                val remoteTweets = tweetsApi.getTimeline()
-                persistTweets(remoteTweets)
-            }
-            loading.postValue(false)
+        loading.postValue(true)
+        val lastFriendsUpdate = prefs.getLong(KEY_FRIENDS_TIMESTAMP, 0)
+        if (clock.getCurrentTime() - lastFriendsUpdate > FRIENDS_REFRESH_INTERVAL) {
+            val handle = prefs.getString(KEY_HANDLE, "") ?: ""
+            val friends = tweetsApi.getFriends(handle)
+            persistFriends(friends)
         }
+
+        val lastUpdate = prefs.getLong(KEY_TWEETS_TIMESTAMP, 0)
+        if (clock.getCurrentTime() - lastUpdate > TIMELINE_REFRESH_INTERVAL) {
+            val remoteTweets = tweetsApi.getTimeline()
+            persistTweets(remoteTweets)
+        }
+        loading.postValue(false)
     }
 
     private fun persistFriends(friends: List<String>) = friends.map { PieFriend(it) }

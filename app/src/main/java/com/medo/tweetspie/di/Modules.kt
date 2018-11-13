@@ -48,7 +48,6 @@ val mainModule = module {
     single { TweetsApiImpl(get(), get()) as TweetsApi }
     single {
         TweetsRepositoryImpl(
-            get(DISPATCHER_IO),
             get(),
             get(),
             get(),
@@ -68,5 +67,5 @@ val mainModule = module {
 
     viewModel { OnboardingViewModel(get()) }
     viewModel { MainViewModel(get(), get(), get(DISPATCHER_IO)) }
-    viewModel { PiesViewModel(get(), get(), get(), get()) }
+    viewModel { PiesViewModel(get(), get(), get(), get(), get(DISPATCHER_IO)) }
 }
