@@ -5,8 +5,8 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.medo.tweetspie.data.local.PieDao
-import com.medo.tweetspie.data.local.model.Pie
 import com.medo.tweetspie.data.local.model.PieFriend
+import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.data.remote.TweetsApi
 import com.medo.tweetspie.system.Clock
 import com.twitter.sdk.android.core.models.Tweet
@@ -20,7 +20,7 @@ interface TweetsRepository {
 
     fun fetch()
 
-    fun getPies(): LiveData<List<Pie>>
+    fun getPies(): LiveData<List<RawPie>>
 
     fun getLoading(): LiveData<Boolean>
 }
@@ -62,7 +62,8 @@ class TweetsRepositoryImpl(
     private fun persistTweets(remoteTweets: List<Tweet>) {
         if (remoteTweets.isEmpty()) return
         val convertedTweets = converter.convertTweets(remoteTweets)
-        pieDao.insert(convertedTweets)
+        pieDao.insert(convertedTweets.map { it.pie })
+        pieDao.insertMedia(convertedTweets.flatMap { it.media })
         prefs.edit {
             putLong(
                 KEY_TWEETS_TIMESTAMP,

@@ -7,6 +7,7 @@ import androidx.lifecycle.Transformations
 import com.medo.tweetspie.R
 import com.medo.tweetspie.base.BaseViewModel
 import com.medo.tweetspie.data.local.model.Pie
+import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.data.repository.TweetsRepository
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.utils.ActionLiveData
@@ -46,23 +47,23 @@ class PiesViewModel(
         job.cancel()
     }
 
-    private fun bakePies(pies: List<Pie>) = pies.map {
+    private fun bakePies(pies: List<RawPie>) = pies.map {
         BakedPie(
-            it.user.avatarUrl,
-            it.user.name,
-            "@${it.user.handle}",
-            it.user.protected,
-            it.user.verified,
-            formatTimestamp(it.createdAt),
-            formatInfo(it),
-            formatText(it.text),
-            it.retweeted,
-            formatNumber(it.retweetCount),
-            it.favorited,
-            formatNumber(it.favoriteCount),
-            formatNumber(it.score),
-            formatUserUrl(it.user.handle),
-            formatTweetUrl(it.user.handle, it.pieId)
+            it.pie.user.avatarUrl,
+            it.pie.user.name,
+            "@${it.pie.user.handle}",
+            it.pie.user.protected,
+            it.pie.user.verified,
+            formatTimestamp(it.pie.createdAt),
+            formatInfo(it.pie),
+            formatText(it.pie.text),
+            it.pie.retweeted,
+            formatNumber(it.pie.retweetCount),
+            it.pie.favorited,
+            formatNumber(it.pie.favoriteCount),
+            formatNumber(it.pie.score),
+            formatUserUrl(it.pie.user.handle),
+            formatTweetUrl(it.pie.user.handle, it.pie.pieId)
         )
     }
 

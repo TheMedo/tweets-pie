@@ -7,6 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.medo.tweetspie.data.local.model.Pie
 import com.medo.tweetspie.data.local.model.PieFriend
+import com.medo.tweetspie.data.local.model.PieMedia
+import com.medo.tweetspie.data.local.model.RawPie
 
 @Dao
 interface PieDao {
@@ -14,8 +16,11 @@ interface PieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(pies: List<Pie>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertMedia(pies: List<PieMedia>)
+
     @Query("SELECT * FROM pies ORDER BY score DESC LIMIT 30")
-    fun getPies(): LiveData<List<Pie>>
+    fun getPies(): LiveData<List<RawPie>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertFriends(friends: List<PieFriend>)

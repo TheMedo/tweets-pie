@@ -3,6 +3,14 @@ package com.medo.tweetspie.data.local.model
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.Relation
+
+data class RawPie(
+    @Embedded
+    var pie: Pie,
+    @Relation(parentColumn = "pieId", entityColumn = "foreignPieId", entity = PieMedia::class)
+    var media: List<PieMedia>
+)
 
 @Entity(tableName = "pies")
 data class Pie(
@@ -50,4 +58,13 @@ data class PieUser(
 data class PieFriend(
     @PrimaryKey
     var friendId: String = ""
+)
+
+@Entity(tableName = "media")
+data class PieMedia(
+    @PrimaryKey
+    var mediaId: String = "",
+    var url: String = "",
+    var type: String = "",
+    var foreignPieId: String = ""
 )

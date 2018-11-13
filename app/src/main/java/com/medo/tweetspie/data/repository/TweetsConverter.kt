@@ -3,9 +3,12 @@ package com.medo.tweetspie.data.repository
 import androidx.annotation.Nullable
 import com.medo.tweetspie.data.local.PieDao
 import com.medo.tweetspie.data.local.model.Pie
+import com.medo.tweetspie.data.local.model.PieMedia
 import com.medo.tweetspie.data.local.model.PieUser
+import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.system.Clock
 import com.medo.tweetspie.utils.Formatter
+import com.twitter.sdk.android.core.models.MediaEntity
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User
 import java.util.Calendar
@@ -14,7 +17,7 @@ import java.util.Random
 
 interface TweetsConverter {
 
-    fun convertTweets(remoteTweets: List<Tweet>): List<Pie>
+    fun convertTweets(remoteTweets: List<Tweet>): List<RawPie>
 }
 
 class TweetsConverterImpl(
@@ -24,11 +27,24 @@ class TweetsConverterImpl(
 ) : TweetsConverter {
 
     override fun convertTweets(remoteTweets: List<Tweet>) = remoteTweets.map {
-        convertTweet(
-            it.retweetedStatus ?: it,
-            if (it.retweetedStatus != null) it.user.screenName else null
+        RawPie(
+            convertTweet(
+                it.retweetedStatus ?: it,
+                if (it.retweetedStatus != null) it.user.screenName else null
+            ),
+            convertMedia(it.retweetedStatus?.idStr ?: it.idStr, it.extendedEntities.media)
         )
     }
+
+    private fun convertMedia(tweetId: String, mediaEntities: List<MediaEntity>) =
+        mediaEntities.map {
+            PieMedia(
+                it.idStr,
+                it.mediaUrl,
+                it.type,
+                tweetId
+            )
+        }
 
     private fun convertTweet(tweet: Tweet, retweetedBy: String?) = Pie(
         pieId = tweet.idStr,
