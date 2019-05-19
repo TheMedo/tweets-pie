@@ -26,13 +26,12 @@ import com.medo.tweetspie.utils.linkify.TwitterLinkifyImpl
 import com.twitter.sdk.android.core.TwitterCore
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidApplication
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.StringQualifier
+import org.koin.dsl.module
 
 const val DISPATCHER_MAIN = "MAIN"
 const val DISPATCHER_IO = "IO"
-
-fun getAppModules() = listOf(mainModule)
 
 val mainModule = module {
     single {
@@ -57,8 +56,8 @@ val mainModule = module {
     }
     single { ClockImpl() as Clock }
     single { TwitterLinkifyImpl() as TwitterLinkify }
-    single(DISPATCHER_IO) { Dispatchers.IO }
-    single(DISPATCHER_MAIN) { Dispatchers.Main }
+    single(StringQualifier(DISPATCHER_IO)) { Dispatchers.IO }
+    single(StringQualifier(DISPATCHER_MAIN)) { Dispatchers.Main }
 
     single { PreferenceManager.getDefaultSharedPreferences(get()) }
     single { TwitterCore.getInstance().sessionManager.activeSession }
@@ -66,6 +65,6 @@ val mainModule = module {
     single { FriendsApiClient(get()).friendsService }
 
     viewModel { OnboardingViewModel(get()) }
-    viewModel { MainViewModel(get(), get(), get(DISPATCHER_IO)) }
-    viewModel { PiesViewModel(get(), get(), get(), get(), get(DISPATCHER_IO)) }
+    viewModel { MainViewModel(get(), get(), get(StringQualifier(DISPATCHER_IO))) }
+    viewModel { PiesViewModel(get(), get(), get(), get(), get(StringQualifier(DISPATCHER_IO))) }
 }
