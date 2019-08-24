@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.medo.tweetspie.data.local.model.Pie
 import com.medo.tweetspie.data.local.model.PieFriend
 import com.medo.tweetspie.data.local.model.PieMedia
@@ -19,6 +20,7 @@ interface PieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMedia(pies: List<PieMedia>)
 
+    @Transaction
     @Query("SELECT * FROM pies ORDER BY score DESC LIMIT 30")
     fun getPies(): LiveData<List<RawPie>>
 

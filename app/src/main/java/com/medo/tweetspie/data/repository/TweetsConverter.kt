@@ -14,6 +14,7 @@ import com.twitter.sdk.android.core.models.User
 import java.util.Calendar
 import java.util.Locale
 import java.util.Random
+import kotlin.math.min
 
 interface TweetsConverter {
 
@@ -164,7 +165,7 @@ class TweetsConverterImpl(
      * @return the retweet score between 0 and 10
      */
     private fun getRetweetScore(retweetCount: Int, followersCount: Int) =
-        Math.min(10, (retweetCount.toFloat() / followersCount * 2000).toInt())
+        min(10, (retweetCount.toFloat() / followersCount * 2000).toInt())
 
     /**
      * Returns the favorite score based on the favorite count and user's followers count.
@@ -175,7 +176,7 @@ class TweetsConverterImpl(
      * @return the retweet score between 0 and 10
      */
     private fun getFavoriteScore(favoriteCount: Int, followersCount: Int) =
-        Math.min(10, (favoriteCount.toFloat() / followersCount * 1000).toInt())
+        min(10, (favoriteCount.toFloat() / followersCount * 1000).toInt())
 
 //    /**
 //     * Returns the media score based on the media presence

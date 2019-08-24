@@ -1,6 +1,6 @@
 package com.medo.tweetspie.di
 
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.medo.tweetspie.data.local.PieDatabase
 import com.medo.tweetspie.data.remote.FriendsApiClient

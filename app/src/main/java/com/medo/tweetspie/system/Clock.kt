@@ -2,6 +2,7 @@ package com.medo.tweetspie.system
 
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 interface Clock {
 
@@ -22,6 +23,6 @@ class ClockImpl : Clock {
         val now = Calendar.getInstance()
         val nowOffset = now.get(Calendar.ZONE_OFFSET) + now.get(Calendar.DST_OFFSET)
         val calendarOffset = calendar.get(Calendar.ZONE_OFFSET) + calendar.get(Calendar.DST_OFFSET)
-        return Math.abs(TimeUnit.MILLISECONDS.toHours((nowOffset - calendarOffset).toLong()))
+        return abs(TimeUnit.MILLISECONDS.toHours((nowOffset - calendarOffset).toLong()))
     }
 }

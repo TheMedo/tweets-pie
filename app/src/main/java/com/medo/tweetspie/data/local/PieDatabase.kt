@@ -7,7 +7,11 @@ import com.medo.tweetspie.data.local.model.PieFriend
 import com.medo.tweetspie.data.local.model.PieMedia
 import com.medo.tweetspie.data.local.model.PieUser
 
-@Database(entities = [Pie::class, PieUser::class, PieFriend::class, PieMedia::class], version = 1)
+@Database(
+    entities = [Pie::class, PieUser::class, PieFriend::class, PieMedia::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class PieDatabase : RoomDatabase() {
 
     abstract fun pieDao(): PieDao

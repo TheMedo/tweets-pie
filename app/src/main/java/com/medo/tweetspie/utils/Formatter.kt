@@ -64,7 +64,7 @@ class FormatterImpl(val context: Context) : Formatter {
     private val urlFormat = "http://twitter.com/%s/status/%s"
 
     override fun utcToDate(utcTime: String): Date = try {
-        dateFormat.parse(utcTime)
+        dateFormat.parse(utcTime) ?: Date()
     } catch (e: ParseException) {
         Date()
     }

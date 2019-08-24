@@ -16,7 +16,7 @@ class ResourcesImpl(
 ) : Resources {
 
     override fun getString(@StringRes id: Int, vararg args: String) =
-        context.getString(id, *args) ?: ""
+        context.getString(id, *args)
 
     override fun getColor(id: Int) = context.getColor(id)
 }
