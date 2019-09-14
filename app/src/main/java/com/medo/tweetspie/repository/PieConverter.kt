@@ -1,4 +1,4 @@
-package com.medo.tweetspie.utils
+package com.medo.tweetspie.repository
 
 import androidx.annotation.Nullable
 import com.medo.tweetspie.R

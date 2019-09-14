@@ -1,4 +1,4 @@
-package com.medo.tweetspie.data.remote
+package com.medo.tweetspie.remote.api
 
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.services.StatusesService

@@ -1,4 +1,4 @@
-package com.medo.tweetspie.data.repository
+package com.medo.tweetspie.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

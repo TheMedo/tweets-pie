@@ -12,10 +12,6 @@ android {
         targetSdkVersion sdk_version
         versionCode version_code
         versionName version_name
-
-        // set the twitter api keys into your global gradle.properties file
-        buildConfigField("String", "TWITTER_KEY", "\"" + TWITTER_KEY + "\"")
-        buildConfigField("String", "TWITTER_SECRET", "\"" + TWITTER_SECRET + "\"")
     }
     buildTypes {
         release {
@@ -33,6 +29,7 @@ dependencies {
     implementation project(path: ':util')
     implementation project(path: ':system')
     implementation project(path: ':storage')
+    implementation project(path: ':remote')
 
     /* Support */
     implementation "androidx.appcompat:appcompat:$app_compat_version"
@@ -55,10 +52,6 @@ dependencies {
     /* Coroutines */
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-
-    /* Twitter */
-    implementation "com.twitter.sdk.android:twitter-core:$twitter_version"
-    implementation "com.twitter.sdk.android:tweet-ui:$twitter_version"
 
     /* Images */
     implementation "com.github.bumptech.glide:glide:$glide_version"

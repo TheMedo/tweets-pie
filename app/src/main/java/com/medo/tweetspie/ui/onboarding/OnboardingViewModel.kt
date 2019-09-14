@@ -1,7 +1,7 @@
 package com.medo.tweetspie.ui.onboarding
 
 import androidx.lifecycle.LiveData
-import com.medo.tweetspie.data.repository.UserRepository
+import com.medo.tweetspie.repository.UserRepository
 import com.medo.tweetspie.util.base.BaseViewModel
 import com.twitter.sdk.android.core.TwitterSession
 

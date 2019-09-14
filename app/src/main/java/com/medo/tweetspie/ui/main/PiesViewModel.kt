@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.medo.tweetspie.R
-import com.medo.tweetspie.data.repository.TweetsRepository
+import com.medo.tweetspie.repository.PieConverter
+import com.medo.tweetspie.repository.TweetsRepository
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.util.base.BaseCoroutineViewModel
 import com.medo.tweetspie.utils.ActionLiveData
-import com.medo.tweetspie.utils.PieConverter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 

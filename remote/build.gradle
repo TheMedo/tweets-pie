@@ -13,6 +13,10 @@ android {
         versionName version_name
 
         consumerProguardFiles 'consumer-rules.pro'
+
+        // set the twitter api keys into your global gradle.properties file
+        buildConfigField("String", "TWITTER_KEY", "\"" + TWITTER_KEY + "\"")
+        buildConfigField("String", "TWITTER_SECRET", "\"" + TWITTER_SECRET + "\"")
     }
     buildTypes {
         release {
@@ -30,14 +34,9 @@ dependencies {
     /* Kotlin */
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    /* Lifecycle */
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-
-    /* Database */
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-
+    /* Twitter */
+    api "com.twitter.sdk.android:twitter-core:$twitter_version"
+    api "com.twitter.sdk.android:tweet-ui:$twitter_version"
 
     /* Dependency Injection */
     implementation "org.koin:koin-androidx-scope:$koin_version"
