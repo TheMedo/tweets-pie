@@ -31,4 +31,12 @@ dependencies {
 
     /* Support */
     implementation "androidx.appcompat:appcompat:$app_compat_version"
+
+    /* Extensions */
+    implementation "androidx.preference:preference-ktx:$ktx_version"
+
+    /* Dependency Injection */
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    testImplementation "org.koin:koin-test:$koin_version"
 }
