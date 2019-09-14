@@ -1,4 +1,4 @@
-package com.medo.tweetspie.data.local
+package com.medo.tweetspie.storage
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -6,10 +6,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.medo.tweetspie.data.local.model.Pie
-import com.medo.tweetspie.data.local.model.PieFriend
-import com.medo.tweetspie.data.local.model.PieMedia
-import com.medo.tweetspie.data.local.model.RawPie
+import com.medo.tweetspie.storage.model.Pie
+import com.medo.tweetspie.storage.model.PieFriend
+import com.medo.tweetspie.storage.model.PieMedia
+import com.medo.tweetspie.storage.model.RawPie
 
 @Dao
 interface PieDao {

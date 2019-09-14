@@ -1,11 +1,11 @@
 package com.medo.tweetspie.data.repository
 
 import androidx.annotation.Nullable
-import com.medo.tweetspie.data.local.PieDao
-import com.medo.tweetspie.data.local.model.Pie
-import com.medo.tweetspie.data.local.model.PieMedia
-import com.medo.tweetspie.data.local.model.PieUser
-import com.medo.tweetspie.data.local.model.RawPie
+import com.medo.tweetspie.storage.PieDao
+import com.medo.tweetspie.storage.model.Pie
+import com.medo.tweetspie.storage.model.PieMedia
+import com.medo.tweetspie.storage.model.PieUser
+import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Clock
 import com.medo.tweetspie.system.Formatter
 import com.twitter.sdk.android.core.models.MediaEntity

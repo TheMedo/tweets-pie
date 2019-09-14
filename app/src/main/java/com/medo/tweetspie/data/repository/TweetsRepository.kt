@@ -4,10 +4,10 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.medo.tweetspie.data.local.PieDao
-import com.medo.tweetspie.data.local.model.PieFriend
-import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.data.remote.TweetsApi
+import com.medo.tweetspie.storage.PieDao
+import com.medo.tweetspie.storage.model.PieFriend
+import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Clock
 import com.twitter.sdk.android.core.models.Tweet
 

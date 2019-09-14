@@ -1,7 +1,5 @@
 package com.medo.tweetspie.di
 
-import androidx.room.Room
-import com.medo.tweetspie.data.local.PieDatabase
 import com.medo.tweetspie.data.remote.FriendsApiClient
 import com.medo.tweetspie.data.remote.TweetsApi
 import com.medo.tweetspie.data.remote.TweetsApiImpl
@@ -20,18 +18,11 @@ import com.medo.tweetspie.util.linkify.TwitterLinkifyImpl
 import com.medo.tweetspie.utils.PieBaker
 import com.medo.tweetspie.utils.PieBakerImpl
 import com.twitter.sdk.android.core.TwitterCore
-import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.StringQualifier
 import org.koin.dsl.module
 
 val mainModule = module {
-    single {
-        Room.databaseBuilder(
-            androidApplication(), PieDatabase::class.java, "pie_db"
-        ).build()
-    }
-    single { get<PieDatabase>().pieDao() }
     single { TweetsConverterImpl(get(), get(), get()) as TweetsConverter }
     single { UserRepositoryImpl(get()) as UserRepository }
     single { TweetsApiImpl(get(), get()) as TweetsApi }

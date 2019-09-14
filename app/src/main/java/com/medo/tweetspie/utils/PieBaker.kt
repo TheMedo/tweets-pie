@@ -1,8 +1,8 @@
 package com.medo.tweetspie.utils
 
 import com.medo.tweetspie.R
-import com.medo.tweetspie.data.local.model.Pie
-import com.medo.tweetspie.data.local.model.RawPie
+import com.medo.tweetspie.storage.model.Pie
+import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Formatter
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.ui.main.BakedPie

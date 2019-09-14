@@ -3,6 +3,7 @@ package com.medo.tweetspie
 import android.app.Application
 import android.util.Log
 import com.medo.tweetspie.di.mainModule
+import com.medo.tweetspie.storage.di.storageModule
 import com.medo.tweetspie.system.di.systemModule
 import com.medo.tweetspie.util.di.utilModule
 import com.twitter.sdk.android.core.DefaultLogger
@@ -20,7 +21,7 @@ class MainApp : Application() {
         // init DI
         startKoin {
             androidContext(this@MainApp)
-            modules(listOf(mainModule, systemModule, utilModule))
+            modules(listOf(mainModule, systemModule, utilModule, storageModule))
         }
         // init twitter
         val config = TwitterConfig.Builder(this)

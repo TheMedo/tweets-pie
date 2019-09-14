@@ -1,11 +1,11 @@
-package com.medo.tweetspie.data.local
+package com.medo.tweetspie.storage
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.medo.tweetspie.data.local.model.Pie
-import com.medo.tweetspie.data.local.model.PieFriend
-import com.medo.tweetspie.data.local.model.PieMedia
-import com.medo.tweetspie.data.local.model.PieUser
+import com.medo.tweetspie.storage.model.Pie
+import com.medo.tweetspie.storage.model.PieFriend
+import com.medo.tweetspie.storage.model.PieMedia
+import com.medo.tweetspie.storage.model.PieUser
 
 @Database(
     entities = [Pie::class, PieUser::class, PieFriend::class, PieMedia::class],

@@ -1,4 +1,4 @@
-package com.medo.tweetspie.data.local.model
+package com.medo.tweetspie.storage.model
 
 import androidx.room.Embedded
 import androidx.room.Entity
