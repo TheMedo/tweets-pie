@@ -3,8 +3,6 @@ package com.medo.tweetspie.di
 import com.medo.tweetspie.data.remote.FriendsApiClient
 import com.medo.tweetspie.data.remote.TweetsApi
 import com.medo.tweetspie.data.remote.TweetsApiImpl
-import com.medo.tweetspie.data.repository.TweetsConverter
-import com.medo.tweetspie.data.repository.TweetsConverterImpl
 import com.medo.tweetspie.data.repository.TweetsRepository
 import com.medo.tweetspie.data.repository.TweetsRepositoryImpl
 import com.medo.tweetspie.data.repository.UserRepository
@@ -15,15 +13,23 @@ import com.medo.tweetspie.ui.onboarding.OnboardingViewModel
 import com.medo.tweetspie.util.di.DISPATCHER_IO
 import com.medo.tweetspie.util.linkify.TwitterLinkify
 import com.medo.tweetspie.util.linkify.TwitterLinkifyImpl
-import com.medo.tweetspie.utils.PieBaker
-import com.medo.tweetspie.utils.PieBakerImpl
+import com.medo.tweetspie.utils.PieConverter
+import com.medo.tweetspie.utils.PieConverterImpl
 import com.twitter.sdk.android.core.TwitterCore
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.StringQualifier
 import org.koin.dsl.module
 
 val mainModule = module {
-    single { TweetsConverterImpl(get(), get(), get()) as TweetsConverter }
+    single {
+        PieConverterImpl(
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        ) as PieConverter
+    }
     single { UserRepositoryImpl(get()) as UserRepository }
     single { TweetsApiImpl(get(), get()) as TweetsApi }
     single {
@@ -36,7 +42,6 @@ val mainModule = module {
         ) as TweetsRepository
     }
     single { TwitterLinkifyImpl() as TwitterLinkify }
-    single { PieBakerImpl(get(), get(), get()) as PieBaker }
     single { TwitterCore.getInstance().sessionManager.activeSession }
     single { TwitterCore.getInstance().apiClient.statusesService }
     single { FriendsApiClient(get()).friendsService }

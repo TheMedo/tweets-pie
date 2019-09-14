@@ -8,13 +8,13 @@ import com.medo.tweetspie.data.repository.TweetsRepository
 import com.medo.tweetspie.system.Resources
 import com.medo.tweetspie.util.base.BaseCoroutineViewModel
 import com.medo.tweetspie.utils.ActionLiveData
-import com.medo.tweetspie.utils.PieBaker
+import com.medo.tweetspie.utils.PieConverter
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 
 class PiesViewModel(
     repository: TweetsRepository,
-    private val pieBaker: PieBaker,
+    private val pieConverter: PieConverter,
     private val resources: Resources,
     ioDispatcher: CoroutineDispatcher
 ) : BaseCoroutineViewModel(ioDispatcher) {
@@ -35,6 +35,6 @@ class PiesViewModel(
     val loading: LiveData<Boolean> = repository.getLoading()
     val refresh: MutableLiveData<Boolean> = MutableLiveData()
     val pies: LiveData<List<BakedPie>> = Transformations.map(repository.getPies()) {
-        pieBaker.bakePies(it, urlActionCallback)
+        pieConverter.bakePies(it, urlActionCallback)
     }
 }

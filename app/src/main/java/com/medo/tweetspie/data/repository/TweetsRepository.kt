@@ -9,6 +9,7 @@ import com.medo.tweetspie.storage.PieDao
 import com.medo.tweetspie.storage.model.PieFriend
 import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Clock
+import com.medo.tweetspie.utils.PieConverter
 import com.twitter.sdk.android.core.models.Tweet
 
 const val KEY_TWEETS_TIMESTAMP = "keyTweetsTimestamp"
@@ -28,7 +29,7 @@ interface TweetsRepository {
 class TweetsRepositoryImpl(
     private val prefs: SharedPreferences,
     private val clock: Clock,
-    private val converter: TweetsConverter,
+    private val converter: PieConverter,
     private val tweetsApi: TweetsApi,
     private val pieDao: PieDao
 ) : TweetsRepository {
@@ -61,7 +62,7 @@ class TweetsRepositoryImpl(
 
     private fun persistTweets(remoteTweets: List<Tweet>) {
         if (remoteTweets.isEmpty()) return
-        val convertedTweets = converter.convertTweets(remoteTweets)
+        val convertedTweets = converter.createPies(remoteTweets)
         pieDao.insert(convertedTweets.map { it.pie })
         pieDao.insertMedia(convertedTweets.flatMap { it.media })
         prefs.edit {

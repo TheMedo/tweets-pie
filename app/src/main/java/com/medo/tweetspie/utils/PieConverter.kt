@@ -1,6 +1,7 @@
-package com.medo.tweetspie.data.repository
+package com.medo.tweetspie.utils
 
 import androidx.annotation.Nullable
+import com.medo.tweetspie.R
 import com.medo.tweetspie.storage.PieDao
 import com.medo.tweetspie.storage.model.Pie
 import com.medo.tweetspie.storage.model.PieMedia
@@ -8,6 +9,9 @@ import com.medo.tweetspie.storage.model.PieUser
 import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Clock
 import com.medo.tweetspie.system.Formatter
+import com.medo.tweetspie.system.Resources
+import com.medo.tweetspie.ui.main.BakedPie
+import com.medo.tweetspie.util.linkify.TwitterLinkify
 import com.twitter.sdk.android.core.models.MediaEntity
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User
@@ -16,24 +20,48 @@ import java.util.Locale
 import java.util.Random
 import kotlin.math.min
 
-interface TweetsConverter {
+interface PieConverter {
 
-    fun convertTweets(remoteTweets: List<Tweet>): List<RawPie>
+    fun createPies(remoteTweets: List<Tweet>): List<RawPie>
+
+    fun bakePies(pies: List<RawPie>, urlAction: (String) -> Unit = {}): List<BakedPie>
 }
 
-class TweetsConverterImpl(
+class PieConverterImpl(
     private val clock: Clock,
     private val formatter: Formatter,
-    private val pieDao: PieDao
-) : TweetsConverter {
+    private val pieDao: PieDao,
+    private val resources: Resources,
+    private val linkify: TwitterLinkify
+) : PieConverter {
 
-    override fun convertTweets(remoteTweets: List<Tweet>) = remoteTweets.map {
+    override fun createPies(remoteTweets: List<Tweet>) = remoteTweets.map {
         RawPie(
             convertTweet(
                 it.retweetedStatus ?: it,
                 if (it.retweetedStatus != null) it.user.screenName else null
             ),
             convertMedia(it.retweetedStatus?.idStr ?: it.idStr, it.extendedEntities.media)
+        )
+    }
+
+    override fun bakePies(pies: List<RawPie>, urlAction: (String) -> Unit) = pies.map {
+        BakedPie(
+            it.pie.user.avatarUrl,
+            it.pie.user.name,
+            "@${it.pie.user.handle}",
+            it.pie.user.protected,
+            it.pie.user.verified,
+            formatTimestamp(it.pie.createdAt),
+            formatInfo(it.pie),
+            formatText(it.pie.text, urlAction),
+            it.pie.retweeted,
+            formatNumber(it.pie.retweetCount),
+            it.pie.favorited,
+            formatNumber(it.pie.favoriteCount),
+            formatNumber(it.pie.score),
+            formatUserUrl(it.pie.user.handle),
+            formatTweetUrl(it.pie.user.handle, it.pie.pieId)
         )
     }
 
@@ -217,4 +245,33 @@ class TweetsConverterImpl(
      */
     private fun normalize(valueIn: Long, baseMin: Long, baseMax: Long) =
         (valueIn - baseMin) / (baseMax - baseMin).toFloat()
+
+    private fun formatTimestamp(createdAt: String) =
+        formatter.toRelativeDate(formatter.utcToDate(createdAt))
+
+    private fun formatInfo(pie: Pie): String {
+        val builder = StringBuilder()
+        val retweet = pie.retweetedBy
+        if (retweet != null)
+            builder.appendln(resources.getString(R.string.hint_retweet, "@$retweet"))
+        val reply = pie.inReplyTo
+        if (reply != null)
+            builder.appendln(resources.getString(R.string.hint_reply, reply))
+        val quote = pie.quoted
+        if (quote != null)
+            builder.appendln(resources.getString(R.string.hint_quote, quote))
+        return builder.trim().toString()
+    }
+
+    private fun formatText(text: String, urlAction: (String) -> Unit) =
+        linkify.linkifyText(text, resources.getColor(R.color.colorPrimaryDark), urlAction)
+
+    private fun formatNumber(count: Int) =
+        formatter.formatNumber(count.toLong())
+
+    private fun formatTweetUrl(handle: String, id: String) =
+        resources.getString(R.string.url_tweet, handle, id)
+
+    private fun formatUserUrl(handle: String) =
+        resources.getString(R.string.url_user, handle)
 }
