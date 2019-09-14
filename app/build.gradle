@@ -31,6 +31,7 @@ android {
 dependencies {
     /* Modules */
     implementation project(path: ':util')
+    implementation project(path: ':system')
 
     /* Support */
     implementation "androidx.appcompat:appcompat:$app_compat_version"
