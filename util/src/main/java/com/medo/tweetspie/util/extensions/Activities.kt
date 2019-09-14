@@ -1,4 +1,4 @@
-package com.medo.tweetspie.extensions
+package com.medo.tweetspie.util.extensions
 
 import android.app.Activity
 import android.content.Intent

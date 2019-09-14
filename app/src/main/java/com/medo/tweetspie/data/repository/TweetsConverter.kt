@@ -7,7 +7,7 @@ import com.medo.tweetspie.data.local.model.PieMedia
 import com.medo.tweetspie.data.local.model.PieUser
 import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.system.Clock
-import com.medo.tweetspie.utils.Formatter
+import com.medo.tweetspie.system.Formatter
 import com.twitter.sdk.android.core.models.MediaEntity
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User

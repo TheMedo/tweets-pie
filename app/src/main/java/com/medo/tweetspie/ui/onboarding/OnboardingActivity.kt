@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.medo.tweetspie.R
-import com.medo.tweetspie.base.BaseActivity
 import com.medo.tweetspie.ui.main.MainActivity
+import com.medo.tweetspie.util.base.BaseActivity
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException

@@ -1,4 +1,4 @@
-package com.medo.tweetspie.base
+package com.medo.tweetspie.util.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.medo.tweetspie.extensions.snack
+import com.medo.tweetspie.util.extensions.snack
 
 abstract class BaseFragment : Fragment() {
 

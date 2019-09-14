@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.medo.tweetspie.R
-import com.medo.tweetspie.base.BaseViewModel
 import com.medo.tweetspie.data.local.model.Pie
 import com.medo.tweetspie.data.local.model.RawPie
 import com.medo.tweetspie.data.repository.TweetsRepository
+import com.medo.tweetspie.system.Formatter
 import com.medo.tweetspie.system.Resources
+import com.medo.tweetspie.util.base.BaseViewModel
+import com.medo.tweetspie.util.linkify.TwitterLinkify
 import com.medo.tweetspie.utils.ActionLiveData
-import com.medo.tweetspie.utils.Formatter
-import com.medo.tweetspie.utils.linkify.TwitterLinkify
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

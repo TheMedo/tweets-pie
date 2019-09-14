@@ -10,8 +10,8 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.medo.tweetspie.R
-import com.medo.tweetspie.extensions.show
 import com.medo.tweetspie.glide.GlideApp
+import com.medo.tweetspie.util.extensions.show
 import kotlinx.android.synthetic.main.item_pie.view.*
 
 data class BakedPie(

@@ -1,9 +1,9 @@
 package com.medo.tweetspie.ui.main
 
 import androidx.lifecycle.LiveData
-import com.medo.tweetspie.base.BaseViewModel
 import com.medo.tweetspie.data.local.PieDao
 import com.medo.tweetspie.data.repository.UserRepository
+import com.medo.tweetspie.util.base.BaseViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

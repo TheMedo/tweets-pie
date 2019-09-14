@@ -1,4 +1,4 @@
-package com.medo.tweetspie.base
+package com.medo.tweetspie.util.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

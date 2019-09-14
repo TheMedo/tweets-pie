@@ -6,9 +6,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.medo.tweetspie.R
-import com.medo.tweetspie.base.BaseFragment
-import com.medo.tweetspie.extensions.openUrl
-import com.medo.tweetspie.extensions.show
+import com.medo.tweetspie.util.base.BaseFragment
+import com.medo.tweetspie.util.extensions.openUrl
+import com.medo.tweetspie.util.extensions.show
 import kotlinx.android.synthetic.main.fragment_tweets.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

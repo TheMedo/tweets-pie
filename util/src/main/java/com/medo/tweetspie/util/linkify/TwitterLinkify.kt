@@ -1,4 +1,4 @@
-package com.medo.tweetspie.utils.linkify
+package com.medo.tweetspie.util.linkify
 
 import android.graphics.Color
 import android.text.SpannableString

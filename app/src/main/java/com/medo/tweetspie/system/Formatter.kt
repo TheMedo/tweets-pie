@@ -1,4 +1,4 @@
-package com.medo.tweetspie.utils
+package com.medo.tweetspie.system
 
 import android.content.Context
 import android.text.format.DateUtils

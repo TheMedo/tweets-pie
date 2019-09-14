@@ -1,9 +1,9 @@
-package com.medo.tweetspie.base
+package com.medo.tweetspie.util.base
 
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.medo.tweetspie.extensions.snack
+import com.medo.tweetspie.util.extensions.snack
 
 abstract class BaseActivity : AppCompatActivity() {
 
