@@ -2,14 +2,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion sdk_version
-    buildToolsVersion build_tools_version
-
+    compileSdkVersion projectConfig.sdk
+    buildToolsVersion projectConfig.tools
     defaultConfig {
-        minSdkVersion sdk_min_version
-        targetSdkVersion sdk_version
-        versionCode version_code
-        versionName version_name
+        minSdkVersion projectConfig.minSdk
+        targetSdkVersion projectConfig.sdk
+        versionCode projectConfig.version
+        versionName projectConfig.code
 
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -26,17 +25,9 @@ android {
 }
 
 dependencies {
-    /* Kotlin */
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation commonDependencies.values()
+    implementation uiDependencies.appCompat
+    implementation extensionsDependencies.preference
 
-    /* Support */
-    implementation "androidx.appcompat:appcompat:$app_compat_version"
-
-    /* Extensions */
-    implementation "androidx.preference:preference-ktx:$ktx_version"
-
-    /* Dependency Injection */
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    testImplementation "org.koin:koin-test:$koin_version"
+    testImplementation testDependencies.values()
 }
