@@ -1,21 +1,31 @@
 package com.medo.tweetspie.remote.api
 
 import com.twitter.sdk.android.core.models.Tweet
+import com.twitter.sdk.android.core.services.FavoriteService
 import com.twitter.sdk.android.core.services.StatusesService
 
 interface TweetsApi {
 
-    fun getTimeline(): List<Tweet>
+    suspend fun getTimeline(): List<Tweet>
 
-    fun getFriends(handle: String): List<String>
+    suspend fun getFriends(handle: String): List<String>
+
+    suspend fun retweet(id: Long): Boolean
+
+    suspend fun unretweet(id: Long): Boolean
+
+    suspend fun favorite(id: Long): Boolean
+
+    suspend fun unfavorite(id: Long): Boolean
 }
 
 class TweetsApiImpl(
     private val statuses: StatusesService,
+    private val favorites: FavoriteService,
     private val friends: FriendsService
 ) : TweetsApi {
 
-    override fun getTimeline(): List<Tweet> {
+    override suspend fun getTimeline(): List<Tweet> {
         var maxId: Long? = null
         val result = mutableListOf<Tweet>()
 
@@ -30,7 +40,7 @@ class TweetsApiImpl(
         return result
     }
 
-    override fun getFriends(handle: String): List<String> {
+    override suspend fun getFriends(handle: String): List<String> {
         var cursor: Long? = null
         val result = mutableListOf<String>()
 
@@ -41,6 +51,30 @@ class TweetsApiImpl(
         }
 
         return result
+    }
+
+    override suspend fun retweet(id: Long) = try {
+        statuses.retweet(id, true).execute().isSuccessful
+    } catch (e: Exception) {
+        false
+    }
+
+    override suspend fun unretweet(id: Long) = try {
+        statuses.unretweet(id, true).execute().isSuccessful
+    } catch (e: Exception) {
+        false
+    }
+
+    override suspend fun favorite(id: Long) = try {
+        favorites.create(id, false).execute().isSuccessful
+    } catch (e: Exception) {
+        false
+    }
+
+    override suspend fun unfavorite(id: Long) = try {
+        favorites.destroy(id, false).execute().isSuccessful
+    } catch (e: Exception) {
+        false
     }
 
     private fun getTimeline(maxId: Long?) = try {

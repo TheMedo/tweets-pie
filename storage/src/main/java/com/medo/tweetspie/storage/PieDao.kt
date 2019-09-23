@@ -32,4 +32,16 @@ interface PieDao {
 
     @Query("DELETE FROM pies where pieId NOT IN (SELECT pieId from pies ORDER BY createdAt DESC LIMIT 400)")
     fun deleteOldData()
+
+    @Query("UPDATE pies SET retweeted=1, retweetCount = retweetCount + 1 WHERE pieId = :id")
+    fun retweet(id: Long)
+
+    @Query("UPDATE pies SET retweeted=0, retweetCount = retweetCount - 1 WHERE pieId = :id")
+    fun unretweet(id: Long)
+
+    @Query("UPDATE pies SET favorited=1, favoriteCount = favoriteCount + 1 WHERE pieId = :id")
+    fun favorite(id: Long)
+
+    @Query("UPDATE pies SET favorited=0, favoriteCount = favoriteCount - 1 WHERE pieId = :id")
+    fun unfavorite(id: Long)
 }

@@ -47,6 +47,7 @@ class PieConverterImpl(
 
     override fun bakePies(pies: List<RawPie>, urlAction: (String) -> Unit) = pies.map {
         BakedPie(
+            it.pie.pieId,
             it.pie.user.avatarUrl,
             it.pie.user.name,
             "@${it.pie.user.handle}",

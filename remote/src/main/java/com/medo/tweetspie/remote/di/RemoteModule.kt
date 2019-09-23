@@ -10,8 +10,10 @@ import org.koin.dsl.module
 val remoteModule = module {
     single { TwitterCore.getInstance().sessionManager.activeSession }
     single { TwitterCore.getInstance().apiClient.statusesService }
+    single { TwitterCore.getInstance().apiClient.favoriteService }
     single {
         TweetsApiImpl(
+            get(),
             get(),
             get()
         ) as TweetsApi

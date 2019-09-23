@@ -18,11 +18,19 @@ const val FRIENDS_REFRESH_INTERVAL = 24 * 60 * 60 * 1000
 
 interface TweetsRepository {
 
-    fun fetch()
+    suspend fun fetch()
 
     fun getPies(): LiveData<List<RawPie>>
 
     fun getLoading(): LiveData<Boolean>
+
+    suspend fun retweet(id: Long)
+
+    suspend fun unretweet(id: Long)
+
+    suspend fun favorite(id: Long)
+
+    suspend fun unfavorite(id: Long)
 }
 
 class TweetsRepositoryImpl(
@@ -40,7 +48,7 @@ class TweetsRepositoryImpl(
 
     override fun getLoading() = loading
 
-    override fun fetch() {
+    override suspend fun fetch() {
         loading.postValue(true)
         val lastFriendsUpdate = prefs.getLong(KEY_FRIENDS_TIMESTAMP, 0)
         if (clock.getCurrentTime() - lastFriendsUpdate > FRIENDS_REFRESH_INTERVAL) {
@@ -55,6 +63,34 @@ class TweetsRepositoryImpl(
             persistTweets(remoteTweets)
         }
         loading.postValue(false)
+    }
+
+    override suspend fun retweet(id: Long) {
+        pieDao.retweet(id)
+        if (!tweetsApi.retweet(id)) {
+            pieDao.unretweet(id)
+        }
+    }
+
+    override suspend fun unretweet(id: Long) {
+        pieDao.unretweet(id)
+        if (!tweetsApi.unretweet(id)) {
+            pieDao.retweet(id)
+        }
+    }
+
+    override suspend fun favorite(id: Long) {
+        pieDao.favorite(id)
+        if (!tweetsApi.favorite(id)) {
+            pieDao.unfavorite(id)
+        }
+    }
+
+    override suspend fun unfavorite(id: Long) {
+        pieDao.unfavorite(id)
+        if (!tweetsApi.unfavorite(id)) {
+            pieDao.favorite(id)
+        }
     }
 
     private fun persistFriends(friends: List<String>) = friends.map { PieFriend(it) }

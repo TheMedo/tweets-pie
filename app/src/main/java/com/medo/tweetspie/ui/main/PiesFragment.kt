@@ -14,9 +14,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PiesFragment : BaseFragment() {
 
-    override val viewModel by viewModel<PiesViewModel>()
-
     private val adapter by lazy { PieAdapter(viewModel) }
+
+    override val viewModel by viewModel<PiesViewModel>()
 
     override fun getLayoutId() = R.layout.fragment_tweets
 
@@ -32,29 +32,17 @@ class PiesFragment : BaseFragment() {
             )
         )
 
-        fab.setOnClickListener { viewModel.refresh.postValue(false) }
-
         viewModel.pies.observe(this, Observer<List<BakedPie>>(this::showPies))
         viewModel.loading.observe(this, Observer<Boolean>(this::showLoading))
-        viewModel.refresh.observe(this, Observer<Boolean>(this::showRefresh))
         viewModel.urlAction.observe(this, Observer(this::openUrl))
     }
 
     private fun showPies(pies: List<BakedPie>) {
-        val hasData = adapter.itemCount > 0
-        viewModel.refresh.postValue(hasData)
-
         adapter.setData(pies)
-        if (!hasData) adapter.notifyDataSetChanged()
     }
 
     private fun showLoading(show: Boolean) {
         progress.show(visible = show)
-    }
-
-    private fun showRefresh(show: Boolean) {
-        if (show) fab.show() else fab.hide()
-        if (!show) adapter.notifyDataSetChanged()
     }
 
     private fun openUrl(url: String) {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.RequestOptions
 import com.medo.tweetspie.R
@@ -15,6 +16,7 @@ import com.medo.tweetspie.util.extensions.show
 import kotlinx.android.synthetic.main.item_pie.view.*
 
 data class BakedPie(
+    val id: String,
     val userAvatarUrl: String?,
     val userName: String,
     val userHandle: String,
@@ -48,7 +50,28 @@ class PieAdapter(
     }
 
     fun setData(items: List<BakedPie>) {
-        data = items
+        if (data.isEmpty()) {
+            data = items
+            notifyItemChanged(0, items.size)
+        } else {
+            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+
+                override fun getOldListSize() = data.size
+
+                override fun getNewListSize() = items.size
+
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                    data[oldItemPosition].id == items[newItemPosition].id
+
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                    data[oldItemPosition].retweeted == items[newItemPosition].retweeted &&
+                            data[oldItemPosition].retweetCount == items[newItemPosition].retweetCount &&
+                            data[oldItemPosition].favorited == items[newItemPosition].favorited &&
+                            data[oldItemPosition].favoriteCount == items[newItemPosition].favoriteCount
+            })
+            data = items
+            result.dispatchUpdatesTo(this)
+        }
     }
 }
 
@@ -90,6 +113,8 @@ class PieViewHolder(
         itemView.text_name.setOnClickListener(userClickListener)
         itemView.text_handle.setOnClickListener(userClickListener)
         itemView.text_timestamp.setOnClickListener { viewModel.urlAction.post(item.tweetUrl) }
+        itemView.button_retweet.setOnClickListener { viewModel.retweet(item.id, item.retweeted) }
+        itemView.button_favorite.setOnClickListener { viewModel.favorite(item.id, item.favorited) }
     }
 }
 
