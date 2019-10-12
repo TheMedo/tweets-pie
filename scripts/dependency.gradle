@@ -44,7 +44,7 @@ ext {
     appCompat = "1.1.0"
     recycler = '1.0.0'
     constraint = '1.1.3'
-    material = '1.0.0'
+    material = '1.1.0-beta01'
     uiDependencies = [
             appCompat : "androidx.appcompat:appcompat:$appCompat",
             recycler  : "androidx.recyclerview:recyclerview:$recycler",

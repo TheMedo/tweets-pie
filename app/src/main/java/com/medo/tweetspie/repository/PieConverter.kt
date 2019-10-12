@@ -15,9 +15,7 @@ import com.medo.tweetspie.util.linkify.TwitterLinkify
 import com.twitter.sdk.android.core.models.MediaEntity
 import com.twitter.sdk.android.core.models.Tweet
 import com.twitter.sdk.android.core.models.User
-import java.util.Calendar
-import java.util.Locale
-import java.util.Random
+import java.util.*
 import kotlin.math.min
 
 interface PieConverter {
@@ -161,7 +159,7 @@ class PieConverterImpl(
      */
     private fun getRecencyScore(createdAt: String): Int {
         val createdAtMillis = formatter.utcToDate(createdAt).time
-        val currentTimeMillis = clock.getCurrentTime()
+        val currentTimeMillis = clock.currentTime
         val deltaMillis = currentTimeMillis - createdAtMillis
         return when {
             deltaMillis > clock.daysToMillis(2) -> -50

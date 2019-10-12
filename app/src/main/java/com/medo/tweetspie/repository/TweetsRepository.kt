@@ -3,16 +3,16 @@ package com.medo.tweetspie.repository
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.medo.tweetspie.remote.api.TweetsApi
 import com.medo.tweetspie.storage.PieDao
 import com.medo.tweetspie.storage.model.PieFriend
 import com.medo.tweetspie.storage.model.RawPie
 import com.medo.tweetspie.system.Clock
+import com.medo.tweetspie.util.events.SingleLiveEvent
 import com.twitter.sdk.android.core.models.Tweet
 
 const val KEY_TWEETS_TIMESTAMP = "keyTweetsTimestamp"
-const val TIMELINE_REFRESH_INTERVAL = 1 * 30 * 1000
+const val TIMELINE_REFRESH_INTERVAL = 1 * 60 * 1000
 const val KEY_FRIENDS_TIMESTAMP = "keyFriendsTimestamp"
 const val FRIENDS_REFRESH_INTERVAL = 24 * 60 * 60 * 1000
 
@@ -23,6 +23,8 @@ interface TweetsRepository {
     fun getPies(): LiveData<List<RawPie>>
 
     fun getLoading(): LiveData<Boolean>
+
+    suspend fun persistTweets()
 
     suspend fun retweet(id: Long)
 
@@ -42,27 +44,36 @@ class TweetsRepositoryImpl(
 ) : TweetsRepository {
 
     private val data = pieDao.getPies()
-    private val loading = MutableLiveData<Boolean>()
+    private val loading = SingleLiveEvent<Boolean>()
+
+    private var remoteTweets: List<Tweet>? = null
 
     override fun getPies() = data
 
     override fun getLoading() = loading
 
     override suspend fun fetch() {
-        loading.postValue(true)
         val lastFriendsUpdate = prefs.getLong(KEY_FRIENDS_TIMESTAMP, 0)
-        if (clock.getCurrentTime() - lastFriendsUpdate > FRIENDS_REFRESH_INTERVAL) {
+        if (clock.currentTime - lastFriendsUpdate > FRIENDS_REFRESH_INTERVAL) {
             val handle = prefs.getString(KEY_HANDLE, "") ?: ""
             val friends = tweetsApi.getFriends(handle)
             persistFriends(friends)
         }
 
         val lastUpdate = prefs.getLong(KEY_TWEETS_TIMESTAMP, 0)
-        if (clock.getCurrentTime() - lastUpdate > TIMELINE_REFRESH_INTERVAL) {
-            val remoteTweets = tweetsApi.getTimeline()
-            persistTweets(remoteTweets)
+        if (clock.currentTime - lastUpdate > TIMELINE_REFRESH_INTERVAL) {
+            loading.postValue(true)
+            remoteTweets = tweetsApi.getTimeline()
+            loading.postValue(false)
         }
-        loading.postValue(false)
+    }
+
+    override suspend fun persistTweets() {
+        remoteTweets?.let {
+            persistTweets(it)
+            remoteTweets = null
+        }
+
     }
 
     override suspend fun retweet(id: Long) {
@@ -103,7 +114,7 @@ class TweetsRepositoryImpl(
         prefs.edit {
             putLong(
                 KEY_TWEETS_TIMESTAMP,
-                clock.getCurrentTime()
+                clock.currentTime
             )
         }
     }

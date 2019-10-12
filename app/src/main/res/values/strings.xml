@@ -19,6 +19,7 @@
     <string name="url_hashtag" translatable="false">https://twitter.com/hashtag/%s</string>
 
     <!-- Actions -->
+    <string name="action_refresh">Refresh</string>
 
     <!-- Utils -->
     <string name="notification_channel_tweets">Tweets</string>

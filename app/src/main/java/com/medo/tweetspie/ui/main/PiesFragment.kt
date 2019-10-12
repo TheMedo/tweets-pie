@@ -32,6 +32,11 @@ class PiesFragment : BaseFragment() {
             )
         )
 
+        fab.setOnClickListener {
+            viewModel.persistTweets()
+            fab.hide()
+        }
+
         viewModel.pies.observe(this, Observer<List<BakedPie>>(this::showPies))
         viewModel.loading.observe(this, Observer<Boolean>(this::showLoading))
         viewModel.urlAction.observe(this, Observer(this::openUrl))
@@ -43,6 +48,7 @@ class PiesFragment : BaseFragment() {
 
     private fun showLoading(show: Boolean) {
         progress.show(visible = show)
+        if (!show) fab.show()
     }
 
     private fun openUrl(url: String) {

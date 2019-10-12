@@ -36,6 +36,12 @@ class PiesViewModel(
         pieConverter.bakePies(it, urlActionCallback)
     }
 
+    fun persistTweets() {
+        launch {
+            repository.persistTweets()
+        }
+    }
+
     fun retweet(id: String, retweeted: Boolean) {
         launch {
             when (retweeted) {

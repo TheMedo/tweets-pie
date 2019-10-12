@@ -1,12 +1,12 @@
 package com.medo.tweetspie.system
 
-import java.util.Calendar
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 interface Clock {
 
-    fun getCurrentTime(): Long
+    val currentTime: Long
 
     fun daysToMillis(days: Long): Long
 
@@ -15,7 +15,8 @@ interface Clock {
 
 class ClockImpl : Clock {
 
-    override fun getCurrentTime() = System.currentTimeMillis()
+    override val currentTime: Long
+        get() = System.currentTimeMillis()
 
     override fun daysToMillis(days: Long) = TimeUnit.DAYS.toMillis(days)
 
