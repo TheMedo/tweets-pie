@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.RequestOptions
+import coil.api.load
+import coil.transform.CircleCropTransformation
 import com.medo.tweetspie.R
-import com.medo.tweetspie.glide.GlideApp
 import com.medo.tweetspie.util.extensions.show
 import kotlinx.android.synthetic.main.item_pie.view.*
 
@@ -88,13 +88,12 @@ class PieViewHolder(
     }
 
     fun bindData(item: BakedPie) {
-        GlideApp.with(itemView)
-            .load(item.userAvatarUrl)
-            .placeholder(R.drawable.ic_avatar)
-            .error(R.drawable.ic_avatar)
-            .centerCrop()
-            .apply(RequestOptions.circleCropTransform())
-            .into(itemView.image_avatar)
+        itemView.image_avatar.load(item.userAvatarUrl) {
+            crossfade(true)
+            placeholder(R.drawable.ic_avatar)
+            error(R.drawable.ic_avatar)
+            transformations(CircleCropTransformation())
+        }
         itemView.text_name.text = item.userName
         itemView.text_handle.text = item.userHandle
         itemView.text_timestamp.text = item.timestamp
